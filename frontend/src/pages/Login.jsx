@@ -1,38 +1,244 @@
-import React, { useState } from 'react';
-import { login, signup } from '../api/api';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { login, signup } from '../api/api';
 
-export default function Login(){
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+export default function LoginPage() {
+  const [mode, setMode] = useState('login'); // 'login' or 'signup'
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');        // no default email now
+  const [password, setPassword] = useState('');  // no default password now
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  async function handleLogin(e){
-    e.preventDefault();
-    await login(email, password);
-    navigate("/");
+  function validate() {
+    if (mode === 'signup' && !name.trim()) {
+      return 'Please enter your name.';
+    }
+    const emailRegex = /^\S+@\S+\.\S+$/;
+    if (!emailRegex.test(email.trim())) {
+      return 'Please enter a valid email address.';
+    }
+    if (password.length < 6) {
+      return 'Password should be at least 6 characters.';
+    }
+    return '';
   }
 
-  async function handleSignup(e){
+  async function handleSubmit(e) {
     e.preventDefault();
-    await signup({ name: "User", email, password, password_confirmation: password });
-    navigate("/");
+    setError('');
+
+    const validationError = validate();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      if (mode === 'login') {
+        await login(email.trim(), password);
+      } else {
+        await signup({
+          name: name.trim(),
+          email: email.trim(),
+          password,
+          password_confirmation: password,
+        });
+      }
+      navigate('/');
+    } catch (err) {
+      console.error(err);
+      const msg =
+        err?.response?.data?.error ||
+        err?.response?.data?.message ||
+        'Something went wrong. Please try again.';
+      setError(msg);
+    } finally {
+      setLoading(false);
+    }
   }
+
+  function handleGoogleClick() {
+    alert('Google login UI is ready. OAuth integration can be added later.');
+  }
+
+
+
+  useEffect(() => {
+    // Add class when login page is mounted
+    document.body.classList.add('auth-body');
+    return () => {
+      // Remove when leaving login page
+      document.body.classList.remove('auth-body');
+    };
+  }, []);
+
+
 
   return (
-    <div className="container">
-      <h2>Login / Signup</h2>
+    <div className="auth-page">
+      <div className="auth-card">
+        {/* Left gradient welcome section */}
+        <div className="auth-hero">
+          <div className="auth-pill" />
+          <h1>Welcome to Shopperspoint</h1>
+          <p>
+            Discover mobiles, accessories and more. Create an account or sign in
+            to continue your shopping experience.
+          </p>
+          <ul className="auth-list">
+            <li>Fast checkout & saved carts</li>
+            <li>Track your orders in real time</li>
+            <li>Secure payments (Stripe ready)</li>
+          </ul>
+        </div>
 
-      <form>
-        <label>Email</label><br/>
-        <input value={email} onChange={e=>setEmail(e.target.value)} /><br/><br/>
+        {/* Right login / signup panel */}
+        <div className="auth-panel">
+          <div className="auth-panel-inner">
+            <div className="auth-toggle">
+              <button
+                type="button"
+                className={mode === 'login' ? 'auth-toggle-btn active' : 'auth-toggle-btn'}
+                onClick={() => {
+                  setMode('login');
+                  setError('');
+                }}
+              >
+                Login
+              </button>
+              <button
+                type="button"
+                className={mode === 'signup' ? 'auth-toggle-btn active' : 'auth-toggle-btn'}
+                onClick={() => {
+                  setMode('signup');
+                  setError('');
+                }}
+              >
+                Sign up
+              </button>
+            </div>
 
-        <label>Password</label><br/>
-        <input type="password" value={password} onChange={e=>setPassword(e.target.value)} /><br/><br/>
+            <h2 className="auth-title">
+              {mode === 'login' ? 'Welcome back' : 'Create an account'}
+            </h2>
+            <p className="auth-subtitle">
+              {mode === 'login'
+                ? 'Sign in to continue shopping.'
+                : 'It only takes a minute to join us.'}
+            </p>
 
-        <button className="button" onClick={handleLogin}>Login</button>
-        <button className="button" style={{marginLeft:8}} onClick={handleSignup}>Signup</button>
-      </form>
+            {/* Google button */}
+            <button type="button" className="auth-google-btn" onClick={handleGoogleClick}>
+              <span className="auth-google-icon">G</span>
+              Continue with Google
+            </button>
+
+            <div className="auth-divider">
+              <span>or use your email</span>
+            </div>
+
+            <form onSubmit={handleSubmit} className="auth-form">
+              {mode === 'signup' && (
+                <div className="auth-field">
+                  <label>Name</label>
+                  <input
+                    type="text"
+                    placeholder="Your name"
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                  />
+                </div>
+              )}
+
+              <div className="auth-field">
+                <label>Email</label>
+                <input
+                  type="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                />
+              </div>
+
+              <div className="auth-field">
+                <label>Password</label>
+                <div className="auth-password-wrapper">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    className="auth-eye-btn"
+                    onClick={() => setShowPassword(v => !v)}
+                  >
+                    {showPassword ? 'Hide' : 'Show'}
+                  </button>
+                </div>
+              </div>
+
+              {mode === 'login' && (
+                <div className="auth-meta-row">
+                  <label className="auth-remember">
+                    <input type="checkbox" defaultChecked /> <span>Remember me</span>
+                  </label>
+                  <button
+                    type="button"
+                    className="auth-link"
+                    onClick={() =>
+                      alert('Password reset flow can be added later as an enhancement.')
+                    }
+                  >
+                    Forgot password?
+                  </button>
+                </div>
+              )}
+
+              {error && <div className="auth-error">{error}</div>}
+
+              <button type="submit" className="auth-submit" disabled={loading}>
+                {loading ? 'Please wait…' : mode === 'login' ? 'Login' : 'Sign up'}
+              </button>
+
+              {mode === 'login' ? (
+                <p className="auth-footer-text">
+                  New here?{' '}
+                  <button
+                    type="button"
+                    className="auth-link"
+                    onClick={() => {
+                      setMode('signup');
+                      setError('');
+                    }}
+                  >
+                    Create an account
+                  </button>
+                </p>
+              ) : (
+                <p className="auth-footer-text">
+                  Already have an account?{' '}
+                  <button
+                    type="button"
+                    className="auth-link"
+                    onClick={() => {
+                      setMode('login');
+                      setError('');
+                    }}
+                  >
+                    Login instead
+                  </button>
+                </p>
+              )}
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

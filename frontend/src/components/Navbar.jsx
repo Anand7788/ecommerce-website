@@ -34,16 +34,16 @@ export default function Navbar(){
       <div className="brand"><Link to="/" style={{color:'inherit'}}>Shopperspoint</Link></div>
 
       <div className="right">
-        <Link to="/cart" style={{display:'inline-flex',alignItems:'center', gap:8}}>
+        <Link to="/cart" style={{display:'inline-flex',alignItems:'center', gap:8}} className="nav-btn">
           Cart {cartCount > 0 && <span className="badge">{cartCount}</span>}
         </Link>
 
-        <Link to="/orders">Orders</Link>
+        <Link to="/orders" className="nav-btn">Orders</Link>
 
         {token ? (
-          <button onClick={logout} className="button" style={{marginLeft:8}}>Logout</button>
+          <button onClick={logout} className="nav-btn" style={{marginLeft:8}}>Logout</button>
         ) : (
-          <Link to="/login" className="button secondary" style={{marginLeft:8}}>Login</Link>
+          <Link to="/login" className="nav-btn" style={{marginLeft:8}}>Login</Link>
         )}
       </div>
     </nav>
