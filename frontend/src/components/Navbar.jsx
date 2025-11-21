@@ -25,6 +25,9 @@ export default function Navbar() {
     navigate("/login");
   }
 
+  const logoUrl = "/logo.png";
+
+
   return (
     <nav className="navbar-modern">
       <div className="nav-inner">

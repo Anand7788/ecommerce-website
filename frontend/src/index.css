@@ -670,189 +670,157 @@ body.auth-body .nav .brand{
 }
 
 
-/* ----------------------------- */
-/* Responsive Navbar (mobile)    */
-/* ----------------------------- */
+/* ===========================
+   MOBILE / RESPONSIVE FIXES
+   Appended patch (override)
+   =========================== */
 
-.navbar-modern {
-  position: sticky;
-  top: 0;
-  z-index: 60;
-  backdrop-filter: blur(10px);
-  background: rgba(255,255,255,0.65);
-  border-bottom: 1px solid rgba(15,23,42,0.05);
-  box-shadow: 0 6px 18px rgba(13,18,27,0.06);
+/* 1) Ensure SVG icons inherit visible color (fix invisible icons) */
+.nav-link svg,
+.nav-btn svg,
+.mobile-toggle svg,
+.drawer-close svg,
+.brand-logo,
+.brand-text {
+  color: inherit;
+  display: inline-block;
+  vertical-align: middle;
 }
 
-/* layout */
-.nav-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 10px 22px;
+/* 2) Ensure nav labels hide but icons remain visible on narrow screens */
+@media (max-width: 640px) {
+  .nav-label { display: none !important; }
+  .nav-link { padding: 8px; }
+  .nav-badge { font-size: 11px; padding: 3px 7px; }
+}
+
+/* 3) Product grid: safe breakpoints for phones */
+.product-grid {
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+/* 4) Card stacking & spacing to prevent overlap */
+.card {
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* let content flow on small screens */
+  gap: 10px;
+}
+
+/* image responsive */
+.card img {
+  max-width: 100%;
+  height: auto;
+  max-height: 260px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* clamp product title and description so long text won't push buttons */
+.card h3 {
+  font-size: 1.05rem;
+  line-height: 1.2;
+  margin: 8px 0 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  word-wrap: break-word;
+}
+
+.card p {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* Price spacing and prominence */
+.price {
+  font-weight: 800;
+  font-size: 1.05rem;
+  margin: 8px 0 12px;
+  color: #0f172a;
+  min-width: 0;
+}
+
+/* Row & actions: keeps buttons from wrapping into price area */
+.card .row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  margin-top: auto; /* pushes row to bottom in taller cards */
+  min-width: 0;
 }
 
-.nav-left {
+.card .actions {
   display: flex;
+  gap: 10px;
   align-items: center;
-  gap: 12px;
+  flex-shrink: 0; /* prevents actions from shrinking too much */
+  white-space: nowrap; /* keep buttons on one line when possible */
 }
 
-/* brand logo + text */
-.brand {
-  display:flex;
-  align-items:center;
-  gap:10px;
-  cursor: pointer;
-}
-.brand-logo{
-  width:42px;
-  height:42px;
-  object-fit:cover;
-  border-radius:8px;
-  box-shadow: 0 6px 16px rgba(2,6,23,0.06);
-}
-.brand-text{
-  font-weight:700;
-  font-size:18px;
-  color:#0f172a;
-}
+/* 5) Very small screens: stack action buttons and make full width */
+@media (max-width: 420px) {
+  .product-grid { grid-template-columns: 1fr; gap: 12px; }
 
-/* mobile menu toggle (hamburger) */
-.mobile-toggle {
-  display:none;
-  background: transparent;
-  border: none;
-  align-items:center;
-  justify-content:center;
-  padding:8px;
-  border-radius:8px;
-  cursor:pointer;
-}
+  .card img { max-height: 300px; }
 
-/* right-side navigation (desktop) */
-.nav-right {
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
+  .card .row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
 
-/* links/buttons inside nav */
-.nav-link {
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:8px 10px;
-  border-radius:10px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  color:#111827;
-  font-weight:600;
-  transition: background .18s;
-}
-.nav-link:hover { background: rgba(15,23,42,0.04); }
-
-/* small text shown next to icons */
-.nav-label { display:inline-block; }
-
-/* cart badge */
-.nav-badge {
-  background:#2563eb;
-  color:white;
-  padding:2px 8px;
-  border-radius:999px;
-  font-size:12px;
-  margin-left:6px;
-  font-weight:700;
-}
-
-/* login/logout buttons */
-.nav-btn {
-  padding:8px 12px;
-  border-radius:999px;
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  font-weight:700;
-  border:none;
-  cursor:pointer;
-}
-.nav-btn.login {
-  background: rgba(99,102,241,0.12);
-  color:#4f46e5;
-  border: 1px solid rgba(99,102,241,0.18);
-}
-.nav-btn.logout {
-  background:#ef4444;
-  color:white;
-}
-
-/* ===========================
-   Responsive behavior
-   =========================== */
-
-/* <= 900px: show mobile hamburger; collapse nav items into slide-down panel */
-@media (max-width: 900px) {
-
-  .mobile-toggle { display:inline-flex; }
-
-  /* collapse nav by default on small screens */
-  .nav-right {
-    position: fixed;
-    right: 14px;
-    top: 64px;                /* below header */
-    width: calc(100% - 28px);
-    max-width: 420px;
-    background: rgba(255,255,255,0.98);
-    backdrop-filter: blur(6px);
-    border-radius: 12px;
-    padding: 12px;
-    box-shadow: 0 18px 40px rgba(2,6,23,0.12);
+  .card .actions {
+    width: 100%;
     flex-direction: column;
     gap: 10px;
-    transform: translateY(-10px);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity .18s ease, transform .18s ease;
   }
 
-  /* when open, slide down and show */
-  .nav-right.open {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
-
-  /* show icons and labels vertically */
-  .nav-link { width:100%; justify-content:flex-start; }
-  .nav-btn { width:100%; justify-content:center; }
-
-  .brand-text { display:none; } /* hide large brand text on small screens */
-
-  .brand-logo { width:36px; height:36px; } /* smaller logo */
-}
-
-/* Very small phones — make the slide-down full width */
-@media (max-width: 420px) {
-  .nav-right {
-    right: 8px;
-    top: 58px;
-    width: calc(100% - 16px);
-    max-width: none;
+  .card .actions .button,
+  .card .actions .button.secondary {
+    width: 100%;
     padding: 10px;
+    box-sizing: border-box;
   }
-  .brand-logo { width:32px; height:32px; }
-  .nav-inner { padding: 8px 12px; }
-  .brand-text { display:none; }
-  .mobile-toggle { padding:6px; }
+
+  /* tighten margins so cards are compact on small devices */
+  .container { padding-left: 12px; padding-right: 12px; }
 }
 
-/* Accessibility focus ring */
-.mobile-toggle:focus, .nav-link:focus, .nav-btn:focus {
-  outline: 3px solid rgba(37,99,235,0.18);
-  outline-offset: 2px;
+/* 6) Mobile drawer overlay behaviour tweak */
+.mobile-overlay {
+  transition: opacity .18s ease;
+  will-change: opacity;
 }
+.mobile-drawer {
+  transition: right .28s cubic-bezier(.2,.9,.2,1), transform .28s ease;
+  will-change: right, transform;
+}
+
+/* 7) Auth page & navbar contrast safety */
+
+.auth-body .navbar-modern,
+.auth-body .navbar-modern * {
+  color: #fff !important;
+}
+.auth-body .brand-logo {
+  filter: brightness(1.05) contrast(1.02);
+}
+
+/* 8) Small tweaks to keep text and buttons from overflowing */
+.button, .button.secondary {
+  min-width: 56px;
+  line-height: 1;
+  word-break: keep-all;
+}
+
+/* end of appended patch */
