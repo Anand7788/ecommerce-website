@@ -1,50 +1,66 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { getCart } from '../api/api';
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { getCart } from "../api/api";
+import { FiShoppingCart, FiBox, FiLogOut, FiLogIn } from "react-icons/fi";
 
-export default function Navbar(){
-  const navigate = useNavigate();
+export default function Navbar() {
   const [cartCount, setCartCount] = useState(0);
-  const token = localStorage.getItem('token');
+  const [token, setToken] = useState(localStorage.getItem("token"));
+  const navigate = useNavigate();
 
-  async function loadCartCount(){
+  async function loadCart() {
     try {
-      const data = await getCart();
-      const count = data?.items?.reduce((s,i)=>s + (i.quantity||0), 0) || 0;
-      setCartCount(count);
-    } catch(e){
-      // ignore
-    }
+      const cart = await getCart();
+      setCartCount(cart.items?.length || 0);
+    } catch {}
   }
 
   useEffect(() => {
-    loadCartCount();
-    // refresh cart count every 25s while on page (nice UX for demo)
-    const id = setInterval(loadCartCount, 25000);
-    return ()=>clearInterval(id);
-  }, []);
+    if (token) loadCart();
+  }, [token]);
 
-  function logout(){
-    localStorage.removeItem('token');
-    navigate('/login');
+  function logout() {
+    localStorage.removeItem("token");
+    setToken(null);
+    navigate("/login");
   }
 
   return (
-    <nav className="nav">
-      <div className="brand"><Link to="/" style={{color:'inherit'}}>Shopperspoint</Link></div>
+    <nav className="navbar-modern">
+      <div className="nav-inner">
+        <div className="brand" onClick={() => navigate("/")}>
+          ShoppersPoint
+        </div>
 
-      <div className="right">
-        <Link to="/cart" style={{display:'inline-flex',alignItems:'center', gap:8}} className="nav-btn">
-          Cart {cartCount > 0 && <span className="badge">{cartCount}</span>}
-        </Link>
+        <div className="nav-right">
 
-        <Link to="/orders" className="nav-btn">Orders</Link>
+          <Link to="/cart" className="nav-item">
+            <FiShoppingCart size={18} />
+            <span>Cart</span>
+            {cartCount > 0 && <span className="nav-badge">{cartCount}</span>}
+          </Link>
 
-        {token ? (
-          <button onClick={logout} className="nav-btn" style={{marginLeft:8}}>Logout</button>
-        ) : (
-          <Link to="/login" className="nav-btn" style={{marginLeft:8}}>Login</Link>
-        )}
+          <Link to="/orders" className="nav-item">
+            <FiBox size={18} />
+            <span>Orders</span>
+          </Link>
+
+          {/* Login / Logout */}
+          {token ? (
+            <button className="nav-btn logout" onClick={logout}>
+              <FiLogOut size={18} />
+              Logout
+            </button>
+          ) : (
+            <button
+              className="nav-btn login"
+              onClick={() => navigate("/login")}
+            >
+              <FiLogIn size={18} />
+              Login
+            </button>
+          )}
+        </div>
       </div>
     </nav>
   );
