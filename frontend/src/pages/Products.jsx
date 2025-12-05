@@ -1,27 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import { fetchProducts, addToCart } from '../api/api';
-import ProductCard from '../components/ProductCard';
+import { fetchProducts } from '../api/api';
+import ProductGrid from '../components/ProductGrid';
 
-export default function Products(){
+export default function ProductsPage(){
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [reloadFlag, setReloadFlag] = useState(0);
 
-  useEffect(() => {
-    fetchProducts().then(setProducts);
-  }, []);
-
-  async function handleAdd(id){
-    await addToCart(id, 1);
-    alert("Added to cart");
+  async function load(){
+    setLoading(true);
+    try {
+      const data = await fetchProducts();
+      setProducts(Array.isArray(data) ? data : (data.products || []));
+    } catch(err) {
+      console.error('Failed to load products', err);
+    } finally {
+      setLoading(false);
+    }
   }
 
+  useEffect(()=>{ load(); }, [reloadFlag]);
+
   return (
-    <div className="container">
-      <h2>Products</h2>
-      <div className="product-grid">
-        {products.map(p => (
-          <ProductCard key={p.id} product={p} onAdd={handleAdd} />
-        ))}
+    <div>
+      <div className="container" style={{marginBottom:18}}>
+        <h2>Products</h2>
       </div>
+
+      <ProductGrid products={products} loading={loading} onAdded={() => setReloadFlag(f=>f+1)} />
     </div>
   );
 }

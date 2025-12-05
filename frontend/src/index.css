@@ -31,121 +31,118 @@ body{
    NAVBAR
 -------------------------------- */
 
+/* ---------- NAVBAR GLASS + ICONS (replace previous navbar styles) ---------- */
+
 .navbar-modern {
   position: sticky;
   top: 0;
-  z-index: 50;
-
-  /* Glassmorphism background */
-  backdrop-filter: blur(16px);
-  background: rgba(255, 255, 255, 0.60);
-
-  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  z-index: 60;
+  backdrop-filter: blur(10px) saturate(120%);
+  background: linear-gradient(180deg, rgba(255,255,255,0.60), rgba(255,255,255,0.50));
+  border-bottom: 1px solid rgba(15,23,42,0.05);
+  box-shadow: 0 8px 20px rgba(13,18,27,0.06);
 }
 
 .nav-inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 12px 22px;
-
+  padding: 12px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
 }
 
+/* brand */
 .brand {
-  font-size: 22px;
-  font-weight: 700;
+  display:flex;
+  align-items:center;
+  gap:10px;
   cursor: pointer;
-  letter-spacing: -0.5px;
-  color: #111;
+  font-weight:700;
+  font-size:20px;
+  color: #0f172a;
 }
 
+/* nav-right container */
 .nav-right {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+  display:flex;
+  align-items:center;
+  gap:18px;                /* ↑ increased spacing between items */
 }
 
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-
-  padding: 8px 12px;
-  border-radius: 10px;
-
-  color: #111;
-  text-decoration: none;
-  font-weight: 500;
-
-  transition: 0.25s ease;
-}
-
-.nav-item:hover {
-  background: rgba(0, 0, 0, 0.06);
-}
-
-.nav-badge {
-  background: #2563eb;
-  color: white;
-  padding: 2px 7px;
-  border-radius: 50px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-/* Login Button */
+/* individual link/button */
+.nav-link,
 .nav-btn {
-  padding: 8px 14px;
-  border-radius: 999px;
-
-  display: flex;
-  align-items: center;
-  gap: 6px;
-
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.25s ease;
+  display:inline-flex;
+  align-items:center;
+  gap:10px;                /* icon + text gap */
+  padding:10px 14px;
+  border-radius:999px;
+  background: rgba(255,255,255,0.55); /* soft glass pill */
+  border: 1px solid rgba(255,255,255,0.35);
+  box-shadow: 0 6px 18px rgba(2,6,23,0.06);
+  color:#071025;
+  text-decoration:none;
+  font-weight:600;
+  transition: transform .12s ease, box-shadow .12s ease, background .12s;
+  backdrop-filter: blur(8px);
 }
 
-/* Glass Login Button */
+/* slightly stronger on hover */
+.nav-link:hover,
+.nav-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(2,6,23,0.10);
+  background: rgba(255,255,255,0.68);
+}
+
+/* icon container */
+.nav-icon {
+  width:18px;
+  height:18px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  color: #0f172a;
+  flex-shrink:0;
+  opacity:0.98;
+}
+
+/* cart badge */
+.nav-badge {
+  background: linear-gradient(90deg,#6366f1,#6c63ff);
+  color:white;
+  padding:2px 8px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:700;
+  margin-left:6px;
+  box-shadow: 0 6px 16px rgba(108,99,255,0.14);
+}
+
+/* login button variant (slightly purple) */
 .nav-btn.login {
-  background: rgba(37, 99, 235, 0.18);
-  color: #1d4ed8;
-  border: 1px solid rgba(37, 99, 235, 0.25);
+  background: linear-gradient(90deg, rgba(99,102,241,0.10), rgba(99,102,241,0.06));
+  color: #3730a3;
+  border: 1px solid rgba(99,102,241,0.16);
 }
 
-.nav-btn.login:hover {
-  background: rgba(37, 99, 235, 0.28);
-}
-
-/* Logout Button */
+/* logout button variant */
 .nav-btn.logout {
-  background: #ef4444;
-  color: white;
+  background: linear-gradient(90deg, rgba(239,68,68,0.08), rgba(239,68,68,0.04));
+  color:#b91c1c;
+  border: 1px solid rgba(239,68,68,0.12);
 }
 
-.nav-btn.logout:hover {
-  background: #dc2626;
+/* Responsive tweaks: keep icons but hide label on tiny screens */
+@media (max-width:640px) {
+  .nav-right { gap:10px; }
+  .nav-link .nav-label, .nav-btn .nav-label { display:none; }
+  .nav-link, .nav-btn { padding:8px; }
+  .nav-icon { width:20px; height:20px; }
 }
 
-/* Mobile */
-@media (max-width: 640px) {
-  .nav-item span {
-    display: none; /* hide text, keep icon */
-  }
-
-  .nav-right {
-    gap: 10px;
-  }
-
-  .nav-btn {
-    padding: 8px 10px;
-  }
-}
 
 
 
@@ -824,3 +821,28 @@ body.auth-body .nav .brand{
 }
 
 /* end of appended patch */
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.mobile-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.6);
+  border-radius: 10px;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transition: 0.2s ease;
+}
+
+.mobile-toggle:hover {
+  background: rgba(255,255,255,0.85);
+  transform: translateY(-2px);
+}
+

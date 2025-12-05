@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+// /home/lucifer/ecommerce/frontend/src/pages/Login.jsx
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login, signup } from '../api/api';
 
 export default function LoginPage() {
-  const [mode, setMode] = useState('login'); // 'login' or 'signup'
+  const [mode, setMode] = useState('login');
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');        // no default email now
-  const [password, setPassword] = useState('');  // no default password now
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -40,6 +41,11 @@ export default function LoginPage() {
     try {
       if (mode === 'login') {
         await login(email.trim(), password);
+
+        // notify other parts of app (Navbar) that auth changed
+        window.dispatchEvent(new Event('authChange'));
+
+        navigate('/');
       } else {
         await signup({
           name: name.trim(),
@@ -47,8 +53,12 @@ export default function LoginPage() {
           password,
           password_confirmation: password,
         });
+
+        // notify after signup too
+        window.dispatchEvent(new Event('authChange'));
+
+        navigate('/');
       }
-      navigate('/');
     } catch (err) {
       console.error(err);
       const msg =
@@ -65,17 +75,14 @@ export default function LoginPage() {
     alert('Google login UI is ready. OAuth integration can be added later.');
   }
 
-
-
   useEffect(() => {
-    // Add class when login page is mounted
+    // Add class when login page is mounted to style background
     document.body.classList.add('auth-body');
     return () => {
       // Remove when leaving login page
       document.body.classList.remove('auth-body');
     };
   }, []);
-
 
 
   return (
