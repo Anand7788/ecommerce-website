@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getCart } from "../api/api";
+import Logo from "../assets/logo.svg";
 
 export default function Navbar() {
   const [cartCount, setCartCount] = useState(0);
@@ -106,18 +107,16 @@ export default function Navbar() {
 
   {/* gradient logo */}
   <Link to="/" className="brand" onClick={closeMobile} style={{ display: "flex", alignItems: "center" }}>
-    <span
-      style={{
-        display: "inline-block",
-        width: 36,
-        height: 36,
-        borderRadius: 8,
-        background: "linear-gradient(45deg,#ff9a9e,#6c63ff)",
-        boxShadow: "0 6px 14px rgba(12,8,36,0.08)",
-        marginRight: 10
-      }}
-      aria-hidden="true"
-    />
+    <img
+    src={Logo}
+    alt="ShoppersPoint Logo"
+    style={{
+      width: 36,
+      height: 36,
+      marginRight: 10,
+      borderRadius: 8
+    }}
+   />
     <span className="brand-text">ShoppersPoint</span>
   </Link>
 </div>
