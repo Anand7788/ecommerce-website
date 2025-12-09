@@ -6,6 +6,7 @@ import ProductDetails from './pages/ProductDetails';
 import Cart from './pages/Cart';
 import Orders from './pages/Orders';
 import Login from './pages/Login';
+import Footer from "./components/footer";
 
 export default function App(){
   return (
@@ -19,6 +20,7 @@ export default function App(){
           <Route path="/orders" element={<Orders />} />
           <Route path="/login" element={<Login />} />
         </Routes>
+         <Footer />
       </main>
     </div>
   );
