@@ -9,6 +9,24 @@ export default function Navbar() {
   const [token, setToken] = useState(() => localStorage.getItem("token"));
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
+  
+  const [theme, setTheme] = useState(() => {
+  // 1) If user chose a theme earlier, use that
+  const saved = localStorage.getItem('theme');
+  if (saved === 'light' || saved === 'dark') return saved;
+
+  // 2) Otherwise, follow system preference
+  if (
+    typeof window !== 'undefined' &&
+    window.matchMedia &&
+    window.matchMedia('(prefers-color-scheme: dark)').matches
+  ) {
+    return 'dark';
+  }
+
+  // 3) Fallback
+  return 'light';
+});
 
   // fetch cart count
   const loadCart = useCallback(async () => {
@@ -70,10 +88,28 @@ export default function Navbar() {
     setMobileOpen((v) => !v);
   }
 
+  function toggleTheme() {
+  setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
+}
+
   // close mobile menu on navigation (helper)
   function closeMobile() {
     setMobileOpen(false);
   }
+
+  // whenever theme changes, apply class to <body> and save to localStorage
+useEffect(() => {
+  const body = document.body;
+
+  if (theme === 'dark') {
+    body.classList.add('dark-theme');
+  } else {
+    body.classList.remove('dark-theme');
+  }
+
+  localStorage.setItem('theme', theme);
+}, [theme]);
+
 
   return (
     <header
@@ -83,48 +119,93 @@ export default function Navbar() {
     >
       <div className="nav-inner">
         <div className="nav-left">
-  {/* hamburger button on the far left */}
-  <button
-    className="mobile-toggle"
-    onClick={toggleMobile}
-    aria-expanded={mobileOpen}
-    aria-label={mobileOpen ? "Close menu" : "Open menu"}
-    style={{ marginRight: 12 }}
-  >
-    <svg
-      width="22"
-      height="14"
-      viewBox="0 0 22 14"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
-      <rect y="1" width="22" height="2" rx="1" fill="#111827" opacity="0.85" />
-      <rect y="6" width="22" height="2" rx="1" fill="#111827" opacity="0.85" />
-      <rect y="11" width="22" height="2" rx="1" fill="#111827" opacity="0.85" />
-    </svg>
-  </button>
+          {/* hamburger button on the far left */}
+          <button
+            className="mobile-toggle"
+            onClick={toggleMobile}
+            aria-expanded={mobileOpen}
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            style={{ marginRight: 12 }}
+          >
+            <svg
+              width="22"
+              height="14"
+              viewBox="0 0 22 14"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <rect
+                y="1"
+                width="22"
+                height="2"
+                rx="1"
+                fill="#111827"
+                opacity="0.85"
+              />
+              <rect
+                y="6"
+                width="22"
+                height="2"
+                rx="1"
+                fill="#111827"
+                opacity="0.85"
+              />
+              <rect
+                y="11"
+                width="22"
+                height="2"
+                rx="1"
+                fill="#111827"
+                opacity="0.85"
+              />
+            </svg>
+          </button>
 
-  {/* gradient logo */}
-  <Link to="/" className="brand" onClick={closeMobile} style={{ display: "flex", alignItems: "center" }}>
-    <img
-    src={Logo}
-    alt="ShoppersPoint Logo"
-    style={{
-      width: 36,
-      height: 36,
-      marginRight: 10,
-      borderRadius: 8
-    }}
-   />
-    <span className="brand-text">ShoppersPoint</span>
-  </Link>
-</div>
+          {/* gradient logo */}
+          <Link
+            to="/"
+            className="brand"
+            onClick={closeMobile}
+            style={{ display: "flex", alignItems: "center" }}
+          >
+            <img
+              src={Logo}
+              alt="ShoppersPoint Logo"
+              style={{
+                width: 36,
+                height: 36,
+                marginRight: 10,
+                borderRadius: 8,
+              }}
+            />
+            <span className="brand-text">ShoppersPoint</span>
+          </Link>
+        </div>
 
         <nav
           className={`nav-right ${mobileOpen ? "open" : ""}`}
           aria-label="Primary"
         >
+          {/* Theme toggle */}
+          <button
+            type="button"
+            className="theme-toggle"
+            onClick={() => {
+              toggleTheme();
+              setMobileOpen(false);
+            }}
+            aria-label={
+              theme === "light" ? "Switch to dark mode" : "Switch to light mode"
+            }
+          >
+            <span aria-hidden="true" className="theme-toggle-icon">
+              {theme === "light" ? "🌙" : "☀️"}
+            </span>
+            <span className="theme-toggle-label">
+              {theme === "light" ? "Dark" : "Light"}
+            </span>
+          </button>
           {/* Cart */}
           <Link
             to="/cart"
