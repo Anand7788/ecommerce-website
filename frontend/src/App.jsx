@@ -6,7 +6,7 @@ import ProductDetails from './pages/ProductDetails';
 import Cart from './pages/Cart';
 import Orders from './pages/Orders';
 import Login from './pages/Login';
-import Footer from "./components/footer";
+import Footer from "./components/Footer";
 
 export default function App(){
   return (
