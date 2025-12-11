@@ -55,11 +55,13 @@ body.dark-theme {
 .navbar-modern {
   position: sticky;
   top: 0;
-  z-index: 60;
+  z-index: 1200;
   backdrop-filter: blur(10px) saturate(120%);
   background: linear-gradient(180deg, rgba(255,255,255,0.60), rgba(255,255,255,0.50));
   border-bottom: 1px solid rgba(15,23,42,0.05);
   box-shadow: 0 8px 20px rgba(13,18,27,0.06);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 }
 
 .nav-inner {
@@ -70,6 +72,8 @@ body.dark-theme {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  position: relative;
+  z-index: 1210;
 }
 
 /* brand */
@@ -112,7 +116,7 @@ body.dark-theme {
 .nav-link:hover,
 .nav-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(2,6,23,0.10);
+  box-shadow: 0 14px 36px rgba(10,10,20,0.36);
   background: rgba(255,255,255,0.68);
 }
 
@@ -142,16 +146,18 @@ body.dark-theme {
 
 /* login button variant (slightly purple) */
 .nav-btn.login {
-  background: linear-gradient(90deg, rgba(99,102,241,0.10), rgba(99,102,241,0.06));
-  color: #3730a3;
-  border: 1px solid rgba(99,102,241,0.16);
+  background: linear-gradient(90deg, rgba(99,102,241,0.12), rgba(99,102,241,0.06));
+  color: #efe8ff; /* visible text on purple tint */
+  border: 1px solid rgba(99,102,241,0.18);
+  box-shadow: 0 8px 20px rgba(79,70,229,0.14);
 }
 
 /* logout button variant */
 .nav-btn.logout {
-  background: linear-gradient(90deg, rgba(239,68,68,0.08), rgba(239,68,68,0.04));
-  color:#b91c1c;
-  border: 1px solid rgba(239,68,68,0.12);
+  background: linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  color: #ef4444;
+  border: 1px solid rgba(239,68,68,0.08);
+  box-shadow: 0 8px 22px rgba(239,68,68,0.06);
 }
 
 /* Responsive tweaks: keep icons but hide label on tiny screens */
@@ -1244,4 +1250,107 @@ body.dark-theme .footer {
 /* Smooth transitions */
 * {
   transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+}
+
+
+/* =========================
+   Navbar visibility fixes
+   ========================= */
+
+/* Ensure header always sits on top of hero / page content */
+.navbar-modern {
+  position: sticky; /* or 'fixed' if you prefer fixed header */
+  top: 0;
+  z-index: 1200; /* high so hero never covers the header */
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+/* Make sure nav-inner content is above page background */
+.nav-inner {
+  position: relative;
+  z-index: 1210;
+}
+
+/* Make icons inherit the text color and be visible */
+.nav-link span[aria-hidden],
+.nav-btn span[aria-hidden] {
+  display: inline-block;
+  color: currentColor; /* follow text color */
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* Strong, visible glass buttons (works on both dark & light backgrounds) */
+.nav-btn {
+  padding: 8px 14px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+  color: var(--text);
+  box-shadow: 0 8px 24px rgba(10,10,20,0.28);
+  transition: transform .14s ease, box-shadow .14s ease, background .14s ease;
+  min-height: 40px;
+}
+
+/* Login variant */
+.nav-btn.login {
+  background: linear-gradient(90deg, rgba(99,102,241,0.12), rgba(99,102,241,0.06));
+  color: #efe8ff; /* visible text on purple tint */
+  border: 1px solid rgba(99,102,241,0.18);
+  box-shadow: 0 8px 20px rgba(79,70,229,0.14);
+}
+
+/* Logout variant (visible on any bg) */
+.nav-btn.logout {
+  background: linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  color: #ef4444;
+  border: 1px solid rgba(239,68,68,0.08);
+  box-shadow: 0 8px 22px rgba(239,68,68,0.06);
+}
+
+/* Hover states */
+.nav-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 36px rgba(10,10,20,0.36);
+}
+
+/* Ensure nav links (Cart / Orders) are readable */
+.nav-link {
+  color: inherit;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));
+  border-radius: 10px;
+  padding: 8px 10px;
+  border: 1px solid rgba(15,23,42,0.03);
+  box-shadow: 0 6px 18px rgba(2,6,23,0.06);
+}
+
+/* cart badge visibility */
+.nav-badge {
+  background: #6c63ff;
+  color: #fff;
+  padding: 4px 8px;
+  font-weight: 700;
+  border-radius: 999px;
+  box-shadow: 0 6px 18px rgba(108,99,255,0.22);
+}
+
+/* If you're using a dark theme via body.dark-theme, ensure buttons contrast */
+body.dark-theme .nav-btn,
+body.dark-theme .nav-link {
+  border-color: rgba(255,255,255,0.06);
+  color: #f3f4f7;
+}
+
+body.dark-theme .nav-btn.login {
+  color: #f8f7ff;
+}
+
+/* small screens: ensure mobile slidepanel doesn't visually hide the top buttons */
+@media (max-width: 900px) {
+  .navbar-modern { z-index: 1400; }
+  .nav-right { z-index: 1400; }
 }

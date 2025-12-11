@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { fetchProducts } from '../api/api';
 import ProductGrid from '../components/ProductGrid';
 
-export default function ProductsPage(){
+export default function HomePage(){
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [reloadFlag, setReloadFlag] = useState(0);
