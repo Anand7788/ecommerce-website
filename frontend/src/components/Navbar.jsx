@@ -215,7 +215,7 @@ useEffect(() => {
           >
             <span className="nav-icon" aria-hidden="true">
               {/* cart SVG */}
-              <svg
+              <svg className="icon12"
                 viewBox="0 0 24 24"
                 width="18"
                 height="18"
@@ -247,7 +247,7 @@ useEffect(() => {
           >
             <span className="nav-icon" aria-hidden="true">
               {/* box icon */}
-              <svg
+              <svg className="icon12"
                 viewBox="0 0 24 24"
                 width="18"
                 height="18"
@@ -276,7 +276,7 @@ useEffect(() => {
             >
               <span className="nav-icon" aria-hidden="true">
                 {/* logout icon */}
-                <svg
+                <svg className="icon12"
                   viewBox="0 0 24 24"
                   width="18"
                   height="18"
@@ -302,7 +302,7 @@ useEffect(() => {
             >
               <span className="nav-icon" aria-hidden="true">
                 {/* login icon */}
-                <svg
+                <svg className="icon12"
                   viewBox="0 0 24 24"
                   width="18"
                   height="18"

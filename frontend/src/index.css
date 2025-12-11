@@ -27,6 +27,25 @@ body{
   -webkit-font-smoothing: antialiased;
 }
 
+/* Dark theme overrides (applied when body has .dark-theme) */
+body.dark-theme {
+  --primary: #818cf8;
+  --primary-dark: #6366f1;
+  --bg: #020617;
+  --card-bg: #020617;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --shadow: 0 16px 40px rgba(0, 0, 0, 0.9);
+  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.75);
+}
+
+/* base background/text already use variables so this is enough for most pages */
+body.dark-theme {
+  background: var(--bg);
+  color: var(--text);
+}
+
+
 /* -------------------------------
    NAVBAR
 -------------------------------- */
@@ -143,8 +162,49 @@ body{
   .nav-icon { width:20px; height:20px; }
 }
 
+/* Theme toggle button (navbar) */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #0f172a;
+  transition: background 0.18s ease, box-shadow 0.18s ease, transform 0.12s ease;
+}
 
+.theme-toggle:hover {
+  background: rgba(248, 250, 252, 1);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+  transform: translateY(-1px);
+}
 
+.theme-toggle-icon {
+  font-size: 0.95rem;
+}
+
+.theme-toggle-label {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* in dark mode, invert glass style */
+body.dark-theme .theme-toggle {
+  background: rgba(15, 23, 42, 0.95);
+  color: #e5e7eb;
+  border-color: rgba(148, 163, 184, 0.6);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.9);
+}
+body.dark-theme .theme-toggle:hover {
+  background: rgba(31, 41, 55, 1);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.75);
+}
 
 /* -------------------------------
    PAGE WRAPPER
@@ -163,6 +223,160 @@ body{
   grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
   gap:22px;
 }
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+/* Modern product grid */
+.product-grid-modern {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 22px;
+}
+
+.product-card-modern {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.product-card-modern:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
+}
+
+/* image */
+.product-image-box {
+  position: relative;
+  height: 210px;
+  margin-bottom: 10px;
+}
+.product-image-box img {
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
+  object-fit: cover;
+}
+
+/* badge */
+.discount-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #ef4444;
+  color: white;
+  padding: 4px 10px;
+  font-size: 11px;
+  border-radius: 999px;
+}
+
+/* text */
+.product-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.product-desc {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+/* price row */
+.price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.price {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+/* actions */
+.product-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.btn-primary {
+  flex: 1;
+  border-radius: 999px;
+  padding: 8px 12px;
+  border: none;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-outline {
+  flex: 1;
+  border-radius: 999px;
+  padding: 8px 12px;
+  border: 1.5px solid var(--primary);
+  color: var(--primary);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* skeleton loading */
+.skeleton-card {
+  position: relative;
+  overflow: hidden;
+}
+.skeleton-block,
+.skeleton-line {
+  background: linear-gradient(
+    90deg,
+    #e5e7eb 0%,
+    #f3f4f6 40%,
+    #e5e7eb 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.2s ease-in-out infinite;
+  border-radius: 10px;
+}
+.skeleton-block {
+  height: 210px;
+  margin-bottom: 10px;
+}
+.skeleton-line {
+  height: 10px;
+  margin-bottom: 8px;
+}
+.skeleton-line-lg {
+  width: 80%;
+}
+.skeleton-line-sm {
+  width: 60%;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* mobile tweaks */
+@media (max-width: 600px) {
+  .product-grid-modern {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .product-image-box {
+    height: 160px;
+  }
+}
+
 
 /* ---------- Product card layout & button ---------- */
 
@@ -978,4 +1192,56 @@ body.auth-body .nav .brand{
     gap: 6px;
     text-align: center;
   }
+}
+
+/* ---------------------------------------------
+   🌓 DARK MODE COMPONENT OVERRIDES (PART B)
+   Add this entire block below your last line
+--------------------------------------------- */
+
+body.dark-theme .navbar-modern {
+  background: #0f172a;
+  border-bottom: 1px solid #1e293b;
+}
+
+body.dark-theme .brand-text {
+  color: #f1f5f9;
+}
+
+body.dark-theme .nav-link,
+body.dark-theme .nav-btn {
+  color: #e2e8f0;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+body.dark-theme .nav-btn.login {
+  color: #c4b5fd;
+  border-color: #6d28d9;
+}
+
+body.dark-theme .nav-btn.logout {
+  color: #fca5a5;
+  border-color: #dc2626;
+}
+
+body.dark-theme .card {
+  background: #111827;
+  border: 1px solid #1f2937;
+  color: #e2e8f0;
+}
+
+body.dark-theme .price {
+  color: #a78bfa;
+}
+
+body.dark-theme .footer {
+  background: #0f172a;
+  border-top: 1px solid #1e293b;
+  color: #e2e8f0;
+}
+
+/* Smooth transitions */
+* {
+  transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease;
 }
