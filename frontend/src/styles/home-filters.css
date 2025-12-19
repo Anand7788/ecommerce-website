@@ -1,0 +1,70 @@
+.home-page {
+  padding: 24px;
+}
+
+.home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.home-content {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.product-grid-wrapper {
+  flex: 1;               /* 🔥 this allows grid to expand */
+}
+
+
+
+/* Filters */
+.filters {
+  background: white;
+  width: 260px;          /* fixed sidebar width */
+  flex-shrink: 0;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+}
+
+.filter-group {
+  margin-top: 16px;
+}
+
+.filter-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.filter-group button {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 6px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  cursor: pointer;
+}
+
+/* Sort */
+.sort-select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+/* Mobile */
+@media (max-width: 900px) {
+  .home-content {
+    grid-template-columns: 1fr;
+  }
+  .filters {
+    display: none; /* later convert to drawer */
+  }
+}
