@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { login } from '../api/api';
 import { FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
+import { FaGoogle, FaApple } from 'react-icons/fa';
 import '../styles/AdminLogin.css'; // We'll create this next
 
 export default function AdminLogin() {
@@ -65,12 +66,11 @@ export default function AdminLogin() {
 
         {/* Social Buttons (Mock) */}
         <div className="social-login-row">
-           <button className="social-btn">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="G" width="20" />
-              Google
+           <button className="social-btn" type="button" style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
+              <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google" style={{height: 24}} />
            </button>
-           <button className="social-btn">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="A" width="20" />
+           <button className="social-btn" type="button">
+              <FaApple color="black" size={20} />
               Apple
            </button>
         </div>
