@@ -1,64 +1,127 @@
-# db/seeds.rb (idempotent) — creates 20 products by SKU (no destructive deletes)
-
-puts "Seeding products (idempotent)..."
+# db/seeds.rb (idempotent)
+puts "Seeding products..."
 
 Product.transaction do
-  earphones = [
-    { name: "EchoBass Earbuds", sku: "EAR-001", description: "True wireless earbuds with deep bass", price: 1299.0, price_cents: 129900, stock: 150, image_url: "https://m.media-amazon.com/images/I/61IwQUCvgvL.jpg" },
-    { name: "ClearTone In-Ear", sku: "EAR-002", description: "Wired in-ear earphones with mic", price: 399.0, price_cents: 39900, stock: 200, image_url: "https://cdn.shopify.com/s/files/1/0906/7724/8281/files/alpine-cleartone-earplugs-mica-banner-everyday-use.jpg?v=1735351058" },
-    { name: "ActiveSport Buds", sku: "EAR-003", description: "Sweatproof sport earbuds with secure fit", price: 1699.0, price_cents: 169900, stock: 80, image_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAm1huTU2Ms2ZMrH_SLibgTvwKwSePl_0bdg&s" },
-    { name: "StudioPro ANC", sku: "EAR-004", description: "Over-ear ANC headphones for studio sound", price: 3999.0, price_cents: 399900, stock: 40, image_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFZDlJ1fyWMFOxysZ_gjO40ThgYzRdQ0WxCg&s" },
-    { name: "PocketMini Wireless", sku: "EAR-005", description: "Compact true-wireless earbuds with long battery", price: 999.0, price_cents: 99900, stock: 120, image_url: "https://sc04.alicdn.com/kf/H23942c6207384628b90002c04f01babft.jpg" }
-  ]
-
-  mobiles = [
-    { name: "Nova X1", sku: "MOB-001", description: "Nova X1 - 6.5\" AMOLED, 8GB RAM", price: 14999.0, price_cents: 1499900, stock: 50, image_url: "https://i.ytimg.com/vi/pdZ25y1ROkc/sddefault.jpg" },
-    { name: "Edge Pro 5G", sku: "MOB-002", description: "Edge Pro 5G - 120Hz display, 128GB", price: 24999.0, price_cents: 2499900, stock: 30, image_url: "https://gogizmo.in/wp-content/uploads/2024/11/Motorola-Edge-50-Pro-Black-Beauty-3.png" },
-    { name: "Zenith Lite", sku: "MOB-003", description: "Zenith Lite - Lightweight with long battery", price: 11999.0, price_cents: 1199900, stock: 70, image_url: "https://m.media-amazon.com/images/I/81R1J+d8O7L.jpg" },
-    { name: "Aurora Max", sku: "MOB-004", description: "Aurora Max - Flagship camera performance", price: 39999.0, price_cents: 3999900, stock: 15, image_url: "https://www.jiomart.com/images/product/original/491667256/redmi-note-9-pro-max-64-gb-6-gb-ram-aurora-blue-smartphone-digital-o491667256-p590038039-4-202009260544.jpeg?im=Resize=(420,420)" },
-    { name: "Orbit S", sku: "MOB-005", description: "Orbit S - Value for money with clean UI", price: 8999.0, price_cents: 899900, stock: 100, image_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQEI4bUxWfG_Wdq8vXGTHNLIeJkFc4_Lod_A&s" }
-  ]
-
-  cases = [
-    { name: "Nova X1 Rugged Case", sku: "CASE-MOB001-001", for_sku: "MOB-001", description: "Shockproof rugged case for Nova X1", price: 599.0, price_cents: 59900, stock: 200, image_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVkHUn8dI_FdfaKvKdMhXyvUHDOKq0jPKkeA&s" },
-    { name: "Edge Pro Slim Case", sku: "CASE-MOB002-001", for_sku: "MOB-002", description: "Slim protective case for Edge Pro 5G", price: 499.0, price_cents: 49900, stock: 150, image_url: "https://m.media-amazon.com/images/I/51SAuaaomuL._AC_UF1000,1000_QL80_.jpg" },
-    { name: "Zenith Silicone Case", sku: "CASE-MOB003-001", for_sku: "MOB-003", description: "Soft silicone case for Zenith Lite", price: 349.0, price_cents: 34900, stock: 180, image_url: "https://m.media-amazon.com/images/I/81HSN+Y-QgL._AC_UF350,350_QL80_.jpg" },
-    { name: "Aurora Leather Case", sku: "CASE-MOB004-001", for_sku: "MOB-004", description: "Premium leather-style case for Aurora Max", price: 799.0, price_cents: 79900, stock: 60, image_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZpAJxCxAhei_Uq2N59W73dSugEubF2UJ4LA&s" },
-    { name: "Orbit S Transparent Case", sku: "CASE-MOB005-001", for_sku: "MOB-005", description: "Clear case for Orbit S", price: 299.0, price_cents: 29900, stock: 220, image_url: "https://m.media-amazon.com/images/I/51lp2oUJ57L._AC_UF1000,1000_QL80_.jpg" }
-  ]
-
-  chargers = [
-    { name: "Nova X1 Fast Charger 33W", sku: "CHR-MOB001-001", for_sku: "MOB-001", description: "33W fast charger for Nova X1", price: 799.0, price_cents: 79900, stock: 120, image_url: "https://m.media-amazon.com/images/I/4128jrhFylL._AC_UF350,350_QL50_.jpg" },
-    { name: "Edge Pro 65W Charger", sku: "CHR-MOB002-001", for_sku: "MOB-002", description: "65W high-speed charger for Edge Pro 5G", price: 1499.0, price_cents: 149900, stock: 80, image_url: "https://m.media-amazon.com/images/I/61-JicAdlUL._UF1000,1000_QL80_.jpg" }
-  ]
-
-  cables = [
-    { name: "Nova X1 Type-C Cable 1m", sku: "CBL-MOB001-001", for_sku: "MOB-001", description: "Durable Type-C cable (1m) for Nova X1", price: 199.0, price_cents: 19900, stock: 250, image_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUDYRevHz5Qfaj7R7kNDl118hWnh66667i5A&s" },
-    { name: "Zenith Lite Braided Cable 2m", sku: "CBL-MOB003-001", for_sku: "MOB-003", description: "Braided Type-C cable (2m) for Zenith Lite", price: 299.0, price_cents: 29900, stock: 180, image_url: "https://m.media-amazon.com/images/I/51rBn99hV1L.jpg" },
-    { name: "Orbit S Fast Sync Cable", sku: "CBL-MOB005-001", for_sku: "MOB-005", description: "Fast sync cable for Orbit S", price: 249.0, price_cents: 24900, stock: 200, image_url: "https://m.media-amazon.com/images/I/51NfuFkDa0L._AC_UF1000,1000_QL80_.jpg" }
-  ]
-
-  # helper to create or update product by sku
+  # Helper to create/update
   add_or_update = ->(attrs) do
     sku = attrs[:sku]
     p = Product.find_or_initialize_by(sku: sku)
     p.name = attrs[:name]
     p.description = attrs[:description]
-    # Calculate price_cents from price if not provided
-    p.price_cents = attrs[:price_cents] || (attrs[:price] ? (attrs[:price] * 100).to_i : 0)
-    p.stock = attrs[:stock]
+    p.category = attrs[:category]
+    p.price = attrs[:price]
+    p.price_cents = (attrs[:price] * 100).to_i
+    p.stock = attrs[:stock] || 50
     p.image_url = attrs[:image_url]
     p.save!
-    p
+    # print "."
   end
 
-  earphones.each { |h| add_or_update.call(h) }
-  mobiles.each { |h| add_or_update.call(h) }
+  # 1. Electronics (Headphones / Audio)
+  [
+    { 
+      name: "AirPod Max Style Headphones", sku: "AUD-001", category: "Electronics",
+      description: "Premium over-ear noise cancelling headphones with spatial audio.",
+      price: 15999.0, image_url: "https://m.media-amazon.com/images/I/61IwQUCvgvL.jpg" 
+    },
+    { 
+      name: "Sony XM4 Noise Cancelling", sku: "AUD-002", category: "Electronics",
+      description: "Industry leading noise cancellation with 30hr battery life.",
+      price: 24990.0, image_url: "https://m.media-amazon.com/images/I/51SkO+4JkKL._AC_UF1000,1000_QL80_.jpg" 
+    },
+    { 
+      name: "JBL Flip 5 Bluetooth Speaker", sku: "AUD-003", category: "Electronics",
+      description: "Waterproof portable bluetooth speaker with powerful bass.",
+      price: 8999.0, image_url: "https://m.media-amazon.com/images/I/719CLc+IqfL._AC_UF1000,1000_QL80_.jpg" 
+    },
+    { 
+      name: "Marshall Acton II Speaker", sku: "AUD-004", category: "Electronics",
+      description: "Classic design, powerful room-filling sound.",
+      price: 24999.0, image_url: "https://m.media-amazon.com/images/I/71N-E-rZ+AL._AC_UF1000,1000_QL80_.jpg" 
+    },
+    { 
+      name: "Logitech MX Master 3S Mouse", sku: "ACC-001", category: "Electronics",
+      description: "Performance wireless mouse max precision.",
+      price: 9500.0, image_url: "https://m.media-amazon.com/images/I/61ni3t1ryQL._AC_UF1000,1000_QL80_.jpg" 
+    },
+  ].each { |h| add_or_update.call(h) }
 
-  # create accessory products
-  cases.each { |h| add_or_update.call(h.except(:for_sku)) }
-  chargers.each { |h| add_or_update.call(h.except(:for_sku)) }
-  cables.each { |h| add_or_update.call(h.except(:for_sku)) }
+  # 2. Mobiles
+  [
+    { 
+      name: "iPhone 15 Pro", sku: "MOB-101", category: "Mobile",
+      description: "Titanium design, A17 Pro chip, 48MP Main Camera.",
+      price: 134900.0, image_url: "https://m.media-amazon.com/images/I/81+GIkwqLIL._AC_UF1000,1000_QL80_.jpg" 
+    },
+    { 
+      name: "Samsung Galaxy S24 Ultra", sku: "MOB-102", category: "Mobile",
+      description: "Galaxy AI is here. 200MP camera, titanium frame.",
+      price: 129999.0, image_url: "https://m.media-amazon.com/images/I/71Hx8b6HOSL._AC_UF1000,1000_QL80_.jpg" 
+    },
+    { 
+      name: "OnePlus 12", sku: "MOB-103", category: "Mobile",
+      description: "Smooth beyond belief. Snapdragon 8 Gen 3.",
+      price: 64999.0, image_url: "https://m.media-amazon.com/images/I/717Qo4MH97L._AC_UF1000,1000_QL80_.jpg" 
+    },
+    { 
+      name: "Google Pixel 8 Pro", sku: "MOB-104", category: "Mobile",
+      description: "The most pro Pixel ever with Gemini Nano.",
+      price: 99999.0, image_url: "https://m.media-amazon.com/images/I/61f47G-WQwL._AC_UF1000,1000_QL80_.jpg" 
+    },
+    { 
+      name: "Nothing Phone (2)", sku: "MOB-105", category: "Mobile",
+      description: "Iconic Glyph interface, new Nothing OS.",
+      price: 39999.0, image_url: "https://m.media-amazon.com/images/I/715M3Q8cVAL._AC_UF1000,1000_QL80_.jpg" 
+    }
+  ].each { |h| add_or_update.call(h) }
+
+  # 3. Appliances
+  [
+    { 
+      name: "Dyson V12 Detect Slim", sku: "APP-001", category: "Appliances",
+      description: "Intelligent cordless vacuum with laser detect.",
+      price: 45900.0, image_url: "https://m.media-amazon.com/images/I/61w4W3y2VUL._AC_UF1000,1000_QL80_.jpg" 
+    },
+    { 
+      name: "Philips Air Fryer XL", sku: "APP-002", category: "Appliances",
+      description: "Great tasting fries with up to 90% less fat.",
+      price: 12990.0, image_url: "https://m.media-amazon.com/images/I/71Y-C6A7cZL._AC_UF1000,1000_QL80_.jpg" 
+    },
+    { 
+      name: "Nespresso Coffee Machine", sku: "APP-003", category: "Appliances",
+      description: "Barista style coffee at home with one touch.",
+      price: 18500.0, image_url: "https://m.media-amazon.com/images/I/61JImD5p0gL._AC_UF1000,1000_QL80_.jpg" 
+    },
+    { 
+      name: "Roborock S8 Robot Vacuum", sku: "APP-004", category: "Appliances",
+      description: "Robot vacuum and mop with sonic mopping.",
+      price: 59999.0, image_url: "https://m.media-amazon.com/images/I/51H6kP23PQL._AC_UF1000,1000_QL80_.jpg" 
+    }
+  ].each { |h| add_or_update.call(h) }
+
+  # 4. Fashion
+  [
+    { 
+      name: "Nike Air Jordan 1 High", sku: "FAS-001", category: "Fashion",
+      description: "Classic basketball sneakers in red and black.",
+      price: 16995.0, image_url: "https://m.media-amazon.com/images/I/61scZ4WjHIL._AC_UY1000_.jpg" 
+    },
+    { 
+      name: "Casio G-Shock GA-2100", sku: "FAS-002", category: "Fashion",
+      description: "The 'CasiOak' octagonal analog-digital watch.",
+      price: 9995.0, image_url: "https://m.media-amazon.com/images/I/61Xz7C-sB5L._AC_UY1000_.jpg" 
+    },
+    { 
+      name: "Ray-Ban Aviator Sunglasses", sku: "FAS-003", category: "Fashion",
+      description: "Classic gold frame aviator sunglasses.",
+      price: 8500.0, image_url: "https://m.media-amazon.com/images/I/519fT+wT0HL._AC_UY1000_.jpg" 
+    },
+    { 
+      name: "Levis 501 Original Jeans", sku: "FAS-004", category: "Fashion",
+      description: "The original straight fit blue pair of jeans.",
+      price: 3999.0, image_url: "https://m.media-amazon.com/images/I/61+D0Xo0qdL._AC_UY1000_.jpg" 
+    }
+  ].each { |h| add_or_update.call(h) }
 
   puts "Seeding complete. Total products: #{Product.count}"
 end

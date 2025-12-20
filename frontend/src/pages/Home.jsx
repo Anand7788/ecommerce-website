@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { fetchProducts } from "../api/api";
 import ProductGrid from "../components/ProductGrid";
 import Hero from "../components/Hero"; // Import Hero
@@ -9,13 +10,18 @@ export default function HomePage() {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get("search");
+  const categoryParam = searchParams.get("category");
+  const filterParam = searchParams.get("filter");
+  const sortParam = searchParams.get("sort");
+
   async function load() {
     setLoading(true);
     try {
       const data = await fetchProducts();
       const list = Array.isArray(data) ? data : data.products || [];
       setProducts(list);
-      setFilteredProducts(list);
     } catch (err) {
       console.error("Failed to load products", err);
     } finally {
@@ -26,6 +32,39 @@ export default function HomePage() {
   useEffect(() => {
     load();
   }, []);
+
+  // Filter & Sort products
+  useEffect(() => {
+    let result = [...products];
+
+    // 1. Search
+    if(searchQuery) {
+        const lower = searchQuery.toLowerCase();
+        result = result.filter(p => 
+            p.name.toLowerCase().includes(lower) || 
+            (p.description && p.description.toLowerCase().includes(lower))
+        );
+    }
+
+    // 2. Category
+    if(categoryParam && categoryParam !== 'All') {
+        result = result.filter(p => p.category === categoryParam);
+    }
+
+    // 3. Deals (Mock: price < 5000 or specific flag if available)
+    if(filterParam === 'deals') {
+        // As a simple heuristic for "Deals", we can show items under a certain price
+        // or if you have a discount field. For now, showing affordable items.
+        result = result.filter(p => p.price < 5000); 
+    }
+
+    // 4. Sort
+    if(sortParam === 'newest') {
+        result.sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+    }
+
+    setFilteredProducts(result);
+  }, [products, searchQuery, categoryParam, filterParam, sortParam]);
 
   return (
     <div className="home-page">
