@@ -64,7 +64,7 @@ export default function AdminLogin() {
         <h2 className="login-title">Login to your account</h2>
         <p className="login-subtitle">Welcome back, please enter your details</p>
 
-        {/* Social Buttons (Mock) */}
+        {/* Social Buttons (Mock) - Commented out to avoid Phishing False Positive
         <div className="social-login-row">
            <button className="social-btn" type="button">
               <FaGoogle color="#DB4437" size={20} />
@@ -77,6 +77,7 @@ export default function AdminLogin() {
         </div>
 
         <div className="divider">Or</div>
+        */}
 
         <form onSubmit={handleSubmit}>
           {/* Email Field */}
