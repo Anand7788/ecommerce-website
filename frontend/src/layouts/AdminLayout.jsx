@@ -36,7 +36,7 @@ export default function AdminLayout() {
            ShoppersAdmin
         </div>
 
-        <nav className="admin-nav" style={{flex:1, display:'flex', flexDirection:'column'}}>
+        <nav className="admin-nav" style={{display:'flex', flexDirection:'column'}}>
           <NavLink to="/admin" end className={({isActive}) => `admin-nav-item ${isActive ? 'active' : ''}`}>
              <FiGrid /> Dashboard
           </NavLink>
@@ -60,7 +60,7 @@ export default function AdminLayout() {
              <FiHelpCircle /> Help Center
           </NavLink>
           
-          <div style={{marginTop:'auto'}}>
+          <div style={{marginTop:'10px', paddingTop:'10px', borderTop:'1px solid #eee'}}>
             <button 
               onClick={handleLogout} 
               className="admin-nav-item" 
