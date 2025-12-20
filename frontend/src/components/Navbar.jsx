@@ -10,23 +10,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
   
-  const [theme, setTheme] = useState(() => {
-  // 1) If user chose a theme earlier, use that
-  const saved = localStorage.getItem('theme');
-  if (saved === 'light' || saved === 'dark') return saved;
 
-  // 2) Otherwise, follow system preference
-  if (
-    typeof window !== 'undefined' &&
-    window.matchMedia &&
-    window.matchMedia('(prefers-color-scheme: dark)').matches
-  ) {
-    return 'dark';
-  }
-
-  // 3) Fallback
-  return 'light';
-});
 
   // fetch cart count
   const loadCart = useCallback(async () => {
@@ -75,6 +59,8 @@ export default function Navbar() {
   // logout handler
   function logout() {
     localStorage.removeItem("token");
+    localStorage.removeItem("is_admin");
+    localStorage.removeItem("user_name");
     window.dispatchEvent(new Event("authChange"));
     setToken(null);
     setTimeout(() => {
@@ -88,9 +74,7 @@ export default function Navbar() {
     setMobileOpen((v) => !v);
   }
 
-  function toggleTheme() {
-  setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
-}
+
 
   // close mobile menu on navigation (helper)
   function closeMobile() {
@@ -98,17 +82,11 @@ export default function Navbar() {
   }
 
   // whenever theme changes, apply class to <body> and save to localStorage
-useEffect(() => {
-  const body = document.body;
-
-  if (theme === 'dark') {
-    body.classList.add('dark-theme');
-  } else {
-    body.classList.remove('dark-theme');
-  }
-
-  localStorage.setItem('theme', theme);
-}, [theme]);
+// Ensure any stale dark-theme class is removed
+  useEffect(() => {
+    document.body.classList.remove('dark-theme');
+    localStorage.removeItem('theme');
+  }, []);
 
 const [searchQuery, setSearchQuery] = useState("");
 const [allProducts, setAllProducts] = useState([]);
@@ -258,10 +236,11 @@ const handleSuggestionClick = (productName) => {
              {/* Dropdown Menu */}
              <div className="dropdown-menu">
                {token ? (
-                 <>
-                   <Link to="/orders" className="dropdown-item">My Orders</Link>
-                   <button onClick={logout} className="dropdown-item logout-btn">Logout</button>
-                 </>
+                  <>
+                    <Link to="/profile" className="dropdown-item">My Profile</Link>
+                    <Link to="/orders" className="dropdown-item">My Orders</Link>
+                    <button onClick={logout} className="dropdown-item logout-btn">Logout</button>
+                  </>
                ) : (
                  <>
                    <Link to="/login" className="dropdown-item">Login</Link>
@@ -275,7 +254,26 @@ const handleSuggestionClick = (productName) => {
            <Link to="/cart" className="action-item">
              <div style={{position:'relative'}}>
                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-               {cartCount > 0 && <span className="cart-badge-dot"></span>}
+               {cartCount > 0 && (
+                 <span style={{
+                    position: 'absolute',
+                    top: -8,
+                    right: -8,
+                    background: '#ff6f00',
+                    color: 'white',
+                    fontSize: 11,
+                    fontWeight: 'bold',
+                    width: 18,
+                    height: 18,
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    border: '2px solid white'
+                 }}>
+                   {cartCount}
+                 </span>
+               )}
              </div>
              <span>Cart</span>
            </Link>

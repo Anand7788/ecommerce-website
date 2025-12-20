@@ -74,12 +74,13 @@ class ApplicationController < ActionController::API
     response.set_header('Cart-Token', guest_token)
     cart
   end
-end
 
-# authenticate_admin! method to be used in controllers where admin access is required
-def authenticate_admin!
-  unless current_user&.admin?
-    render json: { error: "Forbidden — admin only" }, status: :forbidden
+
+  # authenticate_admin! method to be used in controllers where admin access is required
+  def authenticate_admin!
+    unless current_user&.admin?
+      render json: { error: "Forbidden — admin only" }, status: :forbidden
+    end
   end
 end
 

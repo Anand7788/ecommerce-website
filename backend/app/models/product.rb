@@ -11,6 +11,6 @@ class Product < ApplicationRecord
   end
 
   def as_json(options = {})
-    super({ only: [:id, :name, :description, :sku, :stock, :image_url, :created_at, :updated_at] }.merge(options)).merge("price" => price)
+    super({ only: [:id, :name, :description, :sku, :stock, :image_url, :category, :created_at, :updated_at] }.merge(options)).merge("price" => price)
   end
 end

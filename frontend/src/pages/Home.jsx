@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { fetchProducts } from "../api/api";
 import ProductGrid from "../components/ProductGrid";
-import Hero from "../components/Hero"; // Import Hero
+import Hero from "../components/Hero";
 import SortBar from "../components/SortBar";
+import FilterBar from "../components/FilterBar";
 
 export default function HomePage() {
   const [products, setProducts] = useState([]);
@@ -16,6 +17,13 @@ export default function HomePage() {
   const categoryParam = searchParams.get("category");
   const filterParam = searchParams.get("filter");
   const sortParam = searchParams.get("sort");
+
+  // New Filter State
+  const [activeFilters, setActiveFilters] = useState({
+    price: { min: 0, max: 50000 },
+    colors: [],
+    offer: false
+  });
 
   async function load() {
     setLoading(true);
@@ -54,43 +62,49 @@ export default function HomePage() {
 
     // 3. Deals (Mock: price < 5000 or specific flag if available)
     if(filterParam === 'deals') {
-        // As a simple heuristic for "Deals", we can show items under a certain price
-        // or if you have a discount field. For now, showing affordable items.
         result = result.filter(p => p.price < 5000); 
     }
 
-    // 4. Sort
+    // 4. Interactive Filters (Price, Color, Offer)
+    if (activeFilters.price.min > 0 || activeFilters.price.max < 50000) {
+      result = result.filter(p => p.price >= activeFilters.price.min && p.price <= activeFilters.price.max);
+    }
+    
+    // Note: Assuming 'color' or 'description' contains color info for now as we don't have a dedicated color column yet.
+    // Using description search as a proxy for color if not present.
+    if (activeFilters.colors.length > 0) {
+      result = result.filter(p => {
+        const text = (p.description || '') + ' ' + (p.name || '');
+        return activeFilters.colors.some(c => text.toLowerCase().includes(c.toLowerCase()));
+      });
+    }
+
+    if (activeFilters.offer) {
+       // Mock offer logic: assuming items under certain price or specific keywords are "on offer"
+       result = result.filter(p => p.price < 10000); // Example threshold
+    }
+
+    // 5. Sort
     if(sortParam === 'newest') {
         result.sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
     }
 
     setFilteredProducts(result);
-  }, [products, searchQuery, categoryParam, filterParam, sortParam]);
+  }, [products, searchQuery, categoryParam, filterParam, sortParam, activeFilters]);
+
+  // Handler for filter changes from FilterBar
+  const handleFilterChange = (newFilters) => {
+    setActiveFilters(newFilters);
+  };
 
   return (
     <div className="home-page">
       {/* 1. Hero Section */}
       <Hero />
 
-      {/* 2. Filter Pills Bar (Visual Only for now) */}
+      {/* 2. Filter Pills Bar */}
       <div style={{display:'flex', gap:10, flexWrap:'wrap', marginBottom:32, alignItems:'center'}}>
-        {["Headphone Type", "Price", "Review", "Color", "Material", "Offer"].map(f => (
-           <button key={f} style={{
-             padding: '8px 16px',
-             background: '#f3f4f6',
-             border: 'none',
-             borderRadius: 99,
-             fontSize: 13,
-             fontWeight: 500,
-             display: 'flex',
-             alignItems: 'center',
-             gap: 4,
-             cursor: 'pointer'
-           }}>
-             {f} <span style={{fontSize:10}}>▼</span>
-           </button>
-        ))}
-        <button style={{padding:'8px 16px', background:'#e5e7eb', border:'none', borderRadius:99, fontSize:13, fontWeight:600}}>All Filters ⚙️</button>
+        <FilterBar onFilterChange={handleFilterChange} />
         
         <div style={{marginLeft:'auto'}}>
            <SortBar products={filteredProducts} setProducts={setFilteredProducts} />

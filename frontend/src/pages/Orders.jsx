@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { fetchOrders } from '../api/api';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Orders.css';
 
 export default function Orders(){
+  const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('All');
@@ -85,7 +86,12 @@ export default function Orders(){
              const otherCount = order.order_items.length - 1;
 
              return (
-               <div key={order.id} className="order-card">
+               <div 
+                  key={order.id} 
+                  className="order-card"
+                  onClick={() => navigate(`/orders/${order.id}`)}
+                  style={{cursor:'pointer'}}
+               >
                   <div className="order-header">
                      <span className={`status-badge ${getStatusClass(order.status)}`}>
                         ● {getStatusLabel(order.status)}

@@ -6,6 +6,7 @@ import { login, signup } from '../api/api';
 export default function LoginPage() {
   const [mode, setMode] = useState('login');
   const [name, setName] = useState('');
+  const [mobile, setMobile] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -16,6 +17,9 @@ export default function LoginPage() {
   function validate() {
     if (mode === 'signup' && !name.trim()) {
       return 'Please enter your name.';
+    }
+    if (mode === 'signup' && (!mobile || mobile.length !== 10)) {
+        return 'Please enter a valid 10-digit mobile number.';
     }
     const emailRegex = /^\S+@\S+\.\S+$/;
     if (!emailRegex.test(email.trim())) {
@@ -40,7 +44,16 @@ export default function LoginPage() {
     setLoading(true);
     try {
       if (mode === 'login') {
-        await login(email.trim(), password);
+        const res = await login(email.trim(), password);
+        
+        // Welcome Back logic (simple alert for now or toast)
+        // Check if user has name
+        const userName = res.user.name || "User";
+        localStorage.setItem('user_name', userName); // Store for profile display
+        
+        // We use a small timeout to let the navigation happen or just alert before
+        // Ideally use a Toast library, but for now simple alert as requested "message"
+        alert(`Welcome back, ${userName}!`);
 
         // notify other parts of app (Navbar) that auth changed
         window.dispatchEvent(new Event('authChange'));
@@ -50,11 +63,11 @@ export default function LoginPage() {
         await signup({
           name: name.trim(),
           email: email.trim(),
+          mobile,
           password,
           password_confirmation: password,
         });
 
-        // notify after signup too
         window.dispatchEvent(new Event('authChange'));
 
         navigate('/');
@@ -150,15 +163,29 @@ export default function LoginPage() {
 
             <form onSubmit={handleSubmit} className="auth-form">
               {mode === 'signup' && (
-                <div className="auth-field">
-                  <label>Name</label>
-                  <input
-                    type="text"
-                    placeholder="Your name"
-                    value={name}
-                    onChange={e => setName(e.target.value)}
-                  />
-                </div>
+                <>
+                  <div className="auth-field">
+                    <label>Name</label>
+                    <input
+                      type="text"
+                      placeholder="Your name"
+                      value={name}
+                      onChange={e => setName(e.target.value)}
+                    />
+                  </div>
+                  <div className="auth-field">
+                    <label>Mobile Number</label>
+                    <input
+                      type="tel"
+                      placeholder="10 digit mobile number"
+                      value={mobile}
+                      onChange={e => {
+                        const val = e.target.value.replace(/\D/g, '').slice(-10);
+                        setMobile(val);
+                      }}
+                    />
+                  </div>
+                </>
               )}
 
               <div className="auth-field">
@@ -198,9 +225,7 @@ export default function LoginPage() {
                   <button
                     type="button"
                     className="auth-link"
-                    onClick={() =>
-                      alert('Password reset flow can be added later as an enhancement.')
-                    }
+                    onClick={() => navigate('/forgot-password')}
                   >
                     Forgot password?
                   </button>

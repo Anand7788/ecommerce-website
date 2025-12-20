@@ -36,11 +36,13 @@ export default function ProductGrid({ products, loading, onAdded }) {
 
             {/* Content */}
             <div className="card-content">
-              <div style={{display:'flex', justifyContent:'space-between', alignItems:'flex-start'}}>
-                <Link to={`/products/${p.id}`} style={{textDecoration:'none', color:'inherit', flex:1}}>
-                  <h3 className="card-title">{p.name}</h3>
+              <div style={{display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:'12px'}}>
+                <Link to={`/products/${p.id}`} style={{textDecoration:'none', color:'inherit', flex:1, minWidth:0}}>
+                  <h3 className="card-title" style={{whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis'}}>{p.name}</h3>
                 </Link>
-                <span className="card-price">${Math.floor(p.price)}<sup>.00</sup></span>
+                <div style={{flexShrink:0}}>
+                   <span className="card-price" style={{display:'block'}}>${Math.floor(p.price)}<sup>.00</sup></span>
+                </div>
               </div>
               
               <p className="card-desc">{p.description ? p.description.slice(0, 30) + '...' : 'Premium audio quality'}</p>
