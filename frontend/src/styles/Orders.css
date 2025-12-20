@@ -1,0 +1,183 @@
+/* Orders Page Container */
+.orders-page {
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: 'Inter', sans-serif;
+    color: #333;
+}
+
+/* Breadcrumbs */
+.orders-breadcrumb {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 24px;
+}
+
+.orders-breadcrumb a {
+    text-decoration: none;
+    color: #666;
+}
+
+.orders-breadcrumb span {
+    font-weight: 600;
+    color: #111;
+}
+
+/* Tabs */
+.orders-tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 16px;
+    overflow-x: auto;
+}
+
+.tab-btn {
+    padding: 8px 24px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    background: white;
+    font-size: 14px;
+    font-weight: 500;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.tab-btn:hover {
+    background: #f9f9f9;
+    border-color: #ccc;
+}
+
+.tab-btn.active {
+    background: #fff0f0;
+    /* Light reddish tint from image check? Used Shopcart accent */
+    border-color: #d1fae5;
+    /* Greenish tint for Shopcart theme */
+    background-color: #003d29;
+    color: white;
+    border-color: #003d29;
+}
+
+/* Date Range Placeholder (Right side) - Optional flex container if needed */
+.orders-filter-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Order Card */
+.order-card {
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+    transition: transform 0.2s;
+}
+
+.order-card:hover {
+    border-color: #ddd;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+/* Card Header: Status & Date */
+.order-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.status-badge.in-progress {
+    background: #fff7ed;
+    color: #c2410c;
+    /* Orange */
+}
+
+.status-badge.delivered {
+    background: #f0fdf4;
+    color: #15803d;
+    /* Green */
+}
+
+.status-badge.cancelled {
+    background: #fef2f2;
+    color: #991b1b;
+    /* Red */
+}
+
+.order-date {
+    font-size: 13px;
+    color: #888;
+}
+
+/* Order Main Content */
+.order-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.order-info {
+    flex: 1;
+}
+
+.order-id {
+    font-size: 14px;
+    font-weight: 700;
+    color: #991b1b;
+    /* Reddish brown ID color from image */
+    margin-bottom: 4px;
+    display: block;
+}
+
+.order-title {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 8px;
+    display: block;
+    line-height: 1.4;
+}
+
+.order-total {
+    font-size: 16px;
+    font-weight: 700;
+    color: #111;
+}
+
+.order-items-sub {
+    font-size: 13px;
+    color: #666;
+    margin-top: 4px;
+}
+
+/* Image Thumbnail in list */
+.order-thumb {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 6px;
+    background: #f4f4f4;
+}
+
+/* Chevron */
+.order-arrow {
+    color: #991b1b;
+    font-size: 20px;
+    cursor: pointer;
+}
