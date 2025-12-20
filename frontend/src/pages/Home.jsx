@@ -58,7 +58,7 @@ export default function HomePage() {
       </div>
 
       {/* 3. Section Title */}
-      <h2 style={{fontSize:24, fontWeight:800, marginBottom:24, color:'#111827'}}>Headphones For You!</h2>
+      <h2 style={{fontSize:24, fontWeight:800, marginBottom:24, color:'#111827'}}>Products For You!</h2>
 
       {/* 4. Grid */}
       <ProductGrid products={filteredProducts} loading={loading} />
