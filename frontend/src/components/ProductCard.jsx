@@ -20,7 +20,12 @@ export default function ProductCard({ product, onAdded }) {
   return (
     <div className="card">
       <Link to={`/products/${product.id}`} style={{textDecoration:'none', color:'inherit'}}>
-        <img src={image} alt={product.name || product.title || 'Product'} loading="lazy" />
+        <img 
+          src={image} 
+          alt={product.name || product.title || 'Product'} 
+          loading="lazy" 
+          onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/300x300?text=No+Image'; }}
+        />
         <h3>{product.name || product.title}</h3>
         <p className="small">{product.description}</p>
       </Link>

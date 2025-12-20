@@ -22,7 +22,11 @@ export default function ProductGrid({ products, loading, onAdded }) {
             {/* Image Area (Gray BG) */}
             <div className="card-img-box">
                <Link to={`/products/${p.id}`} style={{display:'block', width:'100%', height:'100%'}}>
-                 <img src={p.image_url} alt={p.name} />
+                 <img 
+                   src={p.image_url} 
+                   alt={p.name} 
+                   onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/300x300?text=No+Image'; }}
+                 />
                </Link>
                {/* Wishlist Icon */}
                <button className="wishlist-btn">

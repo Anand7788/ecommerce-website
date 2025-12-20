@@ -88,7 +88,11 @@ export default function Cart(){
           {cart.items.map((item) => (
              <div key={item.id} className="cart-item-card">
                 <div className="cart-img-box">
-                  <img src={item.product.image_url} alt={item.product.name} />
+                  <img 
+                    src={item.product.image_url} 
+                    alt={item.product.name} 
+                    onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/100x100?text=No+Image'; }}
+                  />
                 </div>
                 <div className="cart-item-info">
                    <div className="cart-item-header">

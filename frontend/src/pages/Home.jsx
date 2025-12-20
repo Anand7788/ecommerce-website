@@ -9,6 +9,7 @@ export default function HomePage() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(12);
 
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get("search");
@@ -100,7 +101,31 @@ export default function HomePage() {
       <h2 style={{fontSize:24, fontWeight:800, marginBottom:24, color:'#111827'}}>Products For You!</h2>
 
       {/* 4. Grid */}
-      <ProductGrid products={filteredProducts} loading={loading} />
+      {/* 4. Grid */}
+      <ProductGrid products={filteredProducts.slice(0, visibleCount)} loading={loading} />
+
+      {/* 5. Load More */}
+      {visibleCount < filteredProducts.length && (
+         <div style={{textAlign:'center', margin:'40px 0'}}>
+            <button 
+              onClick={() => setVisibleCount(prev => prev + 12)}
+              style={{
+                padding:'12px 32px', 
+                background:'white', 
+                border:'2px solid #e5e7eb', 
+                borderRadius:99, 
+                fontSize:14, 
+                fontWeight:600,
+                cursor:'pointer',
+                transition: 'all 0.2s'
+              }}
+              onMouseOver={e => e.target.style.borderColor = '#000'}
+              onMouseOut={e => e.target.style.borderColor = '#e5e7eb'}
+            >
+              Show Next Products (`{filteredProducts.length - visibleCount}` more)
+            </button>
+         </div>
+      )}
     </div>
   );
 }

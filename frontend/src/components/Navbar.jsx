@@ -180,7 +180,7 @@ const handleSuggestionClick = (productName) => {
              <div className="dropdown-menu">
                 <Link to="/" className="dropdown-item">All</Link>
                 {/* Dynamically distinct categories */}
-                {[...new Set(allProducts.map(p => p.category || 'Electronics'))].map(cat => (
+                {[...new Set(allProducts.map(p => p.category).filter(Boolean))].map(cat => (
                    <Link key={cat} to={`/?category=${encodeURIComponent(cat)}`} className="dropdown-item">{cat}</Link>
                 ))}
              </div>

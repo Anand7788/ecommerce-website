@@ -51,7 +51,12 @@ export default function ProductDetails() {
         {/* LEFT: GALLERY */}
         <div className="p-gallery">
           <div className="p-main-image-box">
-             <img src={mainImage} alt={product.name} className="p-main-img" />
+              <img 
+                src={mainImage} 
+                alt={product.name} 
+                className="p-main-img" 
+                onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/600x600?text=No+Image'; }}
+              />
           </div>
           <div className="p-thumbnails">
              {/* Simulating multiple images by repeating the main one */}
@@ -61,7 +66,11 @@ export default function ProductDetails() {
                   className={`p-thumb-box ${mainImage === product.image_url ? 'active' : ''}`}
                   onClick={() => setMainImage(product.image_url)}
                 >
-                   <img src={product.image_url} alt="thumb" />
+                   <img 
+                     src={product.image_url} 
+                     alt="thumb" 
+                     onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/100x100?text=No+Image'; }}
+                   />
                 </div>
              ))}
           </div>

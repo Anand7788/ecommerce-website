@@ -4,7 +4,7 @@ class ProductsController < ApplicationController
 
   # GET /products
   def index
-    @products = Product.limit(20).order(created_at: :desc)
+    @products = Product.all.order(created_at: :desc)
     render json: @products
   end
 
