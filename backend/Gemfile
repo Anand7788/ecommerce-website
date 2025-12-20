@@ -56,3 +56,11 @@ group :development, :test do
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
 end
+
+# Pin gems to working system versions to avoid compilation issues
+gem "psych", "5.2.6"
+gem "date", "3.3.4"
+
+
+
+

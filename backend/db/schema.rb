@@ -57,13 +57,12 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_19_085835) do
     t.datetime "created_at", null: false
     t.text "description"
     t.string "image_url"
-    t.string "name"
-    t.decimal "price", precision: 10, scale: 2
-    t.integer "price_cents"
+    t.string "name", null: false
+    t.integer "price_cents", default: 0, null: false
     t.string "sku"
-    t.integer "stock"
-    t.string "title"
+    t.integer "stock", default: 0, null: false
     t.datetime "updated_at", null: false
+    t.index ["sku"], name: "index_products_on_sku", unique: true
   end
 
   create_table "users", force: :cascade do |t|

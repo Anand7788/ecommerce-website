@@ -43,10 +43,9 @@ Product.transaction do
     sku = attrs[:sku]
     p = Product.find_or_initialize_by(sku: sku)
     p.name = attrs[:name]
-    p.title = attrs[:title] || attrs[:name]
     p.description = attrs[:description]
-    p.price = attrs[:price]
-    p.price_cents = attrs[:price_cents] || (attrs[:price] ? (attrs[:price] * 100).to_i : nil)
+    # Calculate price_cents from price if not provided
+    p.price_cents = attrs[:price_cents] || (attrs[:price] ? (attrs[:price] * 100).to_i : 0)
     p.stock = attrs[:stock]
     p.image_url = attrs[:image_url]
     p.save!

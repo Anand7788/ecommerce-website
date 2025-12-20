@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getCart } from "../api/api";
-import Logo from "../assets/logo.svg";
+// Logo import removed (using SVG now)
 
 export default function Navbar() {
   const [cartCount, setCartCount] = useState(0);
@@ -112,215 +112,71 @@ useEffect(() => {
 
 
   return (
-    <header
-      className="navbar-modern"
-      role="navigation"
-      aria-label="Main navigation"
-    >
+    <header className="navbar-shopcart">
       <div className="nav-inner">
+        {/* LEFT: Logo */}
         <div className="nav-left">
-          {/* hamburger button on the far left */}
-          <button
-            className="mobile-toggle"
-            onClick={toggleMobile}
-            aria-expanded={mobileOpen}
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
-            style={{ marginRight: 12 }}
-          >
-            <svg
-              width="22"
-              height="14"
-              viewBox="0 0 22 14"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <rect
-                y="1"
-                width="22"
-                height="2"
-                rx="1"
-                fill="#111827"
-                opacity="0.85"
-              />
-              <rect
-                y="6"
-                width="22"
-                height="2"
-                rx="1"
-                fill="#111827"
-                opacity="0.85"
-              />
-              <rect
-                y="11"
-                width="22"
-                height="2"
-                rx="1"
-                fill="#111827"
-                opacity="0.85"
-              />
-            </svg>
-          </button>
-
-          {/* gradient logo */}
-          <Link
-            to="/"
-            className="brand"
-            onClick={closeMobile}
-            style={{ display: "flex", alignItems: "center" }}
-          >
-            <img
-              src={Logo}
-              alt="ShoppersPoint Logo"
-              style={{
-                width: 36,
-                height: 36,
-                marginRight: 10,
-                borderRadius: 8,
-              }}
-            />
-            <span className="brand-text">ShoppersPoint</span>
+          <Link to="/" className="brand">
+             {/* Shopcart Icon (Simple representation) */}
+             <div style={{ position:'relative', marginRight:8 }}>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#003d29" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="9" cy="21" r="1"></circle>
+                  <circle cx="20" cy="21" r="1"></circle>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                {/* Orange accent dot/fruit */}
+                <div style={{position:'absolute', top:-2, right:-2, width:10, height:10, background:'#ff6f00', borderRadius:'50%'}}></div>
+             </div>
+             <span className="brand-text" style={{color:'#003d29', fontSize:22, fontWeight:800}}>Shopperspoint</span>
           </Link>
         </div>
 
-        <nav
-          className={`nav-right ${mobileOpen ? "open" : ""}`}
-          aria-label="Primary"
-        >
-          {/* Theme toggle */}
-          <button
-            type="button"
-            className="theme-toggle"
-            onClick={() => {
-              toggleTheme();
-              setMobileOpen(false);
-            }}
-            aria-label={
-              theme === "light" ? "Switch to dark mode" : "Switch to light mode"
-            }
-          >
-            <span aria-hidden="true" className="theme-toggle-icon">
-              {theme === "light" ? "🌙" : "☀️"}
-            </span>
-            <span className="theme-toggle-label">
-              {theme === "light" ? "Dark" : "Light"}
-            </span>
-          </button>
-          {/* Cart */}
-          <Link
-            to="/cart"
-            className="nav-link"
-            onClick={closeMobile}
-            aria-label="Cart"
-          >
-            <span className="nav-icon" aria-hidden="true">
-              {/* cart SVG */}
-              <svg className="icon12"
-                viewBox="0 0 24 24"
-                width="18"
-                height="18"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M6 6h15l-1.5 9h-12z" />
-                <circle cx="9" cy="20" r="1" />
-                <circle cx="19" cy="20" r="1" />
-              </svg>
-            </span>
-            <span className="nav-label">Cart</span>
-            {cartCount > 0 && (
-              <span className="nav-badge" aria-live="polite">
-                {cartCount}
-              </span>
-            )}
-          </Link>
-
-          {/* Orders */}
-          <Link
-            to="/orders"
-            className="nav-link"
-            onClick={closeMobile}
-            aria-label="Orders"
-          >
-            <span className="nav-icon" aria-hidden="true">
-              {/* box icon */}
-              <svg className="icon12"
-                viewBox="0 0 24 24"
-                width="18"
-                height="18"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M21 16V8a2 2 0 0 0-1-1.73L12 3 4 6.27A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73L12 21l8-3.27A2 2 0 0 0 21 16z" />
-                <path d="M12 3v9" />
-              </svg>
-            </span>
-            <span className="nav-label">Orders</span>
-          </Link>
-
-          {/* Login / Logout */}
-          {token ? (
-            <button
-              className="nav-btn logout"
-              onClick={() => {
-                logout();
-                closeMobile();
-              }}
-              aria-label="Logout"
-            >
-              <span className="nav-icon" aria-hidden="true">
-                {/* logout icon */}
-                <svg className="icon12"
-                  viewBox="0 0 24 24"
-                  width="18"
-                  height="18"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                  <path d="M16 17l5-5-5-5" />
-                  <path d="M21 12H9" />
-                </svg>
-              </span>
-              <span className="nav-label">Logout</span>
-            </button>
-          ) : (
-            <Link
-              to="/login"
-              className="nav-btn login"
-              onClick={closeMobile}
-              aria-label="Login"
-            >
-              <span className="nav-icon" aria-hidden="true">
-                {/* login icon */}
-                <svg className="icon12"
-                  viewBox="0 0 24 24"
-                  width="18"
-                  height="18"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-                  <path d="M10 17L15 12 10 7" />
-                  <path d="M15 12H3" />
-                </svg>
-              </span>
-              <span className="nav-label">Login</span>
-            </Link>
-          )}
+        {/* CENTER LEFT: Nav Links */}
+        <nav className="nav-links desktop-only">
+          <Link to="/" className="nav-item">Categories <span style={{fontSize:10}}>▼</span></Link>
+          <Link to="/" className="nav-item">Deals</Link>
+          <Link to="/" className="nav-item">What's New</Link>
+          <Link to="/orders" className="nav-item">Delivery</Link>
         </nav>
+
+        {/* CENTER RIGHT: Search Bar */}
+        <div className="nav-search">
+          <input type="text" placeholder="Search Product" />
+          <svg className="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </div>
+
+        {/* RIGHT: Actions */}
+        <div className="nav-actions">
+           {/* Account Dropdown */}
+           <div className="action-item dropdown-container">
+             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+             <span>Account</span>
+             
+             {/* Dropdown Menu */}
+             <div className="dropdown-menu">
+               {token ? (
+                 <>
+                   <Link to="/orders" className="dropdown-item">My Orders</Link>
+                   <button onClick={logout} className="dropdown-item logout-btn">Logout</button>
+                 </>
+               ) : (
+                 <>
+                   <Link to="/login" className="dropdown-item">Login</Link>
+                   <Link to="/login" className="dropdown-item">Sign Up</Link>
+                 </>
+               )}
+             </div>
+           </div>
+
+           {/* Cart */}
+           <Link to="/cart" className="action-item">
+             <div style={{position:'relative'}}>
+               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+               {cartCount > 0 && <span className="cart-badge-dot"></span>}
+             </div>
+             <span>Cart</span>
+           </Link>
+        </div>
       </div>
     </header>
   );
