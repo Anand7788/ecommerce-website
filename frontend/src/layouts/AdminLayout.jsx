@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { FiGrid, FiShoppingBag, FiUsers, FiBox, FiSettings, FiHelpCircle, FiMessageSquare } from 'react-icons/fi';
+import { FiGrid, FiShoppingBag, FiUsers, FiBox, FiSettings, FiHelpCircle, FiMessageSquare, FiLogOut } from 'react-icons/fi';
 import '../styles/Admin.css';
 
 export default function AdminLayout() {
@@ -18,17 +18,25 @@ export default function AdminLayout() {
     }
   }, [navigate]);
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('is_admin');
+    localStorage.removeItem('user_name');
+    window.dispatchEvent(new Event("authChange"));
+    navigate('/admin/login');
+  };
+
   return (
     <div className="admin-container">
       {/* Sidebar */}
-      <aside className="admin-sidebar">
+      <aside className="admin-sidebar" style={{display:'flex', flexDirection:'column'}}>
         <div className="admin-logo">
            {/* Simple Icon */}
            <div style={{width:32, height:32, background:'#10b981', borderRadius:8}}></div>
            ShoppersAdmin
         </div>
 
-        <nav className="admin-nav">
+        <nav className="admin-nav" style={{flex:1, display:'flex', flexDirection:'column'}}>
           <NavLink to="/admin" end className={({isActive}) => `admin-nav-item ${isActive ? 'active' : ''}`}>
              <FiGrid /> Dashboard
           </NavLink>
@@ -51,6 +59,27 @@ export default function AdminLayout() {
           <NavLink to="/admin/help" className={({isActive}) => `admin-nav-item ${isActive ? 'active' : ''}`}>
              <FiHelpCircle /> Help Center
           </NavLink>
+          
+          <div style={{marginTop:'auto'}}>
+            <button 
+              onClick={handleLogout} 
+              className="admin-nav-item" 
+              style={{
+                width:'100%', 
+                background:'none', 
+                border:'none', 
+                cursor:'pointer', 
+                color:'#d32f2f', 
+                display:'flex', 
+                alignItems:'center', 
+                gap:10, 
+                fontSize:15,
+                padding: '10px 12px',
+                textAlign: 'left'
+              }}>
+              <FiLogOut /> Logout
+            </button>
+          </div>
         </nav>
       </aside>
 
