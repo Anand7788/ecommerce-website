@@ -1254,24 +1254,24 @@ body.auth-body .nav .brand {
 ================================ */
 
 .footer {
-  margin-top: 40px;
-  background: linear-gradient(to top, #e5e7eb0d, #ffffff);
-  border-top: 1px solid rgba(15, 23, 42, 0.06);
+  margin-top: 60px;
+  background: #ffffff;
+  border-top: 1px solid #e5e7eb;
 }
 
 .footer-inner {
   max-width: var(--max-w);
   margin: 0 auto;
-  padding: 24px 20px 12px;
+  padding: 40px 20px 20px;
   display: flex;
   flex-wrap: wrap;
-  gap: 24px;
+  gap: 40px;
   justify-content: space-between;
 }
 
 /* columns */
 .footer-column {
-  min-width: 220px;
+  min-width: 200px;
   max-width: 320px;
 }
 
@@ -1279,36 +1279,28 @@ body.auth-body .nav .brand {
 .footer-brand {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 8px;
-}
-
-.footer-logo {
-  width: 32px;
-  height: 32px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #ff9a9e, #6c63ff);
-  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.12);
+  gap: 4px;
+  margin-bottom: 12px;
 }
 
 .footer-brand-text {
-  font-weight: 700;
-  font-size: 18px;
-  color: #0f172a;
+  font-weight: 800;
+  font-size: 20px;
+  color: var(--primary);
 }
 
 .footer-text {
   font-size: 0.9rem;
-  color: var(--muted);
-  line-height: 1.5;
+  color: #6b7280;
+  line-height: 1.6;
 }
 
 /* titles + lists */
 .footer-title {
   font-size: 0.95rem;
-  font-weight: 600;
-  margin-bottom: 8px;
-  color: #0f172a;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #111827;
 }
 
 .footer-links {
@@ -1318,17 +1310,18 @@ body.auth-body .nav .brand {
 }
 
 .footer-links li+li {
-  margin-top: 4px;
+  margin-top: 10px;
 }
 
 .footer-links a {
   color: #4b5563;
   text-decoration: none;
   font-size: 0.9rem;
+  transition: color 0.2s;
 }
 
 .footer-links a:hover {
-  color: #2563eb;
+  color: var(--primary);
 }
 
 /* tech tags */
@@ -1338,15 +1331,16 @@ body.auth-body .nav .brand {
   margin: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
 }
 
 .footer-tags li {
   font-size: 0.8rem;
-  padding: 4px 8px;
-  border-radius: 999px;
-  background: rgba(148, 163, 184, 0.12);
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: #f3f4f6;
   color: #374151;
+  font-weight: 500;
 }
 
 /* bottom strip */
