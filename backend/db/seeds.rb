@@ -9,7 +9,8 @@ Product.transaction do
     p.name = attrs[:name]
     p.description = attrs[:description]
     p.category = attrs[:category]
-    p.price = attrs[:price]
+    p.category = attrs[:category]
+    # Calculate price_cents from price
     p.price_cents = (attrs[:price] * 100).to_i
     p.stock = attrs[:stock] || 50
     p.image_url = attrs[:image_url]
