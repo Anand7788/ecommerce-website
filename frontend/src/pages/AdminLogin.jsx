@@ -66,8 +66,9 @@ export default function AdminLogin() {
 
         {/* Social Buttons (Mock) */}
         <div className="social-login-row">
-           <button className="social-btn" type="button" style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
-              <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google" style={{height: 24}} />
+           <button className="social-btn" type="button">
+              <FaGoogle color="#DB4437" size={20} />
+              Google
            </button>
            <button className="social-btn" type="button">
               <FaApple color="black" size={20} />
