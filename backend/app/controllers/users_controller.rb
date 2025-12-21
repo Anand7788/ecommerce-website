@@ -29,6 +29,16 @@ class UsersController < ApplicationController
     end
   end
 
+  # POST /check_email - Check if user exists
+  def check_email
+    user = User.find_by(email: params[:email])
+    if user
+      render json: { exists: true }
+    else
+      render json: { exists: false }
+    end
+  end
+
   private
   def user_params
     params.require(:user).permit(:name, :email, :password, :password_confirmation, :mobile)

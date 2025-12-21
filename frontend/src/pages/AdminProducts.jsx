@@ -1,6 +1,6 @@
 // src/pages/AdminProducts.jsx
 import React, { useEffect, useState } from 'react';
-import { fetchProducts, createProduct, deleteProduct, uploadProductCSV } from '../api/api';
+import { fetchProducts, createProduct, deleteProduct, uploadProductCSV, updateProduct } from '../api/api';
 
 export default function AdminProducts() {
   const [products, setProducts] = useState([]);
@@ -8,6 +8,9 @@ export default function AdminProducts() {
   
   // CSV Upload State
   const [uploading, setUploading] = useState(false);
+  
+  // Edit Mode State
+  const [editingId, setEditingId] = useState(null);
   
   // Form State
   const [formData, setFormData] = useState({
@@ -64,10 +67,40 @@ export default function AdminProducts() {
       loadProducts();
     } catch (err) {
       console.error(err);
-      alert('Failed to upload CSV.');
+      const serverError = err.response?.data?.error || err.response?.data?.message || 'Failed to upload CSV.';
+      alert(`Upload Error: ${serverError}`);
     } finally {
       setUploading(false);
       e.target.value = ''; // Reset input
+    }
+  };
+
+  const downloadSampleCSV = () => {
+    const csvContent = `name,price,description,category,stock,image_url
+Wireless Noise Cancelling Headphones,3999.00,Premium over-ear headphones with active noise cancellation and 30-hour battery life.,Electronics,45,https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1000&auto=format&fit=crop
+Smart Fitness Watch,2499.00,Track your health metrics, steps, and sleep with this waterproof smart watch.,Electronics,120,https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1000&auto=format&fit=crop
+Minimalist Cotton T-Shirt,499.00,100% organic cotton t-shirt in basic colors. Comfortable and breathable.,Fashion,200,https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1000&auto=format&fit=crop
+Slim Fit Blue Jeans,1299.00,Classic blue denim jeans with a modern slim fit cut. Durable and stylish.,Fashion,85,https://images.unsplash.com/photo-1542272454315-4c01d7abdf4a?q=80&w=1000&auto=format&fit=crop
+Smartphone X Pro,69999.00,Flagship smartphone with 108MP camera, 5G connectivity, and OLED display.,Mobile,30,https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1000&auto=format&fit=crop
+Budget Android Phone,8999.00,Reliable smartphone with long battery life and essential features.,Mobile,150,https://images.unsplash.com/photo-1598327770691-7dadf1677fd4?q=80&w=1000&auto=format&fit=crop
+Automatic Coffee Maker,4500.00,Brew fresh coffee every morning with programmable timer and keep-warm function.,Appliances,40,https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1000&auto=format&fit=crop
+Robot Vacuum Cleaner,15999.00,Smart robot vacuum with mapping technology and app control for automated cleaning.,Appliances,25,https://images.unsplash.com/photo-1518444065439-e933c06ce9cd?q=80&w=1000&auto=format&fit=crop
+Leather Wallet,899.00,Genuine leather wallet with multiple card slots and RFID protection.,Fashion,100,https://images.unsplash.com/photo-1627123424574-181ce5171c98?q=80&w=1000&auto=format&fit=crop
+4K LED Smart TV 55 inch,35000.00,Ultra HD Smart TV with HDR support and built-in streaming apps.,Electronics,15,https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?q=80&w=1000&auto=format&fit=crop
+Bluetooth Portable Speaker,1999.00,Waterproof portable speaker with deep bass and rugged design.,Electronics,75,https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?q=80&w=1000&auto=format&fit=crop
+Stainless Steel Toaster,2200.00,2-slice toaster with browning control and defrost setting.,Appliances,60,https://images.unsplash.com/photo-1585694248888-06eb183d29bd?q=80&w=1000&auto=format&fit=crop`;
+    
+    // Create download link
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    if (link.download !== undefined) { 
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", "sample_products.csv");
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
   };
 
@@ -116,22 +149,53 @@ export default function AdminProducts() {
     setSubmitting(true);
     setSuccessMsg('');
     try {
-      await createProduct({
+      const payload = {
           ...formData,
           price: parseFloat(formData.price),
           stock: parseInt(formData.stock)
-      });
-      setSuccessMsg('Product created successfully!');
+      };
+
+      if (editingId) {
+        await updateProduct(editingId, payload);
+        setSuccessMsg('Product updated successfully!');
+      } else {
+        await createProduct(payload);
+        setSuccessMsg('Product created successfully!');
+      }
+
       setFormData({
         name: '', price: '', category: 'Electronics', stock: '', sku: '', image_url: '', description: ''
       });
+      setEditingId(null); // Exit edit mode
       loadProducts();
     } catch (err) {
       console.error(err);
-      alert('Failed to create product. Ensure you are logged in as Admin.');
+      alert('Failed to save product. Ensure you are logged in as Admin.');
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const handleEdit = (product) => {
+    setEditingId(product.id);
+    setFormData({
+      name: product.name,
+      price: product.price ? product.price.toString() : (product.price_cents / 100).toString(),
+      category: product.category || 'Electronics',
+      stock: product.stock.toString(),
+      sku: product.sku || '',
+      image_url: product.image_url || '',
+      description: product.description || ''
+    });
+    // Scroll to form
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setFormData({
+      name: '', price: '', category: 'Electronics', stock: '', sku: '', image_url: '', description: ''
+    });
   };
 
   const handleDelete = async (id) => {
@@ -153,7 +217,7 @@ export default function AdminProducts() {
          </div>
          
          {/* CSV Upload Button */}
-         <div>
+         <div style={{display:'flex', flexDirection:'column', alignItems:'flex-end', gap:4}}>
             <label 
                className="btn-submit" 
                style={{cursor:'pointer', background: uploading ? '#9ca3af' : '#4f46e5', display:'inline-block'}}
@@ -167,13 +231,26 @@ export default function AdminProducts() {
                  disabled={uploading}
                />
             </label>
+            <span 
+              onClick={downloadSampleCSV} 
+              style={{fontSize:12, color:'#4f46e5', cursor:'pointer', textDecoration:'underline'}}
+            >
+              Download Template
+            </span>
          </div>
       </div>
 
       <div style={{display:'grid', gridTemplateColumns:'1fr 2fr', gap:32}}>
           {/* Add Product Form */}
           <div className="form-card">
-              <h3 style={{marginBottom:24}}>Add New Product</h3>
+              <h3 style={{marginBottom:24, display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+                {editingId ? 'Edit Product' : 'Add New Product'}
+                {editingId && (
+                  <button onClick={cancelEdit} style={{fontSize:12, padding:'4px 8px', background:'#f3f4f6', border:'none', borderRadius:4, cursor:'pointer'}}>
+                     Cancel
+                  </button>
+                )}
+              </h3>
               {successMsg && <div style={{background:'#d1fae5', color:'#065f46', padding:10, borderRadius:8, marginBottom:20}}>{successMsg}</div>}
               
               <form onSubmit={handleSubmit}>
@@ -255,7 +332,7 @@ export default function AdminProducts() {
                   </div>
 
                   <button type="submit" className="btn-submit" disabled={submitting}>
-                      {submitting ? 'Creating...' : 'Create Product'}
+                      {submitting ? 'Saving...' : (editingId ? 'Update Product' : 'Create Product')}
                   </button>
               </form>
           </div>
@@ -292,6 +369,12 @@ export default function AdminProducts() {
                                     </span>
                                 </td>
                                 <td style={{padding:12}}>
+                                    <button 
+                                        onClick={() => handleEdit(p)}
+                                        style={{color:'#4f46e5', background:'none', border:'none', cursor:'pointer', marginRight:10}}
+                                    >
+                                        Edit
+                                    </button>
                                     <button 
                                         onClick={() => handleDelete(p.id)}
                                         style={{color:'#ef4444', background:'none', border:'none', cursor:'pointer'}}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getCart, updateCartItem, removeCartItem, createOrder } from '../api/api';
 import { useNavigate, Link } from 'react-router-dom';
+import "../styles/Cart.css";
 
 
 export default function Cart(){

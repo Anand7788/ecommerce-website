@@ -4,7 +4,7 @@ const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 const api = axios.create({
   baseURL: API_BASE,
-  headers: { 'Content-Type': 'application/json' },
+  // headers: { 'Content-Type': 'application/json' }, // Let Axios/Browser handle this matches data type
 });
 
 api.interceptors.request.use(config => {
@@ -16,12 +16,11 @@ api.interceptors.request.use(config => {
 // PRODUCTS
 export async function fetchProducts() { return (await api.get('/products')).data; }
 export async function fetchProduct(id) { return (await api.get(`/products/${id}`)).data; }
-export async function createProduct(productData) { return (await api.post('/products', { product: productData })).data; }
-export async function deleteProduct(id) { return (await api.delete(`/products/${id}`)).data; }
+export async function createProduct(productData) { return (await api.post('/admin/products', { product: productData })).data; }
+export async function updateProduct(id, productData) { return (await api.patch(`/admin/products/${id}`, { product: productData })).data; }
+export async function deleteProduct(id) { return (await api.delete(`/admin/products/${id}`)).data; }
 export async function uploadProductCSV(formData) {
-  return (await api.post('/admin/products/import_csv', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' }
-  })).data;
+  return (await api.post('/admin/product_bulk_import', formData)).data;
 }
 
 // CART
@@ -60,6 +59,11 @@ export async function login(email, password) {
     localStorage.setItem('is_admin', res.data.user.admin);
   }
   return res.data;
+}
+
+export async function checkEmail(email) {
+  const res = await api.post('/check_email', { email });
+  return res.data; // { exists: true/false }
 }
 
 export async function signup(userObj) {

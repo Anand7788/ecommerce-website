@@ -102,44 +102,47 @@ export default function HomePage() {
       {/* 1. Hero Section */}
       <Hero />
 
-      {/* 2. Filter Pills Bar */}
-      <div style={{display:'flex', gap:10, flexWrap:'wrap', marginBottom:32, alignItems:'center'}}>
-        <FilterBar onFilterChange={handleFilterChange} />
+      {/* 2. Main Content Container */}
+      <div className="container">
         
-        <div style={{marginLeft:'auto'}}>
-           <SortBar products={filteredProducts} setProducts={setFilteredProducts} />
+        {/* Section Title */}
+        <h2 style={{fontSize:28, fontWeight:800, marginBottom:24, color:'#111827'}}>Products For You!</h2>
+
+        {/* Filter & Sort Bar */}
+        <div style={{display:'flex', gap:10, flexWrap:'wrap', marginBottom:32, alignItems:'center'}}>
+          <FilterBar onFilterChange={handleFilterChange} />
+          
+          <div style={{marginLeft:'auto'}}>
+             <SortBar products={filteredProducts} setProducts={setFilteredProducts} />
+          </div>
         </div>
+
+        {/* Grid */}
+        <ProductGrid products={filteredProducts.slice(0, visibleCount)} loading={loading} />
+
+        {/* Load More */}
+        {visibleCount < filteredProducts.length && (
+           <div style={{textAlign:'center', margin:'40px 0'}}>
+              <button 
+                onClick={() => setVisibleCount(prev => prev + 12)}
+                style={{
+                  padding:'12px 32px', 
+                  background:'white', 
+                  border:'2px solid #e5e7eb', 
+                  borderRadius:99, 
+                  fontSize:14, 
+                  fontWeight:600,
+                  cursor:'pointer',
+                  transition: 'all 0.2s'
+                }}
+                onMouseOver={e => e.target.style.borderColor = '#000'}
+                onMouseOut={e => e.target.style.borderColor = '#e5e7eb'}
+              >
+                Show Next Products (`{filteredProducts.length - visibleCount}` more)
+              </button>
+           </div>
+        )}
       </div>
-
-      {/* 3. Section Title */}
-      <h2 style={{fontSize:24, fontWeight:800, marginBottom:24, color:'#111827'}}>Products For You!</h2>
-
-      {/* 4. Grid */}
-      {/* 4. Grid */}
-      <ProductGrid products={filteredProducts.slice(0, visibleCount)} loading={loading} />
-
-      {/* 5. Load More */}
-      {visibleCount < filteredProducts.length && (
-         <div style={{textAlign:'center', margin:'40px 0'}}>
-            <button 
-              onClick={() => setVisibleCount(prev => prev + 12)}
-              style={{
-                padding:'12px 32px', 
-                background:'white', 
-                border:'2px solid #e5e7eb', 
-                borderRadius:99, 
-                fontSize:14, 
-                fontWeight:600,
-                cursor:'pointer',
-                transition: 'all 0.2s'
-              }}
-              onMouseOver={e => e.target.style.borderColor = '#000'}
-              onMouseOut={e => e.target.style.borderColor = '#e5e7eb'}
-            >
-              Show Next Products (`{filteredProducts.length - visibleCount}` more)
-            </button>
-         </div>
-      )}
     </div>
   );
 }

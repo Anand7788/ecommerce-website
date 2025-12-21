@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { fetchProduct, addToCart } from "../api/api";
-import "../styles/ProductDetails.css"; // We will likely deprecate this in favor of index.css global styles, but keeping for now.
+import "../styles/ProductDetails.css";
 
 export default function ProductDetails() {
   const { id } = useParams();

@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Logo from "./Logo";
+import "../styles/Footer.css";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -10,16 +12,10 @@ export default function Footer() {
         {/* Brand + description */}
         <div className="footer-column">
           <div className="footer-brand">
-            {/* Shopcart Logo from Navbar */}
-            <div style={{ position:'relative', marginRight:8 }}>
-               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#003d29" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                 <circle cx="9" cy="21" r="1"></circle>
-                 <circle cx="20" cy="21" r="1"></circle>
-                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-               </svg>
-               <div style={{position:'absolute', top:-2, right:-2, width:8, height:8, background:'#ff6f00', borderRadius:'50%'}}></div>
+            <div style={{ marginRight: 8, display: 'flex', alignItems: 'center' }}>
+               <Logo width={36} height={36} />
             </div>
-            <span className="footer-brand-text" style={{ color: '#003d29' }}>ShoppersPoint</span>
+            <span className="footer-brand-text brand-gradient">Shopperspoint</span>
           </div>
           <p className="footer-text">
             Simple, modern ecommerce demo built with React & Ruby on Rails –
@@ -54,7 +50,7 @@ export default function Footer() {
       <div className="footer-bottom">
         <span>© {year} ShoppersPoint. All rights reserved.</span>
         <span className="footer-bottom-right">
-          Built as a portfolio project. <span style={{color:'#ef4444', fontWeight:600}}>Not a real e-commerce site.</span>
+          Built as a portfolio project. <span className="footer-note">Not a real e-commerce site.</span>
         </span>
       </div>
     </footer>

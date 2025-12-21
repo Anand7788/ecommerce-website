@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   post '/signup', to: 'users#create'
   get  '/me', to: 'users#show'
   patch '/me', to: 'users#update'
+  post '/check_email', to: 'users#check_email'
   
   resources :addresses
   post '/login',  to: 'sessions#create'
@@ -31,11 +32,8 @@ Rails.application.routes.draw do
 
   # Admin product management
   namespace :admin do
-    resources :products, only: [:index, :show, :create, :update, :destroy] do
-      collection do
-        post :import_csv
-      end
-    end
+    resources :products, only: [:index, :show, :create, :update, :destroy]
+    post 'product_bulk_import', to: 'products#import_csv'
     resources :orders, only: [:index, :update, :show]
     resources :users, only: [:index, :show] # Customers
     get '/analytics', to: 'analytics#show'

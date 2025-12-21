@@ -1,0 +1,240 @@
+/* -------------------------------
+   PRODUCT GRID
+-------------------------------- */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+/* -------------------------------
+   SHOPCART GRID & CARDS
+-------------------------------- */
+.shopcart-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 32px;
+    padding: 20px 0;
+}
+
+.shopcart-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.card-img-box {
+    background: var(--card-img-bg);
+    border-radius: 12px;
+    height: 260px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.card-img-box img {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+    /* Helps transparent PNGs blend with gray bg */
+}
+
+/* Wishlist heart */
+.wishlist-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: transform 0.1s;
+}
+
+.wishlist-btn:hover {
+    transform: scale(1.1);
+}
+
+/* Content */
+.card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #111827;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 70%;
+}
+
+.card-price {
+    font-size: 16px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.card-price sup {
+    font-size: 10px;
+}
+
+.card-desc {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.card-rating {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+/* Outline Button */
+.btn-outline-dark {
+    background: transparent;
+    border: 1px solid #111827;
+    color: #111827;
+    padding: 10px 0;
+    border-radius: 99px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.1s;
+    margin-top: 4px;
+}
+
+.btn-outline-dark:hover {
+    background: #111827;
+    color: white;
+}
+
+/* -------------------------------
+   Responsive
+-------------------------------- */
+@media (max-width: 600px) {
+    .product-grid-modern {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+}
+
+/* =========================================
+   SHOPCART PRODUCT CARD STYLES REDUX
+   (Glassmorphism)
+========================================= */
+
+.shopcart-card {
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+}
+
+.shopcart-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    border-color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.85);
+}
+
+/* Image Box */
+.card-img-box {
+    background: rgba(244, 244, 244, 0.5);
+    height: 220px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 20px;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.card-img-box img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+    mix-blend-mode: multiply;
+    /* Blends transparent PNGs nicely */
+}
+
+.shopcart-card:hover .card-img-box img {
+    transform: scale(1.05);
+}
+
+/* Content Area */
+.card-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.card-price {
+    font-size: 16px;
+    font-weight: 800;
+    color: #059669;
+    /* Emerald Green */
+}
+
+/* Dark Theme Overrides for Cards */
+body.dark-theme .shopcart-card {
+    background: #1f2937;
+    border-color: #374151;
+}
+
+body.dark-theme .card-img-box {
+    background: #111827;
+}
+
+body.dark-theme .card-img-box img {
+    mix-blend-mode: normal;
+    /* Normal mode for dark bg often looks better */
+    filter: brightness(0.9);
+}
+
+body.dark-theme .card-title {
+    color: #f3f4f6;
+}
+
+body.dark-theme .card-desc {
+    color: #9ca3af;
+}
+
+body.dark-theme .btn-outline-dark {
+    border-color: #e5e7eb;
+    color: #e5e7eb;
+}
+
+body.dark-theme .btn-outline-dark:hover {
+    background: #e5e7eb;
+    color: #111827;
+}

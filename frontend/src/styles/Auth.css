@@ -1,0 +1,346 @@
+/* ================================
+   AUTH PAGE (GLASSMORPHISM & ANIMATION)
+================================ */
+
+/* Animated Mesh Gradient Background */
+body.auth-body {
+    background:
+        radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+        radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+        radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
+    background-color: #0f172a;
+    /* Fallback/Base */
+    overflow-x: hidden;
+}
+
+/* Floating Orbs for "Liquid" effect in background */
+body.auth-body::before,
+body.auth-body::after {
+    content: '';
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    filter: blur(100px);
+    z-index: -1;
+    opacity: 0.5;
+    animation: floatOrb 10s infinite alternate ease-in-out;
+}
+
+body.auth-body::before {
+    background: #4f46e5;
+    top: -100px;
+    left: -200px;
+}
+
+body.auth-body::after {
+    background: #db2777;
+    bottom: -100px;
+    right: -200px;
+    animation-delay: -5s;
+}
+
+@keyframes floatOrb {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    100% {
+        transform: translate(50px, 50px);
+    }
+}
+
+/* Nav transparent on auth with Glass Effect */
+body.auth-body .navbar-shopcart {
+    background: rgba(255, 255, 255, 0.02) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+body.auth-body .nav-item,
+body.auth-body .action-item {
+    color: white !important;
+}
+
+/* Brand Gradient Style (Option 45) */
+.brand-gradient {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 900;
+    font-size: 26px;
+    background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: -0.5px;
+}
+
+/* Ensure gradient text stays gradient even on auth page */
+body.auth-body .brand-gradient {
+    background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    color: transparent !important;
+}
+
+body.auth-body .nav-search {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+body.auth-body .nav-search input {
+    color: white !important;
+}
+
+body.auth-body .nav-search input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+body.auth-body .search-icon {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Main Container */
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Glass Card */
+.auth-card {
+    display: flex;
+    width: 1000px;
+    max-width: 100%;
+    min-height: 650px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+/* Split Layout */
+.auth-left {
+    flex: 1;
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.85);
+    /* Slightly opaque for readability */
+    position: relative;
+    transition: all 0.5s ease;
+}
+
+.auth-right {
+    flex: 1;
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Typography & Form */
+.auth-header {
+    margin-bottom: 40px;
+}
+
+.auth-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 10px;
+    letter-spacing: -0.5px;
+}
+
+.auth-subtitle {
+    color: #64748b;
+    font-size: 15px;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.form-input {
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    font-size: 15px;
+    transition: all 0.2s;
+}
+
+.form-input:focus {
+    background: white;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+    outline: none;
+}
+
+.auth-btn {
+    background: #4f46e5;
+    color: white;
+    padding: 16px;
+    border-radius: 14px;
+    border: none;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 10px;
+    box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4);
+}
+
+.auth-btn:hover {
+    background: #4338ca;
+    transform: translateY(-2px);
+    box-shadow: 0 15px 25px -5px rgba(79, 70, 229, 0.5);
+}
+
+.auth-footer {
+    margin-top: 24px;
+    text-align: center;
+    font-size: 14px;
+    color: #64748b;
+}
+
+.link-btn {
+    background: none;
+    border: none;
+    color: #4f46e5;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0 4px;
+}
+
+/* Animation Classes */
+.animate-fade-in {
+    animation: fadeInUp 0.6s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.animate-delay-1 {
+    animation-delay: 0.1s;
+}
+
+.animate-delay-2 {
+    animation-delay: 0.2s;
+}
+
+.animate-delay-3 {
+    animation-delay: 0.3s;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Illustration Side */
+.illustration-container {
+    position: relative;
+    z-index: 2;
+    animation: float 6s ease-in-out infinite;
+}
+
+/* Glass Panels in Illustration */
+.glass-panel-1,
+.glass-panel-2 {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    z-index: 1;
+}
+
+.glass-panel-1 {
+    width: 200px;
+    height: 120px;
+    top: 50%;
+    left: -50px;
+    transform: rotate(-10deg);
+    animation: float 8s ease-in-out infinite reverse;
+}
+
+.glass-panel-2 {
+    width: 150px;
+    height: 150px;
+    bottom: -40px;
+    right: -20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    transform: scale(0.8);
+    animation: pulse 10s infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(0.8);
+    }
+
+    50% {
+        transform: scale(0.9);
+    }
+}
+
+/* Mobile Responsive */
+@media (max-width: 900px) {
+    .auth-card {
+        flex-direction: column;
+        max-width: 500px;
+    }
+
+    .auth-right {
+        display: none;
+        /* Hide illustration on mobile */
+    }
+
+    .auth-left {
+        padding: 40px 30px;
+    }
+}

@@ -1,0 +1,168 @@
+/* -------------------------------
+   FOOTER (REDESIGNED)
+-------------------------------- */
+/* DEFAULT: White Footer (Homepage, etc.) */
+.footer {
+    background: #ffffff !important;
+    color: #1e293b !important;
+    padding: 60px 0 20px;
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid #e2e8f0;
+}
+
+.footer-inner {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 40px;
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.footer-brand-text {
+    font-size: 22px;
+    font-weight: 800;
+    /* Brand text uses .brand-gradient, so no color needed here usually */
+    letter-spacing: -0.5px;
+}
+
+.footer-text {
+    color: #64748b !important;
+    /* Default dark grey */
+    line-height: 1.6;
+    max-width: 320px;
+}
+
+.footer-title {
+    color: #0f172a !important;
+    /* Default Black/Slate */
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.footer-links,
+.footer-tags {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.footer-links a {
+    color: #64748b !important;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-block;
+}
+
+.footer-links a:hover {
+    color: #0ea5e9 !important;
+    /* Sky blue hover */
+    padding-left: 4px;
+}
+
+.footer-tags {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.footer-tags li {
+    background: #f1f5f9 !important;
+    /* Light gray pill */
+    border: 1px solid #e2e8f0 !important;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #475569 !important;
+    transition: background 0.2s;
+}
+
+.footer-tags li:hover {
+    background: #e2e8f0 !important;
+}
+
+/* =========================================
+   AUTH PAGE OVERRIDES (Dark Glass Footer)
+========================================= */
+body.auth-body .footer {
+    background: rgba(15, 23, 42, 0.75) !important;
+    /* Semi-transparent dark blue */
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    color: #e2e8f0 !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Auth Footer Text */
+body.auth-body .footer-title {
+    color: white !important;
+}
+
+body.auth-body .footer-text {
+    color: #dbecfe !important;
+}
+
+body.auth-body .footer-links a {
+    color: #94a3b8 !important;
+}
+
+body.auth-body .footer-links a:hover {
+    color: #38bdf8 !important;
+}
+
+/* Auth Footer Tags (Glass Pills) */
+body.auth-body .footer-tags li {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+    backdrop-filter: blur(4px);
+}
+
+body.auth-body .footer-tags li:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.footer-bottom {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 24px 24px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: #64748b;
+}
+
+.footer-note {
+    color: #f43f5e;
+    font-weight: 600;
+    margin-left: 4px;
+}
+
+@media (max-width: 900px) {
+    .footer-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+}
