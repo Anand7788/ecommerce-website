@@ -46,7 +46,7 @@ export default function Footer() {
       </div>
 
       <div className="footer-bottom">
-        <span>© {year} ShoppersPoint. All rights reserved.</span>
+        <span>© {year} ShopNow. All rights reserved.</span>
         <span className="footer-bottom-right">
           Built as a portfolio project. <span className="footer-note">Not a real e-commerce site.</span>
         </span>
