@@ -139,6 +139,13 @@ const handleSuggestionClick = (productName) => {
   return (
     <header className="navbar-shopcart">
       <div className="nav-inner">
+        {/* Mobile Toggle Button (Left) */}
+        <button className="mobile-toggle" onClick={toggleMobile}>
+           <svg width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              {mobileOpen ? <path d="M18 6L6 18M6 6l12 12"/> : <path d="M3 12h18M3 6h18M3 18h18"/> }
+           </svg>
+        </button>
+
         {/* LEFT: Logo */}
         <div className="nav-left">
           <Link to="/" className="brand">
@@ -277,6 +284,45 @@ const handleSuggestionClick = (productName) => {
              <span>Cart</span>
            </Link>
         </div>
+
+
+      {/* Mobile Menu Overlay */}
+      {mobileOpen && (
+        <div className="mobile-menu">
+           <div className="mobile-search">
+             <input 
+                type="text" 
+                placeholder="Search Product..." 
+                value={searchQuery}
+                onChange={handleSearchChange}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') { handleSearchSubmit(); closeMobile(); }
+                }}
+             />
+           </div>
+           
+           <nav className="mobile-links">
+             <Link to="/" onClick={closeMobile}>Home</Link>
+             <Link to="/?filter=deals" onClick={closeMobile}>Deals</Link>
+             <Link to="/?sort=newest" onClick={closeMobile}>What's New</Link>
+             <Link to="/orders" onClick={closeMobile}>Delivery</Link>
+             <div style={{height:1, background:'#eee', margin:'10px 0'}}></div>
+             {token ? (
+               <>
+                 <Link to="/profile" onClick={closeMobile}>My Profile</Link>
+                 <Link to="/orders" onClick={closeMobile}>Orders</Link>
+                 <button onClick={() => { logout(); closeMobile(); }} style={{textAlign:'left', background:'none', border:'none', fontSize:16, fontWeight:500, color:'#ef4444'}}>Logout</button>
+               </>
+             ) : (
+               <>
+                 <Link to="/login" onClick={closeMobile}>Login</Link>
+                 <Link to="/login?mode=signup" onClick={closeMobile}>Sign Up</Link>
+               </>
+             )}
+           </nav>
+        </div>
+      )}
+
       </div>
     </header>
   );

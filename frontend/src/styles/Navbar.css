@@ -173,4 +173,69 @@
     .nav-search {
         display: none;
     }
+
+    .mobile-toggle {
+        display: flex;
+        /* Changed from block to flex for alignment */
+        align-items: center;
+    }
+
+    /* Hide text labels in actions on mobile */
+    .nav-actions .action-item span:not(.cart-badge-dot) {
+        display: none;
+    }
+
+    .nav-actions {
+        gap: 12px;
+    }
+}
+
+/* Mobile Menu Styles */
+.mobile-toggle {
+    display: none;
+    /* Hidden on desktop */
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #111827;
+    margin-right: 8px;
+    /* Reduced margin */
+    padding: 4px;
+}
+
+.mobile-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    border-top: 1px solid #e5e7eb;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 1000;
+}
+
+.mobile-search input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #f9fafb;
+    outline: none;
+}
+
+.mobile-links {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.mobile-links a {
+    text-decoration: none;
+    color: #1f2937;
+    font-size: 16px;
+    font-weight: 500;
 }

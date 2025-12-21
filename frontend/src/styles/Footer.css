@@ -158,11 +158,30 @@ body.auth-body .footer-tags li:hover {
     .footer-inner {
         grid-template-columns: 1fr;
         gap: 40px;
+        text-align: center;
+        /* Center align all text */
+    }
+
+    .footer-brand {
+        justify-content: center;
+        /* Center brand logo */
+    }
+
+    .footer-text {
+        margin: 0 auto;
+        /* Center paragraph */
+    }
+
+    .footer-tags {
+        justify-content: center;
+        /* Center tags */
     }
 
     .footer-bottom {
         flex-direction: column;
-        gap: 12px;
+        gap: 16px;
         text-align: center;
+        padding-bottom: 30px;
+        /* Add bottom padding for scroll space */
     }
 }
