@@ -10,18 +10,18 @@
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(229, 231, 235, 0.6);
-    padding: 12px 0;
+    padding: 16px 0;
     transition: background 0.3s ease;
 }
 
 .nav-inner {
     max-width: var(--max-w);
     margin: 0 auto;
-    padding: 0 24px;
+    padding: 0 32px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 24px;
+    gap: 32px;
 }
 
 /* Brand */
@@ -34,7 +34,14 @@
 /* Middle Links */
 .nav-links {
     display: flex;
-    gap: 24px;
+    gap: 32px;
+}
+
+/* ... */
+/* Right Actions */
+.nav-actions {
+    display: flex;
+    gap: 32px;
 }
 
 .nav-item {
@@ -85,11 +92,21 @@
 .action-item {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 18px;
     color: #111827;
     text-decoration: none;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 14px;
+    padding: 10px 16px;
+    /* Added internal spacing */
+    border-radius: 99px;
+    /* Pill shape */
+    transition: all 0.2s;
+}
+
+.action-item:hover {
+    background: #f3f4f6;
+    color: var(--primary);
 }
 
 /* Dropdown */
@@ -194,6 +211,16 @@
 
     .nav-actions {
         gap: 12px;
+    }
+
+    /* Hide Logo on Mobile and Reduce Text Size */
+    .brand-logo {
+        display: none !important;
+    }
+
+    .brand-text {
+        font-size: 20px !important;
+        /* Smaller than desktop */
     }
 }
 

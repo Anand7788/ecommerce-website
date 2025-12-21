@@ -57,6 +57,25 @@ body.dark-theme {
 }
 
 
+
+/* Brand Text Logotype */
+.brand-text {
+  font-weight: 800;
+  font-size: 24px;
+  letter-spacing: -0.5px;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-style: italic;
+  /* Gives it that e-commerce speed look (like Flipkart) */
+}
+
+.brand-gradient {
+  /* Amazon/Flipkart style is usually solid or subtle. Keeping gradient but making it punchy */
+  background: linear-gradient(to right, #2563eb, #9333ea);
+  /* Blue to Purple (Modern) */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 /* -------------------------------
    PAGE WRAPPER
 -------------------------------- */

@@ -1,24 +1,22 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 export default function FilterBar({ onFilterChange, products = [] }) {
-  const [activeDropdown, setActiveDropdown] = useState(null); // 'price', 'color', 'offer', 'all', 'category'
+  const [activeDropdown, setActiveDropdown] = useState(null); // 'all'
   const dropdownRef = useRef(null);
 
-  // Local state needs to include category if we want to manage it here, but simplest is to fire onFilterChange directly for category.
-  // Ideally, FilterBar should receive `activeFilters` as prop to show checked state, but refactoring that is larger.
-  // I will assume `products` is passed.
-  // I will add a local `selectedCategory` state or just use `onFilterChange` arguments if I can access current filters.
-  // Issue: `onFilterChange` in Home.jsx sets `activeFilters`. FilterBar current implementation keeps its OWN local state `priceRange`, `selectedColors`, etc. and sends them up.
-  // I need to add `selectedCategory` to FilterBar's local state to persist it.
-  
   const [priceRange, setPriceRange] = useState({ min: 0, max: 50000 });
   const [selectedColors, setSelectedColors] = useState([]);
   const [offerOnly, setOfferOnly] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(""); // Add this
+  const [selectedCategory, setSelectedCategory] = useState("");
+  
+  // New States for Discount and Availability
+  const [minDiscount, setMinDiscount] = useState(0); // 0, 10, 20, 30...
+  const [excludeOutOfStock, setExcludeOutOfStock] = useState(false);
 
   const colors = ["Black", "White", "Blue", "Red", "Green", "Silver", "Gold"];
+  const categories = ["All", ...new Set(products.map(p => p.category).filter(Boolean))];
+  const discounts = [10, 20, 30, 40, 50];
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -38,9 +36,31 @@ export default function FilterBar({ onFilterChange, products = [] }) {
       price: priceRange,
       colors: selectedColors,
       offer: offerOnly,
-      category: selectedCategory
+      category: selectedCategory === "All" ? "" : selectedCategory,
+      discount: minDiscount,
+      availability: excludeOutOfStock
     });
     setActiveDropdown(null);
+  };
+  
+  const handleClear = () => {
+      setPriceRange({ min: 0, max: 50000 });
+      setSelectedColors([]);
+      setOfferOnly(false);
+      setSelectedCategory("");
+      setMinDiscount(0);
+      setExcludeOutOfStock(false);
+      
+      // Auto apply clear
+      onFilterChange({
+          price: { min: 0, max: 50000 },
+          colors: [],
+          offer: false,
+          category: "",
+          discount: 0,
+          availability: false
+      });
+      setActiveDropdown(null);
   };
 
   const handleColorToggle = (color) => {
@@ -51,7 +71,6 @@ export default function FilterBar({ onFilterChange, products = [] }) {
     }
   };
 
-  // Styles
   const btnStyle = (isActive) => ({
     padding: '8px 16px',
     background: isActive ? '#e5e7eb' : '#f3f4f6',
@@ -70,122 +89,75 @@ export default function FilterBar({ onFilterChange, products = [] }) {
 
   const dropdownStyle = {
     position: 'absolute',
-    top: '120%',
+    top: '100%',
+    marginTop: 8,
     left: 0,
+    marginLeft: 4, // Added margin from left
     background: 'white',
+    // ...
     border: '1px solid #e5e7eb',
     borderRadius: 12,
-    boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-    padding: 16,
-    zIndex: 100,
-    minWidth: 200,
+    boxShadow: '0 10px 40px -10px rgba(0,0,0,0.2)',
+    padding: 20,
+    zIndex: 1000,
+    width: 320,
+    maxHeight: '70vh',
+    overflowY: 'auto',
     display: 'flex',
     flexDirection: 'column',
-    gap: 12
+    gap: 20
+  };
+  
+  const sectionTitleStyle = {
+      fontWeight: 700, 
+      fontSize: 14, 
+      marginBottom: 8,
+      color: '#111827'
   };
 
   return (
-    <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center', width: '100%' }} ref={dropdownRef}>
+    <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }} ref={dropdownRef}>
       
-
-
-      {/* CATEGORY FILTER */}
-      <div style={{ position: 'relative' }}>
-        <button onClick={() => toggleDropdown('category')} style={btnStyle(activeDropdown === 'category')}>
-          Category {activeDropdown === 'category' ? '▲' : '▼'}
-        </button>
-        {activeDropdown === 'category' && (
-           <div style={dropdownStyle}>
-              <div style={{ fontWeight: 600, marginBottom: 4 }}>Select Category</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 6, maxHeight: 200, overflowY: 'auto' }}>
-                 <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, cursor: 'pointer' }}>
-                    <input 
-                      type="radio" 
-                      name="cat_filter"
-                      checked={!selectedCategory} 
-                      onChange={() => {
-                          setSelectedCategory("");
-                          onFilterChange({
-                              price: priceRange,
-                              colors: selectedColors,
-                              offer: offerOnly,
-                              category: ""
-                          });
-                          setActiveDropdown(null);
-                      }}
-                    />
-                    All
-                 </label>
-                 {[...new Set(products.map(p => p.category).filter(Boolean))].map(cat => (
-                    <label key={cat} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, cursor: 'pointer' }}>
-                      <input 
-                        type="radio" 
-                        name="cat_filter"
-                        checked={selectedCategory === cat}
-                        onChange={() => {
-                            setSelectedCategory(cat);
-                            onFilterChange({
-                                price: priceRange,
-                                colors: selectedColors,
-                                offer: offerOnly,
-                                category: cat
-                            });
-                            setActiveDropdown(null);
-                        }}
-                      />
-                      {cat}
-                    </label>
-                 ))}
-              </div>
-           </div>
-        )}
-      </div>
-
-
-
-      {/* OFFER FILTER */}
-      <div style={{ position: 'relative' }}>
-        <button onClick={() => toggleDropdown('offer')} style={btnStyle(activeDropdown === 'offer')}>
-          Offer {offerOnly ? '•' : ''} <span style={{ fontSize: 10 }}>▼</span>
-        </button>
-        {activeDropdown === 'offer' && (
-          <div style={dropdownStyle}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, cursor: 'pointer' }}>
-              <input 
-                type="checkbox" 
-                checked={offerOnly}
-                onChange={(e) => setOfferOnly(e.target.checked)}
-              />
-              Show only items on offer
-            </label>
-            <button 
-              onClick={applyFilters}
-              style={{ padding: '8px', background: '#000', color: 'white', border: 'none', borderRadius: 6, cursor: 'pointer', marginTop: 8 }}
-            >
-              Apply
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* ALL FILTERS */}
-      <div style={{ position: 'relative' }}>
-       <button onClick={() => toggleDropdown('all')} style={{...btnStyle(activeDropdown === 'all'), background: '#e5e7eb'}}>
-         All Filters ⚙️
+      {/* ALL FILTERS BUTTON */}
+       <button onClick={() => toggleDropdown('all')} style={{...btnStyle(activeDropdown === 'all'), background: '#fff', border: '1px solid #e5e7eb', boxShadow: '0 1px 2px rgba(0,0,0,0.05)'}}>
+         <span style={{fontSize:16}}>🛠️</span> All Filters
        </button>
+
        {activeDropdown === 'all' && (
-          <div style={{...dropdownStyle, width: '90vw', maxWidth: 320, right: 0, left: 'auto'}}>
-            <div style={{ fontWeight: 600, fontSize: 16, borderBottom:'1px solid #eee', paddingBottom:8 }}>All Filters</div>
+          <div style={dropdownStyle}>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', borderBottom:'1px solid #eee', paddingBottom:12 }}>
+                <span style={{ fontWeight: 800, fontSize: 18 }}>Filter Products</span>
+                <button onClick={() => setActiveDropdown(null)} style={{background:'none', border:'none', fontSize:20, cursor:'pointer'}}>×</button>
+            </div>
             
-            {/* Price Section */}
-            <div style={{marginBottom:8}}>
-                <div style={{fontWeight:600, fontSize:14, marginBottom:4}}>Price Range</div>
+            {/* CATEGORIES */}
+            <div>
+               <div style={sectionTitleStyle}>Category</div>
+               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  {categories.map(cat => (
+                     <label key={cat} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, cursor: 'pointer', padding:'4px 10px', background: selectedCategory === cat ? '#eff6ff' : '#f9fafb', border: selectedCategory === cat ? '1px solid #bfdbfe' : '1px solid #eee', borderRadius: 99 }}>
+                       <input 
+                         type="radio" 
+                         name="all_filter_cat"
+                         checked={selectedCategory === cat || (cat === 'All' && !selectedCategory)}
+                         onChange={() => setSelectedCategory(cat === 'All' ? "" : cat)}
+                         style={{display:'none'}}
+                       />
+                       <span style={{color: selectedCategory === cat ? '#1d4ed8' : '#374151', fontWeight: selectedCategory === cat ? 600 : 400}}>{cat}</span>
+                     </label>
+                  ))}
+               </div>
+            </div>
+
+            {/* PRICE RANGE */}
+            <div>
+                <div style={sectionTitleStyle}>Price Range</div>
                 <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                   <input 
                     type="number" 
                     value={priceRange.min} 
                     onChange={(e) => setPriceRange({ ...priceRange, min: Number(e.target.value) })}
-                    style={{ width: '100%', padding: 6, border: '1px solid #ccc', borderRadius: 4 }}
+                    style={{ width: '100%', padding: 8, border: '1px solid #d1d5db', borderRadius: 6 }}
                     placeholder="Min"
                   />
                   <span>-</span>
@@ -193,67 +165,109 @@ export default function FilterBar({ onFilterChange, products = [] }) {
                     type="number" 
                     value={priceRange.max} 
                     onChange={(e) => setPriceRange({ ...priceRange, max: Number(e.target.value) })}
-                    style={{ width: '100%', padding: 6, border: '1px solid #ccc', borderRadius: 4 }}
+                    style={{ width: '100%', padding: 8, border: '1px solid #d1d5db', borderRadius: 6 }}
                     placeholder="Max"
                   />
                 </div>
             </div>
 
-            {/* Colors Section */}
-            <div style={{marginBottom:8}}>
-                <div style={{fontWeight:600, fontSize:14, marginBottom:4}}>Colors</div>
-                <div style={{ display: 'flex', flexWrap:'wrap', gap: 6 }}>
-                  {colors.map(c => (
-                    <label key={c} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, cursor: 'pointer', background: selectedColors.includes(c) ? '#f3f4f6' : 'transparent', padding:'2px 6px', borderRadius:4, border: '1px solid #eee' }}>
-                      <input 
-                        type="checkbox" 
-                        checked={selectedColors.includes(c)}
-                        onChange={() => handleColorToggle(c)}
-                        style={{display:'none'}}
-                      />
-                      <div style={{ width: 10, height: 10, borderRadius: '50%', background: c.toLowerCase(), border: '1px solid #ddd' }}></div>
-                      <span style={{fontWeight: selectedColors.includes(c) ? 600 : 400}}>{c}</span>
-                    </label>
+            {/* DISCOUNT */}
+            <div>
+                <div style={sectionTitleStyle}>Discount</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {discounts.map(d => (
+                     <label key={d} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, cursor: 'pointer' }}>
+                        <input 
+                          type="radio" 
+                          name="discount_radio"
+                          checked={minDiscount === d}
+                          onChange={() => setMinDiscount(d)}
+                          style={{accentColor: '#111827'}}
+                        />
+                        {d}% or more
+                     </label>
                   ))}
+                   <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, cursor: 'pointer' }}>
+                        <input 
+                          type="radio" 
+                          name="discount_radio"
+                          checked={minDiscount === 0}
+                          onChange={() => setMinDiscount(0)}
+                          style={{accentColor: '#111827'}}
+                        />
+                        Any
+                     </label>
                 </div>
             </div>
 
-            {/* Offer Section */}
-            <div style={{marginBottom:8}}>
+            {/* AVAILABILITY */}
+            <div>
+               <div style={sectionTitleStyle}>Availability</div>
+               <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, cursor: 'pointer' }}>
+                  <input 
+                    type="checkbox" 
+                    checked={excludeOutOfStock}
+                    onChange={(e) => setExcludeOutOfStock(e.target.checked)}
+                    style={{width:16, height:16, accentColor:'black'}}
+                  />
+                  Exclude Out of Stock
+               </label>
+            </div>
+
+            {/* OFFER */}
+            <div>
+                <div style={sectionTitleStyle}>Offers</div>
                  <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, cursor: 'pointer' }}>
                   <input 
                     type="checkbox" 
                     checked={offerOnly}
                     onChange={(e) => setOfferOnly(e.target.checked)}
+                    style={{width:16, height:16, accentColor:'black'}}
                   />
-                  Show only items on offer
+                  Show Special Offers Only
                 </label>
             </div>
 
-            {/* Actions */}
-            <div style={{display:'flex', gap:8, marginTop:8, paddingTop:8, borderTop:'1px solid #eee'}}>
+            {/* COLORS */}
+            <div>
+                <div style={sectionTitleStyle}>Colors</div>
+                <div style={{ display: 'flex', flexWrap:'wrap', gap: 8 }}>
+                  {colors.map(c => (
+                    <div 
+                       key={c} 
+                       onClick={() => handleColorToggle(c)}
+                       style={{ 
+                         width: 24, 
+                         height: 24, 
+                         borderRadius: '50%', 
+                         background: c.toLowerCase(), 
+                         border: selectedColors.includes(c) ? '2px solid #000' : '1px solid #e5e7eb',
+                         boxShadow: selectedColors.includes(c) ? '0 0 0 2px white inset' : 'none',
+                         cursor: 'pointer'
+                       }}
+                       title={c}
+                     />
+                  ))}
+                </div>
+            </div>
+
+            {/* ACTIONS */}
+            <div style={{display:'flex', gap:12, marginTop:12, paddingTop:16, borderTop:'1px solid #eee'}}>
                 <button 
-                  onClick={() => {
-                      setPriceRange({ min: 0, max: 50000 });
-                      setSelectedColors([]);
-                      setOfferOnly(false);
-                      // Optionally auto-apply or let user click apply
-                  }}
-                  style={{ flex:1, padding: '8px', background: 'white', color: '#333', border: '1px solid #ddd', borderRadius: 6, cursor: 'pointer' }}
+                  onClick={handleClear}
+                  style={{ flex:1, padding: '10px', background: 'white', color: '#dc2626', border: '1px solid #fecaca', borderRadius: 8, fontWeight:600, cursor: 'pointer' }}
                 >
-                  Clear
+                  Clear All
                 </button>
                 <button 
                   onClick={applyFilters}
-                  style={{ flex:1, padding: '8px', background: '#000', color: 'white', border: 'none', borderRadius: 6, cursor: 'pointer' }}
+                  style={{ flex:1, padding: '10px', background: '#111827', color: 'white', border: 'none', borderRadius: 8, fontWeight:600, cursor: 'pointer' }}
                 >
                   Apply Filters
                 </button>
             </div>
           </div>
        )}
-      </div>
-
     </div>
   );
 }

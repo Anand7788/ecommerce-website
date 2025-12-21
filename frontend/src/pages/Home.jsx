@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { fetchProducts } from "../api/api";
 import ProductGrid from "../components/ProductGrid";
@@ -6,6 +6,7 @@ import Hero from "../components/Hero";
 import SortBar from "../components/SortBar";
 import FilterBar from "../components/FilterBar";
 import "../styles/HomeMobile.css";
+import { ServiceStrip, DealsGrid } from "../components/HomeBanners";
 
 export default function HomePage() {
   const [products, setProducts] = useState([]);
@@ -41,8 +42,8 @@ export default function HomePage() {
   useEffect(() => {
     load();
   }, []);
-  // 2. Filter & Sort products using useMemo (derived state) to prevent extra renders
-  const filteredProducts = React.useMemo(() => {
+
+  const filteredProducts = useMemo(() => {
     let result = [...products];
 
     // 1. Search
@@ -60,7 +61,7 @@ export default function HomePage() {
         result = result.filter(p => p.category === activeCat);
     }
 
-    // 3. Deals (Mock: price < 5000 or specific flag if available)
+    // 3. Deals (Mock)
     if(filterParam === 'deals') {
         result = result.filter(p => p.price < 5000); 
     }
@@ -70,7 +71,6 @@ export default function HomePage() {
       result = result.filter(p => p.price >= activeFilters.price.min && p.price <= activeFilters.price.max);
     }
     
-    // Note: Assuming 'color' or 'description' contains color info for now as we don't have a dedicated color column yet.
     if (activeFilters.colors.length > 0) {
       result = result.filter(p => {
         const text = (p.description || '') + ' ' + (p.name || '');
@@ -79,7 +79,6 @@ export default function HomePage() {
     }
 
     if (activeFilters.offer) {
-       // Mock offer logic
        result = result.filter(p => p.price < 10000); 
     }
 
@@ -96,24 +95,29 @@ export default function HomePage() {
       setVisibleCount(12);
   }, [filteredProducts]);
 
-  // Handler for filter changes from FilterBar
   const handleFilterChange = (newFilters) => {
     setActiveFilters(newFilters);
   };
 
   return (
     <div className="home-page">
-      {/* 1. Hero Section */}
       <Hero />
 
-      {/* 2. Main Content Container */}
-      <div className="container">
-        
+      <div className="container" style={{ marginTop: 24, padding: '0 20px 40px' }}>
+            
+        {/* Native Service Strip */}
+        <ServiceStrip />
+      
         {/* Section Title */}
-        <h2 style={{fontSize:28, fontWeight:800, marginBottom:24, color:'#111827'}}>Products For You!</h2>
+        <h2 style={{ fontSize: 32, fontWeight: 900, marginBottom: 20, color: '#111827', textAlign: 'center', letterSpacing: '-0.5px' }}>
+           <span style={{borderBottom: '4px solid #fcd34d', paddingBottom: 4}}>Super Dhamaka Deal</span>
+        </h2>
 
-        {/* Filter & Sort Bar */}
-        <div className="filter-sort-container" style={{display:'flex', gap:10, marginBottom:24, alignItems:'center', flexWrap:'wrap'}}>
+        {/* Native Deals Grid */}
+        <DealsGrid />
+
+        {/* Filter & Sort Bar (Restored Horizontal Layout) */}
+        <div className="filter-sort-container" style={{display:'flex', gap:10, marginBottom:8, alignItems:'center', flexWrap:'wrap'}}>
           <FilterBar onFilterChange={handleFilterChange} products={products} />
           
           <div style={{marginLeft:'auto', flexShrink:0}}>
@@ -126,7 +130,7 @@ export default function HomePage() {
 
         {/* Load More */}
         {visibleCount < filteredProducts.length && (
-           <div style={{textAlign:'center', margin:'40px 0'}}>
+          <div style={{textAlign:'center', margin:'40px 0'}}>
               <button 
                 onClick={() => setVisibleCount(prev => prev + 12)}
                 style={{
@@ -142,9 +146,9 @@ export default function HomePage() {
                 onMouseOver={e => e.target.style.borderColor = '#000'}
                 onMouseOut={e => e.target.style.borderColor = '#e5e7eb'}
               >
-                Show Next Products (`{filteredProducts.length - visibleCount}` more)
+                Show Next Products ({filteredProducts.length - visibleCount} more)
               </button>
-           </div>
+          </div>
         )}
       </div>
     </div>
