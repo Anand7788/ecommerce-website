@@ -158,23 +158,23 @@ body.auth-body .footer-tags li:hover {
     .footer-inner {
         grid-template-columns: 1fr;
         gap: 40px;
-        text-align: center;
-        /* Center align all text */
+        text-align: left;
+        /* Left keys align for better readability */
     }
 
     .footer-brand {
-        justify-content: center;
-        /* Center brand logo */
+        justify-content: flex-start;
+        /* Left align brand logo */
     }
 
     .footer-text {
-        margin: 0 auto;
-        /* Center paragraph */
+        margin: 0;
+        /* Remove margin auto */
     }
 
     .footer-tags {
-        justify-content: center;
-        /* Center tags */
+        justify-content: flex-start;
+        /* Left align tags */
     }
 
     .footer-bottom {

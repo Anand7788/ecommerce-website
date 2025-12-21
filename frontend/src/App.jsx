@@ -9,6 +9,7 @@ import OrderDetails from './pages/OrderDetails';
 import Login from './pages/Login';
 import Checkout from './pages/Checkout';
 import Footer from "./components/Footer";
+import ScrollToTop from './components/ScrollToTop';
 
 // Admin Imports
 import AdminLayout from './layouts/AdminLayout';
@@ -38,6 +39,8 @@ const PublicLayout = () => (
 
 export default function App(){
   return (
+    <>
+    <ScrollToTop />
     <Routes>
       <Route path="/admin/login" element={<AdminLogin />} />
       
@@ -72,5 +75,6 @@ export default function App(){
       <Route path="/admin/login" element={<AdminLogin />} />
       </Route>
     </Routes>
+    </>
   );
 }
