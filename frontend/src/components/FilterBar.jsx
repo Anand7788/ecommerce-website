@@ -100,7 +100,7 @@ export default function FilterBar({ onFilterChange, products = [] }) {
     boxShadow: '0 10px 40px -10px rgba(0,0,0,0.2)',
     padding: 20,
     zIndex: 1000,
-    width: 320,
+    width: 'min(320px, 92vw)',
     maxHeight: '70vh',
     overflowY: 'auto',
     display: 'flex',
@@ -116,7 +116,7 @@ export default function FilterBar({ onFilterChange, products = [] }) {
   };
 
   return (
-    <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }} ref={dropdownRef}>
+    <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center', position: 'relative' }} ref={dropdownRef}>
       
       {/* ALL FILTERS BUTTON */}
        <button onClick={() => toggleDropdown('all')} style={{...btnStyle(activeDropdown === 'all'), background: '#fff', border: '1px solid #e5e7eb', boxShadow: '0 1px 2px rgba(0,0,0,0.05)'}}>
