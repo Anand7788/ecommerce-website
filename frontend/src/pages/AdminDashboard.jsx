@@ -63,7 +63,7 @@ export default function AdminDashboard() {
             </div>
             <div className="stat-info">
                <h3>Total Sales</h3>
-               <div className="stat-value">${parseFloat(data.total_sales).toFixed(2)}</div>
+               <div className="stat-value">₹{parseFloat(data.total_sales).toFixed(2)}</div>
             </div>
          </div>
          <div className="stat-card">
@@ -90,7 +90,7 @@ export default function AdminDashboard() {
             </div>
             <div className="stat-info">
                <h3>Total Revenue</h3>
-               <div className="stat-value">${parseFloat(data.total_revenue).toFixed(2)}</div>
+               <div className="stat-value">₹{parseFloat(data.total_revenue).toFixed(2)}</div>
             </div>
          </div>
       </div>
@@ -138,7 +138,7 @@ export default function AdminDashboard() {
                            <div style={{fontSize:12, color:'#9ca3af'}}>Items: {o.items}</div>
                         </div>
                      </div>
-                     <div style={{fontWeight:700, fontSize:14, color:'#10b981'}}>${parseFloat(o.price).toFixed(2)}</div>
+                     <div style={{fontWeight:700, fontSize:14, color:'#10b981'}}>₹{parseFloat(o.price).toFixed(2)}</div>
                   </div>
                ))}
                <div style={{textAlign:'center', marginTop:20, color:'#6b7280', fontSize:13, cursor:'pointer'}}>View All</div>
@@ -177,7 +177,7 @@ export default function AdminDashboard() {
                            }}>{p.status}</span>
                         </td>
                         <td style={{padding:'12px 0'}}>{p.sales}</td>
-                        <td style={{padding:'12px 0'}}>${parseFloat(p.earning).toFixed(2)}</td>
+                        <td style={{padding:'12px 0'}}>₹{parseFloat(p.earning).toFixed(2)}</td>
                      </tr>
                   ))}
                </tbody>
@@ -203,7 +203,7 @@ export default function AdminDashboard() {
                </ResponsiveContainer>
                <div style={{position:'absolute', top:'50%', left:'50%', transform:'translate(-50%, -50%)', textAlign:'center'}}>
                   <div style={{fontSize:12, color:'#9ca3af'}}>Total</div>
-                  <div style={{fontWeight:700}}>${parseFloat(data.total_revenue).toFixed(0)}</div>
+                  <div style={{fontWeight:700}}>₹{parseFloat(data.total_revenue).toFixed(0)}</div>
                </div>
             </div>
          </div>

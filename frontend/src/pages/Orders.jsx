@@ -118,7 +118,7 @@ export default function Orders(){
                               {otherCount > 0 && <span style={{color:'#991b1b', fontWeight:600}}> & {otherCount} more items</span>}
                            </span>
                         ) : (
-                           <span className="order-title">No items</span>
+                           <span style={{fontWeight:600}}>₹{parseFloat(order.total_price).toLocaleString()}</span>
                         )}
                         <div className="order-total">₹{Math.floor(order.total_price).toLocaleString()}</div>
                      </div>

@@ -58,7 +58,7 @@ export default function AdminCustomerDetails() {
                 </div>
                 <div style={{fontSize:14, color:'#4b5563'}}>
                    <div style={{marginBottom:8}}><strong>Joined:</strong> {new Date(customer.created_at).toLocaleDateString()}</div>
-                   <div style={{marginBottom:8}}><strong>Total Spent:</strong> ${parseFloat(customer.stats.total_spent).toFixed(2)}</div>
+                   <div style={{marginBottom:8}}><strong>Total Spent:</strong> ₹{parseFloat(customer.stats.total_spent).toFixed(2)}</div>
                    <div><strong>Total Orders:</strong> {customer.stats.total_orders}</div>
                 </div>
              </div>
@@ -105,7 +105,7 @@ export default function AdminCustomerDetails() {
                               }}>{o.status}</span>
                            </td>
                            <td style={{padding:12}}>{o.items_count}</td>
-                           <td style={{padding:12}}>${parseFloat(o.total_price).toFixed(2)}</td>
+                           <td style={{padding:12}}>₹{parseFloat(o.total_price).toFixed(2)}</td>
                         </tr>
                      ))}
                   </tbody>

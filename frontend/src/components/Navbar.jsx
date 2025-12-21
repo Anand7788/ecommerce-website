@@ -53,7 +53,11 @@ export default function Navbar() {
       loadCart();
     }
     window.addEventListener("authChange", handleAuthChange);
-    return () => window.removeEventListener("authChange", handleAuthChange);
+    window.addEventListener("cartUpdated", loadCart);
+    return () => {
+      window.removeEventListener("authChange", handleAuthChange);
+      window.removeEventListener("cartUpdated", loadCart);
+    };
   }, [loadCart]);
 
   // logout handler

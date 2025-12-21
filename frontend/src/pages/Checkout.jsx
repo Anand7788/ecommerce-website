@@ -191,7 +191,7 @@ export default function Checkout() {
                         <h3>{it.product.name}</h3>
                         <p className="review-meta">Quantity: {it.quantity}</p>
                     </div>
-                    <div className="review-price">${Math.floor(it.product.price)}</div>
+                    <div className="review-price">₹{Math.floor(it.product.price).toLocaleString()}</div>
                 </div>
             ))}
           </div>

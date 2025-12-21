@@ -75,7 +75,7 @@ export default function AdminOrders() {
                         <div style={{fontSize:12, color:'#9ca3af'}}>{order.user.email}</div>
                      </td>
                      <td style={{padding:12}}>{new Date(order.created_at).toLocaleDateString()}</td>
-                     <td style={{padding:12}}>${parseFloat(order.total_price).toFixed(2)}</td>
+                     <td style={{padding:12}}>₹{parseFloat(order.total_price).toFixed(2)}</td>
                      <td style={{padding:12}}>
                         <select 
                           value={order.status}

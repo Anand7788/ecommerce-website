@@ -105,7 +105,7 @@ export default function Cart(){
                    <p className="cart-variant">Size: Medium <br/> Color: Red</p>
                    
                    <div className="cart-item-bottom">
-                      <span className="cart-price">${Math.floor(item.product.price)}</span>
+                      <span className="cart-price">₹{Math.floor(item.product.price).toLocaleString()}</span>
                       
                       <div className="qty-stepper">
                         <button onClick={() => changeQty(item.id, item.quantity - 1)}>–</button>
@@ -124,22 +124,22 @@ export default function Cart(){
           
           <div className="summary-row">
             <span>Subtotal</span>
-            <span className="summary-val">${subtotal}</span>
+            <span className="summary-val">₹{subtotal.toLocaleString()}</span>
           </div>
           <div className="summary-row" style={{color:'#ef4444'}}>
             <span>Discount (-20%)</span>
-            <span className="summary-val">-${discount}</span>
+            <span className="summary-val">-₹{discount.toLocaleString()}</span>
           </div>
           <div className="summary-row">
             <span>Delivery Fee</span>
-            <span className="summary-val">${deliveryFee}</span>
+            <span className="summary-val">₹{deliveryFee}</span>
           </div>
           
           <div className="summary-divider"></div>
           
           <div className="summary-row total">
             <span>Total</span>
-            <span>${Math.max(0, total)}</span>
+            <span>₹{Math.max(0, total).toLocaleString()}</span>
           </div>
 
           <button className="btn-checkout" onClick={() => navigate('/checkout')} style={{marginTop:20}}>

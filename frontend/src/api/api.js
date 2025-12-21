@@ -20,10 +20,23 @@ export async function createProduct(productData) { return (await api.post('/prod
 export async function deleteProduct(id) { return (await api.delete(`/products/${id}`)).data; }
 
 // CART
-export async function addToCart(product_id, quantity = 1) { return (await api.post('/cart/add_item', { product_id, quantity })).data; }
+// CART
+export async function addToCart(product_id, quantity = 1) {
+  const res = (await api.post('/cart/add_item', { product_id, quantity })).data;
+  window.dispatchEvent(new Event('cartUpdated'));
+  return res;
+}
 export async function getCart() { return (await api.get('/cart')).data; }
-export async function updateCartItem(cart_item_id, quantity) { return (await api.patch('/cart/update_item', { cart_item_id, quantity })).data; }
-export async function removeCartItem(cart_item_id) { return (await api.delete('/cart/remove_item', { data: { cart_item_id } })).data; }
+export async function updateCartItem(cart_item_id, quantity) {
+  const res = (await api.patch('/cart/update_item', { cart_item_id, quantity })).data;
+  window.dispatchEvent(new Event('cartUpdated'));
+  return res;
+}
+export async function removeCartItem(cart_item_id) {
+  const res = (await api.delete('/cart/remove_item', { data: { cart_item_id } })).data;
+  window.dispatchEvent(new Event('cartUpdated'));
+  return res;
+}
 
 // ORDERS
 export async function createOrder(cart_id, address) {

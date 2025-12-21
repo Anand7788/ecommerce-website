@@ -91,7 +91,7 @@ export default function ProductDetails() {
           </div>
 
           <div className="p-price-box">
-            <span className="p-price">${Math.floor(product.price)}.00</span>
+            <span className="p-price">₹{Math.floor(product.price).toLocaleString()}</span>
             <span className="p-installment"> or 99.99/month</span>
           </div>
           <p className="p-financing">Suggested payments with 6 months special financing</p>

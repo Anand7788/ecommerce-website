@@ -150,7 +150,7 @@ export default function AdminProducts() {
 
                   <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:16}}>
                     <div className="form-group">
-                        <label className="form-label">Price ($)</label>
+                        <label className="form-label">Price (₹)</label>
                         <input 
                             type="number" name="price" 
                             className="form-input" 
@@ -230,7 +230,7 @@ export default function AdminProducts() {
                                     <img src={p.image_url} style={{width:40, height:40, borderRadius:4, objectFit:'cover'}} alt="" />
                                 </td>
                                 <td style={{padding:12, fontWeight:500}}>{p.name}</td>
-                                <td style={{padding:12}}>${p.price || (p.price_cents/100)}</td>
+                                <td style={{padding:12}}>₹{p.price || (p.price_cents/100)}</td>
                                 <td style={{padding:12}}>
                                     <span style={{
                                         padding:'2px 8px', borderRadius:10, fontSize:12,

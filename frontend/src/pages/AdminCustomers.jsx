@@ -56,7 +56,7 @@ export default function AdminCustomers() {
                      <td style={{padding:12}}>{user.email}</td>
                      <td style={{padding:12}}>{new Date(user.created_at).toLocaleDateString()}</td>
                      <td style={{padding:12}}>{user.total_orders}</td>
-                     <td style={{padding:12}}>${parseFloat(user.total_spent || 0).toFixed(2)}</td>
+                     <td style={{padding:12}}>₹{parseFloat(user.total_spent || 0).toFixed(2)}</td>
                      <td style={{padding:12}}>
                        <a href={`/admin/customers/${user.id}`} style={{color:'#3b82f6', textDecoration:'none', fontSize:13, fontWeight:600}}>View Details</a>
                      </td>

@@ -87,9 +87,9 @@ export default function AdminOrderDetails() {
                                 <span style={{fontWeight:500}}>{item.name}</span>
                               </div>
                            </td>
-                           <td style={{padding:12}}>${parseFloat(item.price).toFixed(2)}</td>
+                           <td style={{padding:12}}>₹{parseFloat(item.price).toFixed(2)}</td>
                            <td style={{padding:12}}>x{item.quantity}</td>
-                           <td style={{padding:12, fontWeight:600}}>${(parseFloat(item.price) * item.quantity).toFixed(2)}</td>
+                           <td style={{padding:12, fontWeight:600}}>₹{(parseFloat(item.price) * item.quantity).toFixed(2)}</td>
                         </tr>
                      ))}
                   </tbody>
@@ -97,7 +97,7 @@ export default function AdminOrderDetails() {
               <div style={{marginTop:20, display:'flex', justifyContent:'flex-end', borderTop:'1px solid #eee', paddingTop:20}}>
                  <div style={{textAlign:'right'}}>
                     <div style={{color:'#6b7280', marginBottom:5}}>Subtotal</div>
-                    <div style={{fontSize:24, fontWeight:700, color:'#10b981'}}>${parseFloat(order.total_price).toFixed(2)}</div>
+                    <div style={{fontSize:24, fontWeight:700, color:'#10b981'}}>₹{parseFloat(order.total_price).toFixed(2)}</div>
                  </div>
               </div>
           </div>
