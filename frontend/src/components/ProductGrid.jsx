@@ -41,7 +41,7 @@ export default function ProductGrid({ products, loading, onAdded }) {
                   <h3 className="card-title" style={{whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis'}}>{p.name}</h3>
                 </Link>
                 <div style={{flexShrink:0}}>
-                   <span className="card-price" style={{display:'block'}}>${Math.floor(p.price)}<sup>.00</sup></span>
+                   <span className="card-price" style={{display:'block'}}>₹{Math.floor(p.price).toLocaleString()}</span>
                 </div>
               </div>
               
