@@ -11,11 +11,9 @@ export default function Footer() {
       <div className="footer-inner">
         {/* Brand + description */}
         <div className="footer-column">
-          <div className="footer-brand">
-            <div style={{ marginRight: 8, display: 'flex', alignItems: 'center' }}>
-               <Logo width={36} height={36} />
-            </div>
-            <span className="footer-brand-text brand-gradient">Shopperspoint</span>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            {/* Logo Icon Removed */}
+            <span className="footer-brand-text brand-gradient">ShopNow</span>
           </div>
           <p className="footer-text">
             Simple, modern ecommerce demo built with React & Ruby on Rails –
@@ -48,7 +46,7 @@ export default function Footer() {
       </div>
 
       <div className="footer-bottom">
-        <span>© {year} ShoppersPoint. All rights reserved.</span>
+        <span>© {year} ShopNow. All rights reserved.</span>
         <span className="footer-bottom-right">
           Built as a portfolio project. <span className="footer-note">Not a real e-commerce site.</span>
         </span>
