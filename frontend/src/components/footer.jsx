@@ -54,7 +54,7 @@ export default function Footer() {
       <div className="footer-bottom">
         <span>© {year} ShoppersPoint. All rights reserved.</span>
         <span className="footer-bottom-right">
-          Built as a portfolio project.
+          Built as a portfolio project. <span style={{color:'#ef4444', fontWeight:600}}>Not a real e-commerce site.</span>
         </span>
       </div>
     </footer>

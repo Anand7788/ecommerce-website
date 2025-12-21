@@ -128,9 +128,16 @@ export default function AdminLogin() {
           </button>
         </form>
 
-        <div className="login-footer">
-           Not registered yet? <span className="create-acc-link">Create an account</span>
-        </div>
+           <div className="login-footer">
+              Not registered yet? <span className="create-acc-link">Create an account</span>
+           </div>
+           
+           {/* Anti-Phishing Disclaimer */}
+           <div style={{marginTop:20, padding:10, background:'#eef2ff', borderRadius:8, fontSize:12, color:'#4338ca', textAlign:'center', border:'1px solid #c7d2fe'}}>
+              <strong>Educational Project Portfolio</strong><br/>
+              This is a demonstration website built for learning React & Rails. 
+              <br/>This is NOT a real store. Do not enter real credentials.
+           </div>
       </div>
     </div>
   );
