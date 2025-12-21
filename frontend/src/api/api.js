@@ -18,6 +18,11 @@ export async function fetchProducts() { return (await api.get('/products')).data
 export async function fetchProduct(id) { return (await api.get(`/products/${id}`)).data; }
 export async function createProduct(productData) { return (await api.post('/products', { product: productData })).data; }
 export async function deleteProduct(id) { return (await api.delete(`/products/${id}`)).data; }
+export async function uploadProductCSV(formData) {
+  return (await api.post('/admin/products/import_csv', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  })).data;
+}
 
 // CART
 // CART

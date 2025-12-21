@@ -1,10 +1,13 @@
 // src/pages/AdminProducts.jsx
 import React, { useEffect, useState } from 'react';
-import { fetchProducts, createProduct, deleteProduct } from '../api/api';
+import { fetchProducts, createProduct, deleteProduct, uploadProductCSV } from '../api/api';
 
 export default function AdminProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  // CSV Upload State
+  const [uploading, setUploading] = useState(false);
   
   // Form State
   const [formData, setFormData] = useState({
@@ -36,6 +39,37 @@ export default function AdminProducts() {
       setLoading(false);
     }
   }
+
+  // Handle CSV Upload
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (!file.name.endsWith('.csv')) {
+      alert('Please upload a CSV file.');
+      return;
+    }
+
+    setUploading(true);
+    const data = new FormData();
+    data.append('file', file);
+
+    try {
+      const res = await uploadProductCSV(data);
+      if (res.errors && res.errors.length > 0) {
+        alert(`Imported with some errors:\n${res.errors.join('\n')}`);
+      } else {
+        alert(res.message || 'Import successful!');
+      }
+      loadProducts();
+    } catch (err) {
+      console.error(err);
+      alert('Failed to upload CSV.');
+    } finally {
+      setUploading(false);
+      e.target.value = ''; // Reset input
+    }
+  };
 
   const validate = () => {
     const newErrors = {};
@@ -116,6 +150,23 @@ export default function AdminProducts() {
          <div className="admin-title">
            <h2>Products</h2>
            <p>Manage your product catalog</p>
+         </div>
+         
+         {/* CSV Upload Button */}
+         <div>
+            <label 
+               className="btn-submit" 
+               style={{cursor:'pointer', background: uploading ? '#9ca3af' : '#4f46e5', display:'inline-block'}}
+            >
+               {uploading ? 'Importing...' : 'Import CSV'}
+               <input 
+                 type="file" 
+                 accept=".csv" 
+                 onChange={handleFileUpload} 
+                 style={{display:'none'}} 
+                 disabled={uploading}
+               />
+            </label>
          </div>
       </div>
 

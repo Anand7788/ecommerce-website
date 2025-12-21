@@ -1,5 +1,7 @@
 # app/controllers/admin/products_controller.rb
 module Admin
+  require 'csv'
+
   class ProductsController < ApplicationController
     before_action :authenticate_user!        # ensure logged in
     before_action :authenticate_admin!       # ensure admin

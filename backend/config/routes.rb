@@ -31,7 +31,11 @@ Rails.application.routes.draw do
 
   # Admin product management
   namespace :admin do
-    resources :products, only: [:index, :show, :create, :update, :destroy]
+    resources :products, only: [:index, :show, :create, :update, :destroy] do
+      collection do
+        post :import_csv
+      end
+    end
     resources :orders, only: [:index, :update, :show]
     resources :users, only: [:index, :show] # Customers
     get '/analytics', to: 'analytics#show'
