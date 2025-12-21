@@ -19,6 +19,14 @@ export default function Filters({ products, setFiltered }) {
       </div>
 
       <div className="filter-group">
+        <label>Category</label>
+        {[...new Set(products.map(p => p.category).filter(Boolean))].map(cat => (
+            <button key={cat} onClick={() => setFiltered(products.filter(p => p.category === cat))}>{cat}</button>
+        ))}
+        <button onClick={() => setFiltered(products)} style={{marginTop:8, fontSize:12, color:'var(--primary)'}}>Reset</button>
+      </div>
+
+      <div className="filter-group">
         <label>Rating</label>
         <label><input type="checkbox" /> 4★ & above</label>
       </div>

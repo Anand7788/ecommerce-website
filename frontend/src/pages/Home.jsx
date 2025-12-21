@@ -5,10 +5,10 @@ import ProductGrid from "../components/ProductGrid";
 import Hero from "../components/Hero";
 import SortBar from "../components/SortBar";
 import FilterBar from "../components/FilterBar";
+import "../styles/HomeMobile.css";
 
 export default function HomePage() {
   const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [visibleCount, setVisibleCount] = useState(12);
 
@@ -41,9 +41,8 @@ export default function HomePage() {
   useEffect(() => {
     load();
   }, []);
-
-  // Filter & Sort products
-  useEffect(() => {
+  // 2. Filter & Sort products using useMemo (derived state) to prevent extra renders
+  const filteredProducts = React.useMemo(() => {
     let result = [...products];
 
     // 1. Search
@@ -55,9 +54,10 @@ export default function HomePage() {
         );
     }
 
-    // 2. Category
-    if(categoryParam && categoryParam !== 'All') {
-        result = result.filter(p => p.category === categoryParam);
+    // 2. Category (URL or Interactive Filter)
+    const activeCat = activeFilters.category || categoryParam;
+    if(activeCat && activeCat !== 'All') {
+        result = result.filter(p => p.category === activeCat);
     }
 
     // 3. Deals (Mock: price < 5000 or specific flag if available)
@@ -65,13 +65,12 @@ export default function HomePage() {
         result = result.filter(p => p.price < 5000); 
     }
 
-    // 4. Interactive Filters (Price, Color, Offer)
+    // 4. Interactive Filters TopBar (Price, Color, Offer)
     if (activeFilters.price.min > 0 || activeFilters.price.max < 50000) {
       result = result.filter(p => p.price >= activeFilters.price.min && p.price <= activeFilters.price.max);
     }
     
     // Note: Assuming 'color' or 'description' contains color info for now as we don't have a dedicated color column yet.
-    // Using description search as a proxy for color if not present.
     if (activeFilters.colors.length > 0) {
       result = result.filter(p => {
         const text = (p.description || '') + ' ' + (p.name || '');
@@ -80,8 +79,8 @@ export default function HomePage() {
     }
 
     if (activeFilters.offer) {
-       // Mock offer logic: assuming items under certain price or specific keywords are "on offer"
-       result = result.filter(p => p.price < 10000); // Example threshold
+       // Mock offer logic
+       result = result.filter(p => p.price < 10000); 
     }
 
     // 5. Sort
@@ -89,8 +88,13 @@ export default function HomePage() {
         result.sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
     }
 
-    setFilteredProducts(result);
+    return result;
   }, [products, searchQuery, categoryParam, filterParam, sortParam, activeFilters]);
+
+  // Reset visible count when filters change
+  useEffect(() => {
+      setVisibleCount(12);
+  }, [filteredProducts]);
 
   // Handler for filter changes from FilterBar
   const handleFilterChange = (newFilters) => {
@@ -109,11 +113,11 @@ export default function HomePage() {
         <h2 style={{fontSize:28, fontWeight:800, marginBottom:24, color:'#111827'}}>Products For You!</h2>
 
         {/* Filter & Sort Bar */}
-        <div style={{display:'flex', gap:10, flexWrap:'wrap', marginBottom:32, alignItems:'center'}}>
-          <FilterBar onFilterChange={handleFilterChange} />
+        <div className="filter-sort-container" style={{display:'flex', gap:10, marginBottom:24, alignItems:'center', flexWrap:'wrap'}}>
+          <FilterBar onFilterChange={handleFilterChange} products={products} />
           
-          <div style={{marginLeft:'auto'}}>
-             <SortBar products={filteredProducts} setProducts={setFilteredProducts} />
+          <div style={{marginLeft:'auto', flexShrink:0}}>
+             <SortBar products={filteredProducts} setProducts={() => {}} />
           </div>
         </div>
 

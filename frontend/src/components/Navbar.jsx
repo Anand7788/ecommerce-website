@@ -234,6 +234,11 @@ const handleSuggestionClick = (productName) => {
 
         {/* RIGHT: Actions */}
         <div className="nav-actions">
+           {/* Mobile Search Icon Trigger */}
+           <button className="mobile-search-trigger" onClick={toggleMobile} style={{background:'none', border:'none', cursor:'pointer', display:'none'}}>
+               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+           </button>
+
            {/* Account Dropdown */}
            <div className="action-item dropdown-container">
              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
@@ -303,6 +308,21 @@ const handleSuggestionClick = (productName) => {
            
            <nav className="mobile-links">
              <Link to="/" onClick={closeMobile}>Home</Link>
+             
+             {/* Mobile Categories */}
+             <div style={{fontWeight:600, marginTop:8, marginBottom:4, color:'#6b7280', fontSize:12, textTransform:'uppercase'}}>Categories</div>
+             {[...new Set(allProducts.map(p => p.category).filter(Boolean))].map(cat => (
+                 <Link 
+                    key={cat} 
+                    to={`/?category=${encodeURIComponent(cat)}`} 
+                    onClick={closeMobile}
+                    style={{paddingLeft:10, fontSize:15}}
+                 >
+                    {cat}
+                 </Link>
+             ))}
+
+             <div style={{height:1, background:'#eee', margin:'10px 0'}}></div>
              <Link to="/?filter=deals" onClick={closeMobile}>Deals</Link>
              <Link to="/?sort=newest" onClick={closeMobile}>What's New</Link>
              <Link to="/orders" onClick={closeMobile}>Delivery</Link>

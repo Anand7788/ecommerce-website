@@ -1,13 +1,20 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-export default function FilterBar({ onFilterChange }) {
-  const [activeDropdown, setActiveDropdown] = useState(null); // 'price', 'color', 'offer', 'all'
+export default function FilterBar({ onFilterChange, products = [] }) {
+  const [activeDropdown, setActiveDropdown] = useState(null); // 'price', 'color', 'offer', 'all', 'category'
   const dropdownRef = useRef(null);
 
-  // Local state for filters
+  // Local state needs to include category if we want to manage it here, but simplest is to fire onFilterChange directly for category.
+  // Ideally, FilterBar should receive `activeFilters` as prop to show checked state, but refactoring that is larger.
+  // I will assume `products` is passed.
+  // I will add a local `selectedCategory` state or just use `onFilterChange` arguments if I can access current filters.
+  // Issue: `onFilterChange` in Home.jsx sets `activeFilters`. FilterBar current implementation keeps its OWN local state `priceRange`, `selectedColors`, etc. and sends them up.
+  // I need to add `selectedCategory` to FilterBar's local state to persist it.
+  
   const [priceRange, setPriceRange] = useState({ min: 0, max: 50000 });
   const [selectedColors, setSelectedColors] = useState([]);
   const [offerOnly, setOfferOnly] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(""); // Add this
 
   const colors = ["Black", "White", "Blue", "Red", "Green", "Silver", "Gold"];
 
@@ -30,7 +37,8 @@ export default function FilterBar({ onFilterChange }) {
     onFilterChange({
       price: priceRange,
       colors: selectedColors,
-      offer: offerOnly
+      offer: offerOnly,
+      category: selectedCategory
     });
     setActiveDropdown(null);
   };
@@ -53,9 +61,11 @@ export default function FilterBar({ onFilterChange }) {
     fontWeight: 500,
     display: 'flex',
     alignItems: 'center',
-    gap: 4,
+    gap: 6,
     cursor: 'pointer',
-    position: 'relative'
+    position: 'relative',
+    whiteSpace: 'nowrap',
+    flexShrink: 0
   });
 
   const dropdownStyle = {
@@ -75,73 +85,63 @@ export default function FilterBar({ onFilterChange }) {
   };
 
   return (
-    <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }} ref={dropdownRef}>
+    <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center', width: '100%' }} ref={dropdownRef}>
       
-      {/* PRICE FILTER */}
+
+
+      {/* CATEGORY FILTER */}
       <div style={{ position: 'relative' }}>
-        <button onClick={() => toggleDropdown('price')} style={btnStyle(activeDropdown === 'price')}>
-          Price {priceRange.min > 0 || priceRange.max < 50000 ? '•' : ''} <span style={{ fontSize: 10 }}>▼</span>
+        <button onClick={() => toggleDropdown('category')} style={btnStyle(activeDropdown === 'category')}>
+          Category {activeDropdown === 'category' ? '▲' : '▼'}
         </button>
-        {activeDropdown === 'price' && (
-          <div style={dropdownStyle}>
-            <div style={{ fontWeight: 600, marginBottom: 4 }}>Price Range</div>
-            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              <input 
-                type="number" 
-                value={priceRange.min} 
-                onChange={(e) => setPriceRange({ ...priceRange, min: Number(e.target.value) })}
-                style={{ width: 70, padding: 4, border: '1px solid #ccc', borderRadius: 4 }}
-                placeholder="Min"
-              />
-              <span>to</span>
-              <input 
-                type="number" 
-                value={priceRange.max} 
-                onChange={(e) => setPriceRange({ ...priceRange, max: Number(e.target.value) })}
-                style={{ width: 70, padding: 4, border: '1px solid #ccc', borderRadius: 4 }}
-                placeholder="Max"
-              />
-            </div>
-            <button 
-              onClick={applyFilters}
-              style={{ padding: '8px', background: '#000', color: 'white', border: 'none', borderRadius: 6, cursor: 'pointer', marginTop: 8 }}
-            >
-              Apply
-            </button>
-          </div>
+        {activeDropdown === 'category' && (
+           <div style={dropdownStyle}>
+              <div style={{ fontWeight: 600, marginBottom: 4 }}>Select Category</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6, maxHeight: 200, overflowY: 'auto' }}>
+                 <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, cursor: 'pointer' }}>
+                    <input 
+                      type="radio" 
+                      name="cat_filter"
+                      checked={!selectedCategory} 
+                      onChange={() => {
+                          setSelectedCategory("");
+                          onFilterChange({
+                              price: priceRange,
+                              colors: selectedColors,
+                              offer: offerOnly,
+                              category: ""
+                          });
+                          setActiveDropdown(null);
+                      }}
+                    />
+                    All
+                 </label>
+                 {[...new Set(products.map(p => p.category).filter(Boolean))].map(cat => (
+                    <label key={cat} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, cursor: 'pointer' }}>
+                      <input 
+                        type="radio" 
+                        name="cat_filter"
+                        checked={selectedCategory === cat}
+                        onChange={() => {
+                            setSelectedCategory(cat);
+                            onFilterChange({
+                                price: priceRange,
+                                colors: selectedColors,
+                                offer: offerOnly,
+                                category: cat
+                            });
+                            setActiveDropdown(null);
+                        }}
+                      />
+                      {cat}
+                    </label>
+                 ))}
+              </div>
+           </div>
         )}
       </div>
 
-      {/* COLOR FILTER */}
-      <div style={{ position: 'relative' }}>
-        <button onClick={() => toggleDropdown('color')} style={btnStyle(activeDropdown === 'color')}>
-          Color {selectedColors.length > 0 ? `(${selectedColors.length})` : ''} <span style={{ fontSize: 10 }}>▼</span>
-        </button>
-        {activeDropdown === 'color' && (
-          <div style={dropdownStyle}>
-            <div style={{ fontWeight: 600, marginBottom: 4 }}>Select Color</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, maxHeight: 200, overflowY: 'auto' }}>
-              {colors.map(c => (
-                <label key={c} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, cursor: 'pointer' }}>
-                  <input 
-                    type="checkbox" 
-                    checked={selectedColors.includes(c)}
-                    onChange={() => handleColorToggle(c)}
-                  />
-                  <div style={{ width: 12, height: 12, borderRadius: '50%', background: c.toLowerCase(), border: '1px solid #ddd' }}></div>
-                  {c}
-                </label>
-              ))}
-            </div>
-            <button 
-              onClick={applyFilters}
-              style={{ padding: '8px', background: '#000', color: 'white', border: 'none', borderRadius: 6, cursor: 'pointer', marginTop: 8 }}
-            >
-              Apply
-            </button>
-          </div>
-        )}
-      </div>
+
 
       {/* OFFER FILTER */}
       <div style={{ position: 'relative' }}>
@@ -174,7 +174,7 @@ export default function FilterBar({ onFilterChange }) {
          All Filters ⚙️
        </button>
        {activeDropdown === 'all' && (
-          <div style={{...dropdownStyle, width: 300}}>
+          <div style={{...dropdownStyle, width: '90vw', maxWidth: 320, right: 0, left: 'auto'}}>
             <div style={{ fontWeight: 600, fontSize: 16, borderBottom:'1px solid #eee', paddingBottom:8 }}>All Filters</div>
             
             {/* Price Section */}

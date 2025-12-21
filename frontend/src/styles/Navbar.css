@@ -180,6 +180,13 @@
         align-items: center;
     }
 
+    /* Show Mobile Search Icon */
+    .mobile-search-trigger {
+        display: block !important;
+        color: #111827;
+        padding: 4px;
+    }
+
     /* Hide text labels in actions on mobile */
     .nav-actions .action-item span:not(.cart-badge-dot) {
         display: none;

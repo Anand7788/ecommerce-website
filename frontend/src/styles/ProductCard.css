@@ -125,9 +125,57 @@
    Responsive
 -------------------------------- */
 @media (max-width: 600px) {
-    .product-grid-modern {
+    .shopcart-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
+        gap: 10px;
+        padding: 10px 0;
+    }
+
+    /* Compact Card for Mobile */
+    .shopcart-card {
+        border-radius: 12px;
+    }
+
+    .shopcart-card .card-img-box {
+        height: 160px;
+        /* Reduced height */
+        padding: 10px;
+        border-radius: 12px 12px 0 0;
+        /* Align with card border */
+    }
+
+    .shopcart-card .card-content {
+        padding: 10px;
+        gap: 4px;
+    }
+
+    .shopcart-card .card-title {
+        font-size: 13px;
+        line-height: 1.3;
+    }
+
+    .shopcart-card .card-desc {
+        display: none;
+        /* Hide description on mobile to save space */
+    }
+
+    .shopcart-card .card-price {
+        font-size: 14px;
+    }
+
+    .shopcart-card .card-rating {
+        margin-bottom: 4px;
+    }
+
+    .shopcart-card .card-rating svg {
+        width: 12px;
+        height: 12px;
+    }
+
+    .shopcart-card .btn-outline-dark {
+        padding: 6px 0;
+        font-size: 12px;
+        margin-top: 4px;
     }
 }
 
