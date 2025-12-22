@@ -3,8 +3,6 @@
 set -o errexit
 
 bundle install
-bundle exec rails assets:precompile
-bundle exec rails assets:clean
 bundle exec rails db:migrate
 # Run seed on every deploy (safe since our seed file is idempotent/cleans reset)
 DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bundle exec rails db:seed
