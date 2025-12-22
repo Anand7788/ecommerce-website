@@ -79,10 +79,10 @@ Product.transaction do
   puts "Seeding complete. Total products: #{Product.count}"
   
   # Create Admin User
-  if User.find_by(email: 'admin@example.com').nil?
+  if User.find_by(email: 'anandkumarprasad750@gmail.com').nil?
     User.create!(
       name: 'Admin User',
-      email: 'admin@example.com',
+      email: 'anandkumarprasad750@gmail.com',
       password: 'password',
       admin: true
     )
