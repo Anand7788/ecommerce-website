@@ -5,15 +5,15 @@ require 'json'
 puts "Seeding product catalog with RELIABLE data from DummyJSON..."
 
 Product.transaction do
-  # 0. Clean slate
-  puts "Cleaning old products..."
-  OrderItem.destroy_all
-  CartItem.destroy_all
-  Order.destroy_all
-  Cart.destroy_all # Fix: Remove carts before users
-  Product.destroy_all
-  User.where(admin: false).destroy_all 
-  User.connection.execute("DELETE FROM sqlite_sequence WHERE name='products'")
+  # 0. Clean slate - DISABLED FOR SAFETY ON PRODUCTION
+  # puts "Cleaning old products..."
+  # OrderItem.destroy_all
+  # CartItem.destroy_all
+  # Order.destroy_all
+  # Cart.destroy_all # Fix: Remove carts before users
+  # Product.destroy_all
+  # User.where(admin: false).destroy_all 
+  # User.connection.execute("DELETE FROM sqlite_sequence WHERE name='products'")
 
   # Helper to create/update
   add_or_update = ->(attrs) do
@@ -90,40 +90,42 @@ Product.transaction do
   end
 
   # Create Sample Customers and Orders
-  puts "Creating sample orders..."
-  5.times do |i|
-    u = User.create!(
-      name: "Customer #{i+1}",
-      email: "user#{i+1}@example.com",
-      password: "password"
-    )
-    
-    # Create 1-3 orders for this user
-    rand(1..3).times do
-      o = Order.create!(
-        user: u,
-        status: ['pending', 'shipped', 'delivered'].sample,
-        address: "#{100+rand(900)} Main St, City #{i+1}, State, 12345",
-        total_price: 0
+  if Rails.env.development?
+    puts "Creating sample orders..."
+    5.times do |i|
+      u = User.create!(
+        name: "Customer #{i+1}",
+        email: "user#{i+1}@example.com",
+        password: "password"
       )
       
-      # Add 2-5 items per order
-      all_products = Product.all.to_a
-      total = 0
-      rand(2..5).times do
-        prod = all_products.sample
-        qty = rand(1..3)
-        price = prod.price_cents / 100.0
-        OrderItem.create!(
-          order: o,
-          product: prod,
-          quantity: qty,
-          price: price
+      # Create 1-3 orders for this user
+      rand(1..3).times do
+        o = Order.create!(
+          user: u,
+          status: ['pending', 'shipped', 'delivered'].sample,
+          address: "#{100+rand(900)} Main St, City #{i+1}, State, 12345",
+          total_price: 0
         )
-        total += price * qty
+        
+        # Add 2-5 items per order
+        all_products = Product.all.to_a
+        total = 0
+        rand(2..5).times do
+          prod = all_products.sample
+          qty = rand(1..3)
+          price = prod.price_cents / 100.0
+          OrderItem.create!(
+            order: o,
+            product: prod,
+            quantity: qty,
+            price: price
+          )
+          total += price * qty
+        end
+        o.update(total_price: total)
       end
-      o.update(total_price: total)
     end
+    puts "Created sample customers and orders."
   end
-  puts "Created sample customers and orders."
 end
