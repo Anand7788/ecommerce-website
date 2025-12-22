@@ -25,6 +25,7 @@ export function ServiceStrip() {
     <div className="service-strip" style={{
       /* --- ADJUST HEIGHT HERE --- */
       padding: '0px 0', 
+      height: '22px',
       /* -------------------------- */
       
       width: '98%', 
