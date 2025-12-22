@@ -16,6 +16,7 @@ export function ServiceStrip() {
     display: 'flex',
     flexDirection: 'row', 
     gap: 4, 
+    alignItems: 'center',
     fontWeight: 700,
     fontSize: 14, // Kept at 14 manually
     lineHeight: 1 
@@ -24,8 +25,7 @@ export function ServiceStrip() {
   return (
     <div className="service-strip" style={{
       /* --- ADJUST HEIGHT HERE --- */
-      padding: '0px 0', 
-      height: '22px',
+      padding: '0px 0',
       /* -------------------------- */
       
       width: '98%', 
