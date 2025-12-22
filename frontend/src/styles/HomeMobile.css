@@ -1,0 +1,98 @@
+@media screen and (max-width: 768px) {
+
+    /* --- Hero Section --- */
+    /* --- Hero Section --- */
+    .hero-section {
+        min-height: 250px !important;
+        /* Slightly reduced height constraint */
+        padding: 5px 5px !important;
+        /* Minimal padding */
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center;
+        gap: 10px;
+        background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('https://images.unsplash.com/photo-1546961329-78bef0414d7c?q=80&w=1000&auto=format&fit=crop') center/cover no-repeat !important;
+        position: relative !important;
+        margin-bottom: 5px !important;
+        /* Tight margin bottom */
+    }
+
+    .hero-title {
+        font-size: 1.5rem !important;
+        /* Significantly smaller */
+        line-height: 1.2 !important;
+        margin-bottom: 15px !important;
+    }
+
+    /* Hide the separate image element since it's now the background */
+    .hero-image {
+        display: none !important;
+    }
+
+    .hero-image img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain !important;
+        /* Ensure full image is visible */
+        mask-image: none !important;
+        /* Remove fade on mobile so full part is seen */
+    }
+
+    /* --- Service Strip --- */
+    .service-strip {
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: 0 !important;
+        /* Minimal gap */
+        padding: 0 !important;
+        overflow: hidden !important;
+        /* Cut off anything extra */
+        justify-content: space-evenly !important;
+        min-height: 0 !important;
+        height: 22px !important;
+        /* Forced Fixed Height */
+        margin-bottom: 1px !important;
+        border-radius: 50px !important;
+    }
+
+    .service-text {
+        flex-direction: row !important;
+        gap: 2px !important;
+        align-items: center !important;
+    }
+
+    .service-text span {
+        font-size: 9px !important;
+        /* Slightly readable but tiny */
+        white-space: nowrap;
+        line-height: 1 !important;
+        display: inline-block !important;
+    }
+
+    /* Target the container divs of icons/text */
+    .service-strip>div {
+        height: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Icon size reduced further */
+    .service-strip svg {
+        width: 10px !important;
+        height: 10px !important;
+        margin-right: 2px !important;
+    }
+
+    /* Duplicates removed */
+
+    /* --- Super Dhamaka Deal --- */
+    .dhamaka-title {
+        font-size: 20px !important;
+        margin-bottom: 10px !important;
+        white-space: nowrap;
+        /* Force horizontal */
+    }
+}

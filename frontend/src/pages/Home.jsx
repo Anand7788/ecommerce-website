@@ -102,14 +102,14 @@ export default function HomePage() {
   return (
     <div className="home-page">
       <Hero />
+      <ServiceStrip />
 
       <div className="container" style={{ marginTop: 24, padding: '0 20px 40px' }}>
             
-        {/* Native Service Strip */}
-        <ServiceStrip />
+
       
         {/* Section Title */}
-        <h2 style={{ fontSize: 32, fontWeight: 900, marginBottom: 20, color: '#111827', textAlign: 'center', letterSpacing: '-0.5px' }}>
+        <h2 className="dhamaka-title" style={{ fontSize: 32, fontWeight: 900, marginBottom: 20, color: '#111827', textAlign: 'center', letterSpacing: '-0.5px' }}>
            <span style={{borderBottom: '4px solid #fcd34d', paddingBottom: 4}}>Super Dhamaka Deal</span>
         </h2>
 

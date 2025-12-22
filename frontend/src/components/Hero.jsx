@@ -3,7 +3,7 @@ import React from 'react';
 
 export default function Hero() {
   return (
-    <div style={{
+    <div className="hero-section" style={{
       background: '#fbf0e4', // Beige background
       borderRadius: 12,
       padding: '40px 60px',
@@ -17,14 +17,14 @@ export default function Hero() {
     }}>
       {/* Text Content */}
       <div style={{ zIndex: 10, maxWidth: 500 }}>
-        <h1 style={{
+        <h1 className="hero-title" style={{
           fontSize: '3.5rem',
           fontWeight: 800,
           color: '#003d29',
           lineHeight: 1.1,
           marginBottom: 24
         }}>
-          Grab Upto 50% Off On Selected Headphone
+          Grab Upto 50 to 80 % Off On Selected Products
         </h1>
         <button style={{
           background: '#003d29',
@@ -41,7 +41,7 @@ export default function Hero() {
       </div>
 
       {/* Image (Model) */}
-      <div style={{
+      <div className="hero-image" style={{
         position: 'absolute',
         right: 0,
         bottom: 0,

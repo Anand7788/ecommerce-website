@@ -5,61 +5,65 @@ export function ServiceStrip() {
   const itemStyle = {
     display: 'flex',
     alignItems: 'center',
-    gap: 12,
+    gap: 8, // Reduced gap
     color: 'white',
     flex: 1,
     justifyContent: 'center',
-    minWidth: 200
+    // removed minWidth
   };
 
   const textStyle = {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'row', 
+    gap: 4, 
     fontWeight: 700,
-    fontSize: 15,
-    lineHeight: 1.2
+    fontSize: 14, // Kept at 14 manually
+    lineHeight: 1 
   };
 
   return (
-    <div style={{
-      width: '100%',
-      background: 'linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%)', // Violet to Purple
-      padding: '16px 24px',
-      borderRadius: 99,
-      border: '4px solid #fcd34d', // Gold border
-      boxShadow: '0 10px 25px -5px rgba(124, 58, 237, 0.4)',
+    <div className="service-strip" style={{
+      /* --- ADJUST HEIGHT HERE --- */
+      padding: '0px 0', 
+      /* -------------------------- */
+      
+      width: '98%', 
+      margin: '0 auto 28px', 
+      borderRadius: 99, 
+      
+      background: 'linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%)', 
+      border: '1px solid #fcd34d', 
       display: 'flex',
-      justifyContent: 'space-between',
+      justifyContent: 'space-evenly', 
       alignItems: 'center',
       flexWrap: 'wrap',
-      gap: 16,
-      marginBottom: 32
+      gap: 6,
     }}>
       <div style={itemStyle}>
-        <RotateCcw size={32} color="#fcd34d" />
-        <div style={textStyle}>
-          <span>Easy</span>
+        <RotateCcw size={14} color="#fcd34d" />
+        <div className="service-text" style={textStyle}>
+          <span>Easy</span> 
           <span>Returns</span>
         </div>
       </div>
 
-      <div className="divider" style={{width: 1, height: 40, background: 'rgba(255,255,255,0.2)'}}></div>
+      <div className="divider" style={{width: 1, height: 5, background: 'rgba(255,255,255,0.2)'}}></div> {/* Reduced Divider */}
 
       <div style={itemStyle}>
-        <BadgeCheck size={32} color="#fcd34d" />
-        <div style={textStyle}>
+        <BadgeCheck size={14} color="#fcd34d" />
+        <div className="service-text" style={textStyle}>
           <span>Top Rated</span>
           <span>Products</span>
         </div>
       </div>
 
-      <div className="divider" style={{width: 1, height: 40, background: 'rgba(255,255,255,0.2)'}}></div>
+      <div className="divider" style={{width: 1, height: 5, background: 'rgba(255,255,255,0.2)'}}></div>
 
       <div style={itemStyle}>
-        <Truck size={32} color="#fcd34d" />
-        <div style={textStyle}>
-          <span>Cash</span>
-          <span>on Delivery</span>
+        <Truck size={14} color="#fcd34d" />
+        <div className="service-text" style={textStyle}>
+          <span style={{fontSize: 14}}>Cash</span>
+          <span style={{fontSize: 14}}>on Delivery</span>
         </div>
       </div>
     </div>
