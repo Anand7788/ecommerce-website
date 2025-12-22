@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { login } from '../api/api';
 import { FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
 import { FaGoogle, FaApple } from 'react-icons/fa';
-import "../styles/Auth.css";
+import "../styles/AdminLogin.css";
 
 export default function AdminLogin() {
   const navigate = useNavigate();

@@ -39,5 +39,10 @@ Rails.application.routes.draw do
     get '/analytics', to: 'analytics#show'
   end
 
+  namespace :api do
+    post 'payments/create_order', to: 'payments#create_order'
+    post 'payments/verify', to: 'payments#verify'
+  end
+
   root "products#index"
 end

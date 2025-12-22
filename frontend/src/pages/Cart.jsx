@@ -9,9 +9,7 @@ export default function Cart(){
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // We mock these for the UI reference, as backend doesn't provide them yet
-  const discount = 113; 
-  const deliveryFee = 15;
+
 
   async function load(){
     setLoading(true);
@@ -71,7 +69,11 @@ export default function Cart(){
   }
 
   // Calculate Subtotal from items
-  const subtotal = cart.items.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
+  const subtotal = cart.items.reduce((sum, item) => sum + (Number(item.product.price) * item.quantity), 0);
+  
+  // Dynamic Discount (e.g., 10% off) instead of hardcoded 113
+  const discount = Math.floor(subtotal * 0.10); 
+  const deliveryFee = 0.0;
   const total = subtotal - discount + deliveryFee;
 
   return (
@@ -106,7 +108,7 @@ export default function Cart(){
                    <p className="cart-variant">Size: Medium <br/> Color: Red</p>
                    
                    <div className="cart-item-bottom">
-                      <span className="cart-price">₹{Math.floor(item.product.price).toLocaleString()}</span>
+                      <span className="cart-price">₹{Number(item.product.price).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                       
                       <div className="qty-stepper">
                         <button onClick={() => changeQty(item.id, item.quantity - 1)}>–</button>
@@ -125,11 +127,11 @@ export default function Cart(){
           
           <div className="summary-row">
             <span>Subtotal</span>
-            <span className="summary-val">₹{subtotal.toLocaleString()}</span>
+            <span className="summary-val">₹{subtotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
           </div>
           <div className="summary-row" style={{color:'#ef4444'}}>
-            <span>Discount (-20%)</span>
-            <span className="summary-val">-₹{discount.toLocaleString()}</span>
+            <span>Discount (10%)</span>
+            <span className="summary-val">-₹{discount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
           </div>
           <div className="summary-row">
             <span>Delivery Fee</span>
@@ -140,7 +142,7 @@ export default function Cart(){
           
           <div className="summary-row total">
             <span>Total</span>
-            <span>₹{Math.max(0, total).toLocaleString()}</span>
+            <span>₹{Math.max(0, total).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
           </div>
 
           <button className="btn-checkout" onClick={() => navigate('/checkout')} style={{marginTop:20}}>

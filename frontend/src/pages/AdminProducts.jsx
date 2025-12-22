@@ -281,6 +281,7 @@ Stainless Steel Toaster,2200.00,2-slice toaster with browning control and defros
                         <label className="form-label">Price (₹)</label>
                         <input 
                             type="number" name="price" 
+                            step="0.01"
                             className="form-input" 
                             value={formData.price} onChange={handleChange}
                             placeholder="0.00"

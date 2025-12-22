@@ -1,5 +1,14 @@
 require_relative "boot"
 
+# Manually load .env file if it exists (avoids dotenv gem dependency issues)
+if File.exist?('.env')
+  File.foreach('.env') do |line|
+    next if line.strip.start_with?('#') || line.strip.empty?
+    key, value = line.strip.split('=', 2)
+    ENV[key] = value if key && value && ENV[key].nil?
+  end
+end
+
 require "rails/all"
 
 # Require the gems listed in Gemfile, including any gems

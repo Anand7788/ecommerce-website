@@ -10,6 +10,10 @@ class Product < ApplicationRecord
     price_cents.to_f / 100.0
   end
 
+  def price=(value)
+    self.price_cents = (value.to_f * 100).to_i
+  end
+
   def as_json(options = {})
     super({ only: [:id, :name, :description, :sku, :stock, :image_url, :category, :created_at, :updated_at] }.merge(options)).merge("price" => price)
   end

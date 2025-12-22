@@ -336,3 +336,44 @@
         gap: 16px;
     }
 }
+
+/* FIX: Align checkout rows (Subtotal, Tax, Total) */
+.checkout-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #374151;
+}
+
+.checkout-row.total {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #e5e7eb;
+    font-size: 18px;
+    font-weight: 800;
+    color: #111827;
+}
+
+/* FIX: Align Saved Address text */
+.saved-addr-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #e5e7eb;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.saved-addr-row:last-child {
+    border-bottom: none;
+}
+
+.saved-addr-text {
+    flex: 1;
+    margin-right: 12px;
+}
