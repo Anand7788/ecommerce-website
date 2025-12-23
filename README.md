@@ -63,12 +63,7 @@ npm run dev    # Client runs on http://localhost:5173
 
 ---
 
-## 🔐 Credentials (Development)
-**Admin Account**:
-- Email: `anandkumarprasad750@gmail.com`
-- Password: `password`
 
----
 
 ## 📖 API Documentation
 For a detailed breakdown of the backend architecture, API endpoints, and database schema, please refer to the [Backend Overview](brain/backend_overview.md).
