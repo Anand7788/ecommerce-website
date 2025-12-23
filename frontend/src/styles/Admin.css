@@ -24,16 +24,25 @@
     display: flex;
     flex-direction: column;
     padding: 24px;
+    transition: transform 0.3s ease;
+    z-index: 50;
+}
+
+.admin-sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 40px;
 }
 
 .admin-logo {
     font-size: 20px;
     font-weight: 700;
     color: #003d29;
-    margin-bottom: 40px;
     display: flex;
     align-items: center;
     gap: 10px;
+    margin-bottom: 0;
 }
 
 .admin-nav {
@@ -71,6 +80,53 @@
     flex: 1;
     padding: 32px;
     overflow-y: auto;
+    position: relative;
+    width: 100%;
+    /* Ensure full width */
+}
+
+/* Mobile Controls - Hidden by default */
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--admin-text);
+    cursor: pointer;
+    margin-bottom: 20px;
+    padding: 0;
+}
+
+.close-sidebar-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--admin-text);
+    cursor: pointer;
+    padding: 0;
+}
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 40;
+    animation: fadeIn 0.2s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 .admin-header {
@@ -177,13 +233,52 @@
     color: var(--admin-text);
 }
 
+/* Product Layout */
+.admin-products-layout {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 32px;
+}
+
+.admin-products-actions {
+    display: flex;
+    flex-direction: row;
+    /* Horizontal alignment */
+    align-items: center;
+    gap: 12px;
+}
+
+.download-template-link {
+    font-size: 12px;
+    color: #4f46e5;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+/* Mobile Product Card */
+.mobile-product-list {
+    display: none;
+    /* Hidden by default */
+}
+
+.mobile-product-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+/* Desktop Table (default visible) */
+.desktop-table-container {
+    display: block;
+}
+
 /* Validation Form Styling */
 .form-card {
     background: var(--admin-white);
     padding: 32px;
     border-radius: 16px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    max-width: 800px;
 }
 
 .form-group {
@@ -221,23 +316,176 @@
     margin-top: 4px;
 }
 
+
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    gap: 12px;
+    flex-wrap: wrap;
+    /* Allow wrapping on very small screens to prevent collision */
+}
+
+/* Compact Buttons */
 .btn-submit {
     background-color: var(--admin-primary);
     color: white;
-    padding: 12px 24px;
+    padding: 6px 12px;
     border: none;
-    border-radius: 8px;
-    font-weight: 600;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 12px;
     cursor: pointer;
     transition: background 0.2s;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    white-space: nowrap;
+    flex: 0 0 auto;
 }
 
 .btn-submit:hover {
     background-color: #059669;
-    /* Darker green */
 }
 
 .btn-submit:disabled {
     background-color: #9ca3af;
     cursor: not-allowed;
+}
+
+
+
+.btn-round {
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    color: #4f46e5;
+    padding: 6px 16px;
+    /* Adjust this to increase/decrease width defined by text padding */
+    border-radius: 50px;
+    /* Makes it fully round */
+    font-weight: 500;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    height: 30px;
+    /* Small fixed height */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    min-width: 100px;
+    /* Optional: Adjust this for fixed minimum width */
+}
+
+.btn-round:hover {
+    background-color: #f9fafb;
+    border-color: #4f46e5;
+}
+
+/* =========================================
+   MOBILE RESPONSIVENESS
+========================================= */
+
+@media (max-width: 768px) {
+    .admin-container {
+        flex-direction: column;
+    }
+
+    /* Sidebar Hidden by Default */
+    .admin-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 80%;
+        max-width: 300px;
+        transform: translateX(-100%);
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .admin-sidebar.open {
+        transform: translateX(0);
+    }
+
+    /* Show Mobile Buttons */
+    .mobile-menu-btn {
+        display: block;
+    }
+
+    .close-sidebar-btn {
+        display: block;
+    }
+
+    .sidebar-overlay {
+        display: block;
+    }
+
+    /* Main Content */
+    .admin-main {
+        padding: 16px;
+        width: 100%;
+    }
+
+    .dashboard-stats-grid {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .charts-row {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .admin-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    /* Mobile Header Adjustments for Products Page */
+    .admin-title {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .admin-products-actions {
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        /* Ensure space between buttons */
+    }
+
+    .download-template-link {
+        order: 2;
+        /* Ensure it moves to right if needed, though flex row handles it */
+    }
+
+    .stat-card {
+        padding: 16px;
+    }
+
+    /* Stack Products Page */
+    .admin-products-layout {
+        grid-template-columns: 1fr;
+    }
+
+    /* Toggle Product Views */
+    .desktop-table-container {
+        display: none;
+    }
+
+    .mobile-product-list {
+        display: block;
+    }
 }

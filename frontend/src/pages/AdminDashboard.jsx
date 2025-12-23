@@ -184,18 +184,20 @@ export default function AdminDashboard() {
             <table style={{width:'100%', borderCollapse:'collapse'}}>
                <thead>
                   <tr style={{textAlign:'left', color:'#9ca3af', fontSize:13, borderBottom:'1px solid #f3f4f6'}}>
-                     <th style={{paddingBottom:12}}>Product</th>
-                     <th style={{paddingBottom:12}}>Status</th>
-                     <th style={{paddingBottom:12}}>Sales</th>
-                     <th style={{paddingBottom:12}}>Earning</th>
+                     <th style={{paddingBottom:12, width: '40%'}}>Product</th>
+                     <th style={{paddingBottom:12, width: '15%'}}>Status</th>
+                     <th style={{paddingBottom:12, width: '15%', textAlign: 'center'}}>Sales</th>
+                     <th style={{paddingBottom:12, width: '30%', textAlign: 'right'}}>Earning</th>
                   </tr>
                </thead>
                <tbody>
                   {data.top_products.length === 0 ? <tr><td colSpan="4" style={{padding:20, textAlign:'center'}}>No sales yet</td></tr> :
                     data.top_products.map((p, idx) => (
                      <tr key={idx} style={{borderBottom:'1px solid #f9fafb'}}>
-                        <td style={{padding:'12px 0', display:'flex', alignItems:'center', gap:10}}>
-                           <span style={{fontWeight:500}}>{p.name}</span>
+                        <td style={{padding:'12px 0'}}>
+                           <div style={{display:'flex', alignItems:'center', gap:10}}>
+                             <span style={{fontWeight:500}}>{p.name}</span>
+                           </div>
                         </td>
                         <td style={{padding:'12px 0'}}>
                            <span style={{
@@ -203,8 +205,8 @@ export default function AdminDashboard() {
                               background: '#d1fae5', color: '#065f46'
                            }}>{p.status}</span>
                         </td>
-                        <td style={{padding:'12px 0'}}>{p.sales}</td>
-                        <td style={{padding:'12px 0'}}>₹{parseFloat(p.earning).toFixed(2)}</td>
+                        <td style={{padding:'12px 0', textAlign: 'center'}}>{p.sales}</td>
+                        <td style={{padding:'12px 0', textAlign: 'right'}}>₹{parseFloat(p.earning).toFixed(2)}</td>
                      </tr>
                   ))}
                </tbody>
@@ -212,28 +214,58 @@ export default function AdminDashboard() {
          </div>
 
          {/* Monthly Profits (Still Dummy for now as we don't have cost price/profit logic) */}
-         <div className="chart-card" style={{display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center'}}>
-            <div className="chart-header" style={{width:'100%'}}>
-               <div className="chart-title">Distribution</div>
-               <FiMoreHorizontal />
-            </div>
-            
-            <div style={{width:200, height:200, position:'relative'}}>
-               <ResponsiveContainer>
-                  <PieChart>
-                     <Pie data={pieData} innerRadius={60} outerRadius={80} dataKey="value">
-                        {pieData.map((entry, index) => (
-                           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
-                     </Pie>
-                  </PieChart>
-               </ResponsiveContainer>
-               <div style={{position:'absolute', top:'50%', left:'50%', transform:'translate(-50%, -50%)', textAlign:'center'}}>
-                  <div style={{fontSize:12, color:'#9ca3af'}}>Total</div>
-                  <div style={{fontWeight:700}}>₹{parseFloat(data.total_revenue).toFixed(0)}</div>
-               </div>
-            </div>
-         </div>
+          <div className="chart-card">
+             <div className="chart-header">
+                <div className="chart-title">Distribution</div>
+                <FiMoreHorizontal />
+             </div>
+             
+             <div style={{width: '100%', height: 260, position: 'relative'}}>
+                <ResponsiveContainer width="100%" height="100%">
+                   <PieChart>
+                      <Pie 
+                        data={pieData} 
+                        cx="50%" 
+                        cy="50%" 
+                        innerRadius={70} 
+                        outerRadius={90} 
+                        paddingAngle={5}
+                        dataKey="value"
+                      >
+                         {pieData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                         ))}
+                      </Pie>
+                      <Tooltip />
+                   </PieChart>
+                </ResponsiveContainer>
+                
+                {/* Center Text Overlay */}
+                <div style={{
+                  position: 'absolute', 
+                  top: '50%', 
+                  left: '50%', 
+                  transform: 'translate(-50%, -50%)', 
+                  textAlign: 'center',
+                  pointerEvents: 'none' 
+                }}>
+                   <div style={{fontSize: 12, color: '#9ca3af', fontWeight: 500}}>Total</div>
+                   <div style={{fontSize: 18, fontWeight: 800, color: '#1f2937'}}>
+                      ₹{parseFloat(data.total_revenue).toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                   </div>
+                </div>
+             </div>
+             
+             {/* Simple Legend */}
+             <div style={{display:'flex', justifyContent:'center', gap:15, marginTop:10}}>
+                {pieData.map((entry, index) => (
+                  <div key={index} style={{display:'flex', alignItems:'center', gap:5, fontSize:12, color:'#6b7280'}}>
+                    <div style={{width:8, height:8, borderRadius:'50%', background:COLORS[index % COLORS.length]}}></div>
+                    {entry.name}
+                  </div>
+                ))}
+             </div>
+          </div>
       </div>
     </div>
   );

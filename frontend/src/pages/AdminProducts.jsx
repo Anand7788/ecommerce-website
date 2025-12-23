@@ -208,6 +208,45 @@ Stainless Steel Toaster,2200.00,2-slice toaster with browning control and defros
       }
   };
 
+  const handleExportCSV = () => {
+    if (products.length === 0) {
+      alert('No products to export.');
+      return;
+    }
+    
+    // Header
+    let csvContent = "id,name,sku,price,stock,category,image_url,description\n";
+    
+    // Rows
+    products.forEach(p => {
+      const row = [
+        p.id,
+        // Wrap strings in quotes to handle commas
+        `"${(p.name || '').replace(/"/g, '""')}"`,
+        `"${(p.sku || '').replace(/"/g, '""')}"`,
+        p.price || (p.price_cents / 100),
+        p.stock,
+        `"${(p.category || '').replace(/"/g, '""')}"`,
+        `"${(p.image_url || '').replace(/"/g, '""')}"`,
+        `"${(p.description || '').replace(/"/g, '""')}"`
+      ].join(",");
+      csvContent += row + "\n";
+    });
+
+    // Download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    if (link.download !== undefined) {
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", "products_export.csv");
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
+
   return (
     <div className="admin-products-page">
       <div className="admin-header">
@@ -217,10 +256,11 @@ Stainless Steel Toaster,2200.00,2-slice toaster with browning control and defros
          </div>
          
          {/* CSV Upload Button */}
-         <div style={{display:'flex', flexDirection:'column', alignItems:'flex-end', gap:4}}>
+         {/* Actions */}
+         <div className="admin-products-actions">
             <label 
                className="btn-submit" 
-               style={{cursor:'pointer', background: uploading ? '#9ca3af' : '#4f46e5', display:'inline-block'}}
+               style={{cursor:'pointer', background: uploading ? '#9ca3af' : '#4f46e5', margin:0}}
             >
                {uploading ? 'Importing...' : 'Import CSV'}
                <input 
@@ -231,16 +271,16 @@ Stainless Steel Toaster,2200.00,2-slice toaster with browning control and defros
                  disabled={uploading}
                />
             </label>
-            <span 
+            <button 
               onClick={downloadSampleCSV} 
-              style={{fontSize:12, color:'#4f46e5', cursor:'pointer', textDecoration:'underline'}}
+              className="btn-round"
             >
               Download Template
-            </span>
+            </button>
          </div>
       </div>
 
-      <div style={{display:'grid', gridTemplateColumns:'1fr 2fr', gap:32}}>
+      <div className="admin-products-layout">
           {/* Add Product Form */}
           <div className="form-card">
               <h3 style={{marginBottom:24, display:'flex', justifyContent:'space-between', alignItems:'center'}}>
@@ -340,45 +380,57 @@ Stainless Steel Toaster,2200.00,2-slice toaster with browning control and defros
 
           {/* Product List */}
           <div className="chart-card">
-              <h3 style={{marginBottom:24}}>Existing Products</h3>
-              <div style={{maxHeight:700, overflowY:'auto'}}>
+              <div className="section-header">
+                <h3 style={{margin: 0}}>Existing Products</h3>
+                <button 
+                  onClick={handleExportCSV}
+                  className="btn-round"
+                >
+                  Export Products
+                </button>
+              </div>
+              {/* Desktop Table View */}
+              <div className="desktop-table-container">
                 <table style={{width:'100%', borderCollapse:'collapse'}}>
                     <thead>
                         <tr style={{textAlign:'left', color:'#9ca3af', borderBottom:'1px solid #f3f4f6'}}>
-                            <th style={{padding:12}}>IMG</th>
-                            <th style={{padding:12}}>Name</th>
-                            <th style={{padding:12}}>Price</th>
-                            <th style={{padding:12}}>Stock</th>
-                            <th style={{padding:12}}>Actions</th>
+                            <th style={{padding:12, width:'10%'}}>IMG</th>
+                            <th style={{padding:12, width:'30%'}}>Name</th>
+                            <th style={{padding:12, width:'15%'}}>Price</th>
+                            <th style={{padding:12, width:'15%', textAlign:'center'}}>Stock</th>
+                            <th style={{padding:12, width:'30%', textAlign:'center'}}>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {products.map(p => (
                             <tr key={p.id} style={{borderBottom:'1px solid #f9fafb'}}>
-                                <td style={{padding:12}}>
+                                <td style={{padding:12, verticalAlign:'middle'}}>
                                     <img src={p.image_url} style={{width:40, height:40, borderRadius:4, objectFit:'cover'}} alt="" />
                                 </td>
-                                <td style={{padding:12, fontWeight:500}}>{p.name}</td>
-                                <td style={{padding:12}}>₹{p.price || (p.price_cents/100)}</td>
-                                <td style={{padding:12}}>
+                                <td style={{padding:12, fontWeight:500, verticalAlign:'middle'}}>
+                                    {p.name}
+                                </td>
+                                <td style={{padding:12, verticalAlign:'middle'}}>₹{p.price || (p.price_cents/100)}</td>
+                                <td style={{padding:12, textAlign:'center', verticalAlign:'middle'}}>
                                     <span style={{
                                         padding:'2px 8px', borderRadius:10, fontSize:12,
                                         background: p.stock > 10 ? '#d1fae5' : '#fee2e2',
-                                        color: p.stock > 10 ? '#065f46' : '#991b1b'
+                                        color: p.stock > 10 ? '#065f46' : '#991b1b',
+                                        display: 'inline-block'
                                     }}>
                                         {p.stock}
                                     </span>
                                 </td>
-                                <td style={{padding:12}}>
+                                <td style={{padding:12, textAlign:'center', verticalAlign:'middle'}}>
                                     <button 
                                         onClick={() => handleEdit(p)}
-                                        style={{color:'#4f46e5', background:'none', border:'none', cursor:'pointer', marginRight:10}}
+                                        style={{color:'#4f46e5', background:'none', border:'none', cursor:'pointer', marginRight:10, fontWeight:500}}
                                     >
                                         Edit
                                     </button>
                                     <button 
                                         onClick={() => handleDelete(p.id)}
-                                        style={{color:'#ef4444', background:'none', border:'none', cursor:'pointer'}}
+                                        style={{color:'#ef4444', background:'none', border:'none', cursor:'pointer', fontWeight:500}}
                                     >
                                         Delete
                                     </button>
@@ -387,6 +439,45 @@ Stainless Steel Toaster,2200.00,2-slice toaster with browning control and defros
                         ))}
                     </tbody>
                 </table>
+              </div>
+
+              {/* Mobile Card List View */}
+              <div className="mobile-product-list">
+                {products.map(p => (
+                   <div key={p.id} className="mobile-product-card">
+                      <div style={{display:'flex', gap:12}}>
+                         <img src={p.image_url} style={{width:60, height:60, borderRadius:8, objectFit:'cover'}} alt="" />
+                         <div style={{flex:1}}>
+                            <div style={{fontWeight:600, fontSize:14, marginBottom:4}}>{p.name}</div>
+                            <div style={{color:'#6b7280', fontSize:13, marginBottom:6}}>SKU: {p.sku || 'N/A'}</div>
+                            <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+                                <div style={{fontWeight:700, color:'#10b981'}}>₹{p.price || (p.price_cents/100)}</div>
+                                <span style={{
+                                    padding:'2px 8px', borderRadius:10, fontSize:11,
+                                    background: p.stock > 10 ? '#d1fae5' : '#fee2e2',
+                                    color: p.stock > 10 ? '#065f46' : '#991b1b'
+                                }}>
+                                    Stock: {p.stock}
+                                </span>
+                            </div>
+                         </div>
+                      </div>
+                      <div style={{borderTop:'1px solid #f3f4f6', marginTop:12, paddingTop:12, display:'flex', gap:12}}>
+                          <button 
+                              onClick={() => handleEdit(p)}
+                              style={{flex:1, padding:'8px', borderRadius:6, border:'1px solid #e5e7eb', background:'white', color:'#4f46e5', fontWeight:500, cursor:'pointer'}}
+                          >
+                              Edit
+                          </button>
+                          <button 
+                              onClick={() => handleDelete(p.id)}
+                              style={{flex:1, padding:'8px', borderRadius:6, border:'1px solid #fee2e2', background:'#fef2f2', color:'#ef4444', fontWeight:500, cursor:'pointer'}}
+                          >
+                              Delete
+                          </button>
+                      </div>
+                   </div>
+                ))}
               </div>
           </div>
       </div>

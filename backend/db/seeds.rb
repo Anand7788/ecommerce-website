@@ -75,6 +75,31 @@ Product.transaction do
   
   
   puts "Seeding complete. Total products: #{Product.count}"
+
+  # 5. Restore Specific "Local" Products (Requested by User)
+  # These ensure the Live site matches the Local environment's important items.
+  manual_products = [
+    { name: "Bluetooth Portable Speaker", price: 1999, category: "Electronics", stock: 75, image: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?q=80&w=300&auto=format&fit=crop" },
+    { name: "4K LED Smart TV 55 inch", price: 35000, category: "Electronics", stock: 15, image: "https://images.unsplash.com/photo-1593784653056-1434156108b6?q=80&w=300&auto=format&fit=crop" },
+    { name: "Robot Vacuum Cleaner", price: 15999, category: "Appliances", stock: 25, image: "https://images.unsplash.com/photo-1518640467707-6811f4a6ab73?q=80&w=300&auto=format&fit=crop" },
+    { name: "Automatic Coffee Maker", price: 4500, category: "Appliances", stock: 40, image: "https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?q=80&w=300&auto=format&fit=crop" },
+    { name: "Smartphone X Pro", price: 69999, category: "Mobile", stock: 30, image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=300&auto=format&fit=crop" },
+    { name: "Slim Fit Blue Jeans", price: 1299, category: "Fashion", stock: 85, image: "https://images.unsplash.com/photo-1542272454315-4c01d7abdf4a?q=80&w=300&auto=format&fit=crop" },
+    { name: "Minimalist Cotton T-Shirt", price: 499, category: "Fashion", stock: 200, image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=300&auto=format&fit=crop" }
+  ]
+
+  manual_products.each do |mp|
+     add_or_update.call({
+        name: mp[:name],
+        sku: "MANUAL-#{mp[:name].hash.abs.to_s[0..5]}",
+        category: mp[:category],
+        description: "Premium #{mp[:name]} - High quality and durable.",
+        price: mp[:price],
+        stock: mp[:stock],
+        image_url: mp[:image]
+     })
+  end
+  puts "Restored #{manual_products.size} manual products."
   
   puts "Seeding complete. Total products: #{Product.count}"
   
