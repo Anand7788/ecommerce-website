@@ -145,8 +145,19 @@ export default function Cart(){
             <span>₹{Math.max(0, total).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
           </div>
 
-          <button className="btn-checkout" onClick={() => navigate('/checkout')} style={{marginTop:20}}>
-            Go to Checkout &rarr;
+          <button 
+            className="btn-checkout" 
+            onClick={() => {
+              const token = localStorage.getItem('token');
+              if (!token) {
+                navigate('/login');
+              } else {
+                navigate('/checkout');
+              }
+            }} 
+            style={{marginTop:20}}
+          >
+            {localStorage.getItem('token') ? "Go to Checkout" : "Login to Checkout"} &rarr;
           </button>
         </div>
       </div>

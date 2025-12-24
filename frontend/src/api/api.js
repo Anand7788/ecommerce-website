@@ -7,10 +7,45 @@ const api = axios.create({
   // headers: { 'Content-Type': 'application/json' }, // Let Axios/Browser handle this matches data type
 });
 
+// Helper to generate a random ID if crypto is not available
+function generateUUID() {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
 api.interceptors.request.use(config => {
   const token = localStorage.getItem('token');
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  // ALWAYS handle guest token, even if logged in (optional, but good for mixing)
+  // But for now, we strictly follow the else logic or just ensure it exists
+  let guestToken = localStorage.getItem('guest_token');
+  if (!guestToken) {
+    guestToken = generateUUID();
+    localStorage.setItem('guest_token', guestToken);
+  }
+
+  // If no auth token, we MUST send guest token
+  if (!token) {
+    config.headers['Cart-Token'] = guestToken;
+  }
+
   return config;
+});
+
+api.interceptors.response.use(response => {
+  const newGuestToken = response.headers['cart-token'];
+  if (newGuestToken) {
+    localStorage.setItem('guest_token', newGuestToken);
+  }
+  return response;
 });
 
 // PRODUCTS

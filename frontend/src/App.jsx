@@ -28,9 +28,9 @@ import LoginSecurity from './pages/LoginSecurity';
 import Addresses from './pages/Addresses';
 
 const PublicLayout = () => (
-  <div>
+  <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
     <Navbar />
-    <main style={{ padding: 20 }}>
+    <main style={{ padding: 20, flex: 1 }}>
       <Outlet />
     </main>
     <Footer />

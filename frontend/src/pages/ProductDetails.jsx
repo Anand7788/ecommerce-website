@@ -23,6 +23,11 @@ export default function ProductDetails() {
   }, [id]);
 
   const handleBuyNow = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
     await addToCart(product.id, quantity);
     navigate("/cart");
   };

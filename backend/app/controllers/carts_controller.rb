@@ -8,15 +8,20 @@ class CartsController < ApplicationController
 
   # POST /cart/add_item
   def add_item
+    puts "DEBUG: add_item called. Params: #{params.inspect}"
     product = Product.find(params[:product_id])
     item = @cart.cart_items.find_by(product_id: product.id)
+    puts "DEBUG: Found existing item? #{item.present?}"
 
     quantity = (params[:quantity] || 1).to_i
 
     if item
       item.update!(quantity: item.quantity + quantity)
+      puts "DEBUG: Updated item quantity to #{item.quantity}"
     else
-      @cart.cart_items.create!(product: product, quantity: quantity, price: product.price)
+      new_item = @cart.cart_items.create!(product: product, quantity: quantity, price: product.price)
+      puts "DEBUG: Created new item: #{new_item.inspect}"
+      puts "DEBUG: Errors? #{new_item.errors.full_messages}" if new_item.errors.any?
     end
 
     render json: cart_json(@cart), status: :ok

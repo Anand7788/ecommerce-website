@@ -62,13 +62,17 @@ class ApplicationController < ActionController::API
   # Frontend should persist and send Cart-Token for anonymous users.
   def find_or_create_anonymous_cart
     token = request.headers['Cart-Token'].presence || params[:cart_token].presence
+    puts "DEBUG: find_or_create_anonymous_cart | Header Token: #{request.headers['Cart-Token']} | Param Token: #{params[:cart_token]}"
+    
     if token
       cart = Cart.find_by(guest_token: token, status: 'open')
+      puts "DEBUG: Found existing cart? #{cart.present?}"
       return cart if cart
     end
 
     # create new anonymous cart with guest_token and return it
     guest_token = SecureRandom.uuid
+    puts "DEBUG: Creating NEW anonymous cart with token: #{guest_token}"
     cart = Cart.create!(guest_token: guest_token, status: 'open')
     # include token in response headers so client can persist it
     response.set_header('Cart-Token', guest_token)
