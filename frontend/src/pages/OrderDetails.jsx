@@ -104,12 +104,19 @@ export default function OrderDetails() {
                    </div>
                </div>
 
-               <div className="od-card">
+                <div className="od-card">
                    <h3 className="od-section-title">Price details</h3>
                    <div className="price-row">
                        <span>Listing Price</span>
-                       <span>₹{parseFloat(order.total_price).toFixed(2)}</span>
+                       {/* If discount exists, add it back to show original subtotal */}
+                       <span>₹{(Number(order.total_price) + Number(order.discount_amount || 0)).toFixed(2)}</span>
                    </div>
+                   {Number(order.discount_amount) > 0 && (
+                       <div className="price-row" style={{color:'#ef4444'}}>
+                           <span>Discount {order.coupon_code ? `(${order.coupon_code})` : ''}</span>
+                           <span>-₹{Number(order.discount_amount).toFixed(2)}</span>
+                       </div>
+                   )}
                    <div className="price-row">
                        <span>Total Fees</span>
                        <span>₹0</span>
@@ -120,12 +127,12 @@ export default function OrderDetails() {
                    </div>
                    <div className="price-row total">
                        <span>Total Amount</span>
-                       <span>₹{parseFloat(order.total_price).toFixed(2)}</span>
+                       <span>₹{Number(order.total_price).toFixed(2)}</span>
                    </div>
                    
                    <div style={{marginTop:24, paddingTop:16, borderTop:'1px solid #f0f0f0'}}>
                        <div style={{fontSize:13, fontWeight:600, color:'#212121', marginBottom:4}}>Payment Method</div>
-                       <div style={{fontSize:13, color:'#878787'}}>Online Payment (Razorpay)</div>
+                       <div style={{fontSize:13, color:'#878787'}}>{order.payment_method || 'Online Payment (Razorpay)'}</div>
                    </div>
                </div>
                

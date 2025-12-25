@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_20_203018) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_24_215713) do
   create_table "addresses", force: :cascade do |t|
     t.string "city"
     t.datetime "created_at", null: false
@@ -58,7 +58,10 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_20_203018) do
 
   create_table "orders", force: :cascade do |t|
     t.text "address"
+    t.string "coupon_code"
     t.datetime "created_at", null: false
+    t.decimal "discount_amount", precision: 10, scale: 2
+    t.string "payment_method"
     t.string "status", default: "pending"
     t.decimal "total_price", precision: 12, scale: 2
     t.datetime "updated_at", null: false

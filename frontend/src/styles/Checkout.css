@@ -2,6 +2,8 @@
 
 .checkout-page {
     padding-bottom: 100px;
+    padding-top: 0 !important;
+    margin-top: 0 !important;
 }
 
 .checkout-grid {
@@ -376,4 +378,13 @@
 .saved-addr-text {
     flex: 1;
     margin-right: 12px;
+}
+
+@media (max-width: 640px) {
+
+    /* Override badge position specific to checkout page */
+    .cab-badge {
+        right: 35px !important;
+        /* Increased to 35px for more gap */
+    }
 }

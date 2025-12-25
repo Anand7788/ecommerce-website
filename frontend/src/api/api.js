@@ -78,8 +78,15 @@ export async function removeCartItem(cart_item_id) {
 }
 
 // ORDERS
-export async function createOrder(cart_id, address) {
-  const res = await api.post('/orders', { cart_id, address });
+export async function createOrder(cart_id, address, payment_method = 'Razorpay', discount_amount = 0, coupon_code = null) {
+  const res = await api.post('/orders', {
+    cart_id,
+    address,
+    payment_method,
+    discount_amount,
+    coupon_code
+  });
+  window.dispatchEvent(new Event('cartUpdated'));
   return res.data;
 }
 export async function fetchOrders() { return (await api.get('/orders')).data; }
