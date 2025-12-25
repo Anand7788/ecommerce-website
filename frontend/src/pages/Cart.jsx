@@ -165,7 +165,7 @@ export default function Cart(){
 
         {/* Right: Summary */}
         <div className="cart-summary">
-          <h3>Order Summary</h3>
+          <h3>Price Details</h3>
           <div className="summary-row"><span>Subtotal</span><span className="summary-val">₹{subtotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span></div>
           <div className="summary-row" style={{color:'#ef4444'}}><span>Discount (10%)</span><span className="summary-val">-₹{discount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span></div>
           <div className="summary-row"><span>Delivery Fee</span><span className="summary-val">₹{deliveryFee}</span></div>
