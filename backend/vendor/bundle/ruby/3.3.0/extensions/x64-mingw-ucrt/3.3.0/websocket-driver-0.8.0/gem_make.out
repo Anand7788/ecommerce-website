@@ -1,0 +1,19 @@
+current directory: C:/Rails Project/ecommerce/backend/vendor/bundle/ruby/3.3.0/gems/websocket-driver-0.8.0/ext/websocket-driver
+C:/Ruby33-x64/bin/ruby.exe extconf.rb --with-cflags\=-Wno-incompatible-pointer-types
+creating Makefile
+
+current directory: C:/Rails Project/ecommerce/backend/vendor/bundle/ruby/3.3.0/gems/websocket-driver-0.8.0/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20251226-20424-ty9mbb sitelibdir\=./.gem.20251226-20424-ty9mbb clean
+
+current directory: C:/Rails Project/ecommerce/backend/vendor/bundle/ruby/3.3.0/gems/websocket-driver-0.8.0/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20251226-20424-ty9mbb sitelibdir\=./.gem.20251226-20424-ty9mbb
+generating websocket_mask-x64-mingw-ucrt.def
+compiling websocket_mask.c
+linking shared-object websocket_mask.so
+
+current directory: C:/Rails Project/ecommerce/backend/vendor/bundle/ruby/3.3.0/gems/websocket-driver-0.8.0/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20251226-20424-ty9mbb sitelibdir\=./.gem.20251226-20424-ty9mbb install
+/usr/bin/install -c -m 0755 websocket_mask.so ./.gem.20251226-20424-ty9mbb
+
+current directory: C:/Rails Project/ecommerce/backend/vendor/bundle/ruby/3.3.0/gems/websocket-driver-0.8.0/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20251226-20424-ty9mbb sitelibdir\=./.gem.20251226-20424-ty9mbb clean

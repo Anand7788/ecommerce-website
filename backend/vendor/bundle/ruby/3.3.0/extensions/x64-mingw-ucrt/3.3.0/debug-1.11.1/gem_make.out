@@ -1,0 +1,20 @@
+current directory: C:/Rails Project/ecommerce/backend/vendor/bundle/ruby/3.3.0/gems/debug-1.11.1/ext/debug
+C:/Ruby33-x64/bin/ruby.exe extconf.rb --with-cflags\=-Wno-incompatible-pointer-types
+creating Makefile
+
+current directory: C:/Rails Project/ecommerce/backend/vendor/bundle/ruby/3.3.0/gems/debug-1.11.1/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20251226-20424-iotbdh sitelibdir\=./.gem.20251226-20424-iotbdh clean
+
+current directory: C:/Rails Project/ecommerce/backend/vendor/bundle/ruby/3.3.0/gems/debug-1.11.1/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20251226-20424-iotbdh sitelibdir\=./.gem.20251226-20424-iotbdh
+generating debug-x64-mingw-ucrt.def
+compiling debug.c
+compiling iseq_collector.c
+linking shared-object debug/debug.so
+
+current directory: C:/Rails Project/ecommerce/backend/vendor/bundle/ruby/3.3.0/gems/debug-1.11.1/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20251226-20424-iotbdh sitelibdir\=./.gem.20251226-20424-iotbdh install
+/usr/bin/install -c -m 0755 debug.so ./.gem.20251226-20424-iotbdh/debug
+
+current directory: C:/Rails Project/ecommerce/backend/vendor/bundle/ruby/3.3.0/gems/debug-1.11.1/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20251226-20424-iotbdh sitelibdir\=./.gem.20251226-20424-iotbdh clean

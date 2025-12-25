@@ -1,0 +1,19 @@
+current directory: C:/Rails Project/ecommerce/backend/vendor/bundle/ruby/3.3.0/gems/racc-1.8.1/ext/racc/cparse
+C:/Ruby33-x64/bin/ruby.exe extconf.rb --with-cflags\=-Wno-incompatible-pointer-types
+creating Makefile
+
+current directory: C:/Rails Project/ecommerce/backend/vendor/bundle/ruby/3.3.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20251226-20424-58fr8p sitelibdir\=./.gem.20251226-20424-58fr8p clean
+
+current directory: C:/Rails Project/ecommerce/backend/vendor/bundle/ruby/3.3.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20251226-20424-58fr8p sitelibdir\=./.gem.20251226-20424-58fr8p
+generating cparse-x64-mingw-ucrt.def
+compiling cparse.c
+linking shared-object racc/cparse.so
+
+current directory: C:/Rails Project/ecommerce/backend/vendor/bundle/ruby/3.3.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20251226-20424-58fr8p sitelibdir\=./.gem.20251226-20424-58fr8p install
+/usr/bin/install -c -m 0755 cparse.so ./.gem.20251226-20424-58fr8p/racc
+
+current directory: C:/Rails Project/ecommerce/backend/vendor/bundle/ruby/3.3.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20251226-20424-58fr8p sitelibdir\=./.gem.20251226-20424-58fr8p clean

@@ -1,0 +1,3 @@
+--with-cflags=-Wno-incompatible-pointer-types
+--with-libyaml-include=C:\\\\\\\\Ruby33-x64\\\\\\\\msys64\\\\\\\\ucrt64\\\\\\\\include
+--with-libyaml-lib=C:\\\\\\\\Ruby33-x64\\\\\\\\msys64\\\\\\\\ucrt64\\\\\\\\lib
