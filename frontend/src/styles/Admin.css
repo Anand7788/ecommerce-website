@@ -255,6 +255,37 @@
     text-decoration: underline;
 }
 
+/* Mobile Cards (Generic) */
+.mobile-list {
+    display: none;
+    /* Hidden by default */
+}
+
+.mobile-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    background: white;
+}
+
+.mobile-card-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.mobile-card-label {
+    color: var(--admin-text-light);
+    font-size: 13px;
+}
+
+.mobile-card-value {
+    color: var(--admin-text);
+    font-weight: 500;
+    font-size: 14px;
+}
+
 /* Mobile Product Card */
 .mobile-product-list {
     display: none;
@@ -488,4 +519,115 @@
     .mobile-product-list {
         display: block;
     }
+
+    .mobile-product-list {
+        display: block;
+    }
+
+    .mobile-list {
+        display: block;
+    }
+}
+
+/* MODAL STYLES */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    animation: fadeIn 0.2s;
+}
+
+.modal-content {
+    background: var(--admin-white);
+    padding: 0;
+    /* Header/Body handles padding */
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.modal-header {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--admin-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f9fafb;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: var(--admin-text);
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--admin-text-light);
+    display: flex;
+    align-items: center;
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+/* BUTTONS */
+.admin-create-btn {
+    background-color: var(--admin-primary);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.admin-create-btn:hover {
+    background-color: #059669;
+}
+
+.btn-save {
+    background-color: #4f46e5;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-save:hover {
+    background-color: #4338ca;
+}
+
+.btn-cancel {
+    background-color: transparent;
+    color: var(--admin-text-light);
+    border: 1px solid var(--admin-border);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: all 0.2s;
+}
+
+.btn-cancel:hover {
+    background-color: #f3f4f6;
+    color: var(--admin-text);
 }

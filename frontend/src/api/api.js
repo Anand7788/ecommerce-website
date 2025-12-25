@@ -58,6 +58,15 @@ export async function uploadProductCSV(formData) {
   return (await api.post('/admin/product_bulk_import', formData)).data;
 }
 
+// REVIEWS
+export async function fetchReviews(productId) { return (await api.get(`/products/${productId}/reviews`)).data; }
+export async function createReview(productId, reviewData) { return (await api.post(`/products/${productId}/reviews`, { review: reviewData })).data; }
+
+// WISHLIST
+export async function fetchWishlist() { return (await api.get('/wishlist')).data; }
+export async function addToWishlist(productId) { return (await api.post('/wishlist', { product_id: productId })).data; }
+export async function removeFromWishlist(id) { return (await api.delete(`/wishlist/${id}`)).data; }
+
 // CART
 // CART
 export async function addToCart(product_id, quantity = 1) {
@@ -135,3 +144,14 @@ export async function fetchAddresses() { return (await api.get('/addresses')).da
 export async function createAddress(data) { return (await api.post('/addresses', { address: data })).data; }
 export async function updateAddress(id, data) { return (await api.patch(`/addresses/${id}`, { address: data })).data; }
 export async function deleteAddress(id) { return (await api.delete(`/addresses/${id}`)).data; }
+
+// COUPONS
+export async function validateCoupon(code, amount) { return (await api.post('/coupons/validate', { code, amount })).data; }
+export async function fetchCoupons() { return (await api.get('/admin/coupons')).data; }
+export async function createCoupon(data) { return (await api.post('/admin/coupons', { coupon: data })).data; }
+export async function updateCoupon(id, data) { return (await api.patch(`/admin/coupons/${id}`, { coupon: data })).data; }
+export async function deleteCoupon(id) { return (await api.delete(`/admin/coupons/${id}`)).data; }
+
+// Admin Reviews
+export async function fetchAdminReviews() { return (await api.get('/admin/reviews')).data; }
+export async function deleteAdminReview(id) { return (await api.delete(`/admin/reviews/${id}`)).data; }

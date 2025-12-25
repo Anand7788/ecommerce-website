@@ -34,9 +34,12 @@ export default function AdminOrders() {
   const getStatusColor = (status) => {
     switch(status?.toLowerCase()) {
       case 'delivered': return { bg: '#d1fae5', text: '#065f46' };
+      case 'out_for_delivery': return { bg: '#cffafe', text: '#155e75' };
       case 'shipped': return { bg: '#dbeafe', text: '#1e40af' };
+      case 'processing': return { bg: '#ffedd5', text: '#9a3412' };
       case 'pending': return { bg: '#fef3c7', text: '#92400e' };
-      case 'cancelled': return { bg: '#fee2e2', text: '#991b1b' };
+      case 'cancelled': 
+      case 'returned': return { bg: '#fee2e2', text: '#991b1b' };
       default: return { bg: '#f3f4f6', text: '#374151' };
     }
   };
@@ -53,53 +56,103 @@ export default function AdminOrders() {
       </div>
 
       <div className="chart-card">
-         <table style={{width:'100%', borderCollapse:'collapse'}}>
-            <thead>
-               <tr style={{textAlign:'left', color:'#9ca3af', borderBottom:'1px solid #f3f4f6'}}>
-                  <th style={{padding:12}}>Order ID</th>
-                  <th style={{padding:12}}>Customer</th>
-                  <th style={{padding:12}}>Date</th>
-                  <th style={{padding:12}}>Total</th>
-                  <th style={{padding:12}}>Status</th>
-                  <th style={{padding:12}}>Items</th>
-               </tr>
-            </thead>
-            <tbody>
-               {orders.map(order => {
+         <div className="desktop-table-container">
+           <table style={{width:'100%', borderCollapse:'collapse'}}>
+             <thead>
+                <tr style={{textAlign:'left', color:'#9ca3af', borderBottom:'1px solid #f3f4f6'}}>
+                   <th style={{padding:12}}>Order ID</th>
+                   <th style={{padding:12}}>Customer</th>
+                   <th style={{padding:12}}>Date</th>
+                   <th style={{padding:12}}>Total</th>
+                   <th style={{padding:12}}>Status</th>
+                   <th style={{padding:12}}>Items</th>
+                   <th style={{padding:12}}>Action</th>
+                </tr>
+             </thead>
+             <tbody>
+                {orders.map(order => {
+                  const style = getStatusColor(order.status);
+                  return (
+                   <tr key={order.id} style={{borderBottom:'1px solid #f9fafb'}}>
+                      <td style={{padding:12}}>#{order.id}</td>
+                      <td style={{padding:12}}>
+                         <div style={{fontWeight:500}}>{order.user.name}</div>
+                         <div style={{fontSize:12, color:'#9ca3af'}}>{order.user.email}</div>
+                      </td>
+                      <td style={{padding:12}}>{new Date(order.created_at).toLocaleDateString()}</td>
+                      <td style={{padding:12}}>₹{parseFloat(order.total_price).toFixed(2)}</td>
+                      <td style={{padding:12}}>
+                         <select 
+                           value={order.status}
+                           onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                           style={{
+                              padding:'4px 8px', borderRadius:8, border:'none',
+                              background: style.bg, color: style.text, fontWeight:500, cursor:'pointer'
+                           }}
+                         >
+                            <option value="pending">Pending</option>
+                            <option value="processing">Processing</option>
+                            <option value="shipped">Shipped</option>
+                            <option value="out_for_delivery">Out for Delivery</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="cancelled">Cancelled</option>
+                            <option value="returned">Returned</option>
+                         </select>
+                      </td>
+                      <td style={{padding:12}}>{order.items_count}</td>
+                      <td style={{padding:12}}>
+                         <a href={`/admin/orders/${order.id}`} style={{color:'#3b82f6', textDecoration:'none', fontSize:13, fontWeight:600}}>View</a>
+                      </td>
+                   </tr>
+                  );
+                })}
+             </tbody>
+          </table>
+         </div>
+
+         <div className="mobile-list">
+             {orders.map(order => {
                  const style = getStatusColor(order.status);
                  return (
-                  <tr key={order.id} style={{borderBottom:'1px solid #f9fafb'}}>
-                     <td style={{padding:12}}>#{order.id}</td>
-                     <td style={{padding:12}}>
-                        <div style={{fontWeight:500}}>{order.user.name}</div>
-                        <div style={{fontSize:12, color:'#9ca3af'}}>{order.user.email}</div>
-                     </td>
-                     <td style={{padding:12}}>{new Date(order.created_at).toLocaleDateString()}</td>
-                     <td style={{padding:12}}>₹{parseFloat(order.total_price).toFixed(2)}</td>
-                     <td style={{padding:12}}>
-                        <select 
-                          value={order.status}
-                          onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                          style={{
-                             padding:'4px 8px', borderRadius:8, border:'none',
-                             background: style.bg, color: style.text, fontWeight:500, cursor:'pointer'
-                          }}
-                        >
-                           <option value="pending">Pending</option>
-                           <option value="shipped">Shipped</option>
-                           <option value="delivered">Delivered</option>
-                           <option value="cancelled">Cancelled</option>
+                 <div key={order.id} className="mobile-card">
+                     <div className="mobile-card-row" style={{borderBottom:'1px solid #eee', paddingBottom:8, marginBottom:12}}>
+                         <span style={{fontWeight:600}}>#{order.id}</span>
+                         <span style={{color:'#9ca3af', fontSize:12}}>{new Date(order.created_at).toLocaleDateString()}</span>
+                     </div>
+                     <div className="mobile-card-row">
+                         <span className="mobile-card-label">Customer</span>
+                         <span className="mobile-card-value">{order.user.name}</span>
+                     </div>
+                     <div className="mobile-card-row">
+                         <span className="mobile-card-label">Total</span>
+                         <span className="mobile-card-value">₹{parseFloat(order.total_price).toFixed(2)}</span>
+                     </div>
+                     <div className="mobile-card-row" style={{alignItems:'center'}}>
+                         <span className="mobile-card-label">Status</span>
+                         <select 
+                           value={order.status}
+                           onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                           style={{
+                              padding:'4px 8px', borderRadius:8, border:'none',
+                              background: style.bg, color: style.text, fontWeight:500, cursor:'pointer', fontSize:12
+                           }}
+                         >
+                            <option value="pending">Pending</option>
+                            <option value="processing">Processing</option>
+                            <option value="shipped">Shipped</option>
+                            <option value="out_for_delivery">Out for Delivery</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="cancelled">Cancelled</option>
+                            <option value="returned">Returned</option>
                         </select>
-                     </td>
-                     <td style={{padding:12}}>{order.items_count}</td>
-                     <td style={{padding:12}}>
-                        <a href={`/admin/orders/${order.id}`} style={{color:'#3b82f6', textDecoration:'none', fontSize:13, fontWeight:600}}>View Order</a>
-                     </td>
-                  </tr>
+                     </div>
+                     <div style={{marginTop:12, paddingTop:12, borderTop:'1px solid #fafa', display:'flex', justifyContent:'flex-end'}}>
+                        <a href={`/admin/orders/${order.id}`} style={{color:'#3b82f6', textDecoration:'none', fontSize:14, fontWeight:600}}>View Details &rarr;</a>
+                     </div>
+                 </div>
                  );
-               })}
-            </tbody>
-         </table>
+             })}
+         </div>
       </div>
     </div>
   );

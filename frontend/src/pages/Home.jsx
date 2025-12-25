@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
-import { fetchProducts } from "../api/api";
+import { fetchProducts, fetchWishlist } from "../api/api";
 import ProductGrid from "../components/ProductGrid";
 import Hero from "../components/Hero";
 import SortBar from "../components/SortBar";
@@ -26,12 +26,22 @@ export default function HomePage() {
     offer: false
   });
 
+  const [wishlistIds, setWishlistIds] = useState([]);
+
   async function load() {
     setLoading(true);
     try {
       const data = await fetchProducts();
       const list = Array.isArray(data) ? data : data.products || [];
       setProducts(list);
+      
+      // Fetch wishlist IDs if logged in
+      const token = localStorage.getItem('token');
+      if (token) {
+          fetchWishlist().then(wData => {
+              setWishlistIds(wData.map(item => item.id));
+          }).catch(e => console.error(e));
+      }
     } catch (err) {
       console.error("Failed to load products", err);
     } finally {
@@ -126,7 +136,7 @@ export default function HomePage() {
         </div>
 
         {/* Grid */}
-        <ProductGrid products={filteredProducts.slice(0, visibleCount)} loading={loading} />
+        <ProductGrid products={filteredProducts.slice(0, visibleCount)} loading={loading} wishlistIds={wishlistIds} />
 
         {/* Load More */}
         {visibleCount < filteredProducts.length && (

@@ -10,7 +10,7 @@ class OrdersController < ApplicationController
   # GET /orders/:id
   def show
     order = current_user.orders.find(params[:id])
-    render json: order.as_json(include: { order_items: { include: :product } })
+    render json: order.as_json(include: { order_items: { include: :product }, order_status_logs: {} })
   rescue ActiveRecord::RecordNotFound
     render json: { error: "Order not found" }, status: :not_found
   end
@@ -32,6 +32,9 @@ class OrdersController < ApplicationController
       discount_amount: params[:discount_amount],
       coupon_code: params[:coupon_code]
     )
+    
+    # Create initial log
+    order.order_status_logs.create!(status: 'pending', notes: 'Order placed successfully')
     
     cart.cart_items.each do |ci|
       order.order_items.create!(product: ci.product, quantity: ci.quantity, price: ci.price)

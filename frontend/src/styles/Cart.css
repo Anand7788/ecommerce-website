@@ -165,20 +165,21 @@
 /* RIGHT: Summary */
 .cart-summary {
     background: white;
-    padding: 32px;
-    border-radius: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 24px;
     height: fit-content;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
     position: sticky;
     top: 100px;
     /* if navbar is sticky */
-    border: 1px solid #f3f4f6;
 }
 
 .cart-summary h3 {
-    font-size: 20px;
-    font-weight: 800;
+    margin-top: 0;
     margin-bottom: 24px;
+    border-bottom: 1px solid #f3f4f6;
+    padding-bottom: 16px;
+    color: #333;
 }
 
 .summary-row {
@@ -196,14 +197,15 @@
 
 .summary-divider {
     height: 1px;
-    background: #e5e7eb;
-    margin: 20px 0;
+    background: #f3f4f6;
+    margin: 16px 0;
 }
 
 .summary-row.total {
-    font-size: 18px;
-    font-weight: 800;
-    color: #111827;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #111;
+    margin-top: 16px;
     margin-bottom: 0;
 }
 

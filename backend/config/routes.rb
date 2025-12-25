@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   post '/check_email', to: 'users#check_email'
   
   resources :addresses
+  resources :wishlist_items, only: [:index, :create, :destroy], path: 'wishlist'
+  
   post '/login',  to: 'sessions#create'
 
   post '/login',  to: 'sessions#create'
@@ -28,7 +30,9 @@ Rails.application.routes.draw do
   resources :orders, only: [:index, :show, :create]
 
   # Public product endpoints
-  resources :products, only: [:index, :show]
+  resources :products, only: [:index, :show] do
+    resources :reviews, only: [:index, :create]
+  end
 
   # Admin product management
   namespace :admin do
@@ -37,12 +41,16 @@ Rails.application.routes.draw do
     resources :orders, only: [:index, :update, :show]
     resources :users, only: [:index, :show] # Customers
     get '/analytics', to: 'analytics#show'
+    resources :coupons, only: [:index, :create, :update, :destroy], controller: '/coupons'
+    resources :reviews, only: [:index, :destroy]
   end
 
   namespace :api do
     post 'payments/create_order', to: 'payments#create_order'
     post 'payments/verify', to: 'payments#verify'
   end
+
+  post 'coupons/validate', to: 'coupons#validate'
 
   root "products#index"
 end

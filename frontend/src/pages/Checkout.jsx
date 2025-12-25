@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getCart, createOrder, fetchOrders, fetchAddresses, fetchProfile, createAddress } from '../api/api';
+import { getCart, createOrder, fetchOrders, fetchAddresses, fetchProfile, createAddress, validateCoupon } from '../api/api';
 import { useNavigate, Link } from 'react-router-dom';
 import '../styles/Checkout.css';
 import '../styles/Cart.css'; // Reuse Cart styles for Address Bar & Modal
@@ -32,7 +32,7 @@ export default function Checkout() {
   // Payment & User State
   const [paymentMethod, setPaymentMethod] = useState('card');
   const [userEmail, setUserEmail] = useState('');
-  const [couponCode, setCouponCode] = useState("");
+
 
   useEffect(() => {
     async function init() {
@@ -87,14 +87,40 @@ export default function Checkout() {
       }
   };
 
+  const [appliedDiscount, setAppliedDiscount] = useState(0); 
+  const [couponCode, setCouponCode] = useState("");
+  const [couponInput, setCouponInput] = useState("");
+
+  const applyCoupon = async () => {
+     if(!couponInput.trim()) return;
+     try {
+       const subtotal = cart.items.reduce((sum, item) => sum + (Number(item.product.price) * item.quantity), 0);
+       const res = await validateCoupon(couponInput, subtotal);
+       if(res.valid) {
+          setAppliedDiscount(res.discount);
+          setCouponCode(res.code);
+          alert(`Coupon ${res.code} Applied! You saved ₹${res.discount}`);
+       }
+     } catch(err) {
+       setAppliedDiscount(0);
+       setCouponCode("");
+       alert(err.response?.data?.error || "Invalid Coupon");
+     }
+  };
+
+  const removeCoupon = () => {
+    setAppliedDiscount(0);
+    setCouponCode("");
+    setCouponInput("");
+  };
+
   const handleRazorpayPayment = async (fullAddress) => {
       const res = await loadRazorpay();
       if (!res) { alert('Razorpay SDK failed to load. Are you online?'); return; }
 
       const subtotal = cart.items.reduce((sum, item) => sum + (Number(item.product.price) * item.quantity), 0);
-      const discount = Math.floor(subtotal * 0.10); 
       const deliveryFee = 0.0;
-      const totalAmount = subtotal - discount + deliveryFee;
+      const totalAmount = subtotal - appliedDiscount + deliveryFee;
 
       try {
           const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
@@ -133,7 +159,7 @@ export default function Checkout() {
                   }).then((t) => t.json());
 
                   if (verifyData.status === 'ok') {
-                      await createOrder(cart.id, fullAddress, 'Razorpay', discount, couponCode);
+                      await createOrder(cart.id, fullAddress, 'Razorpay', appliedDiscount, couponCode);
                       alert('Payment Successful!');
                       navigate('/orders');
                   } else {
@@ -167,13 +193,12 @@ export default function Checkout() {
     
     // Calculate Totals for passing (if needed)
     const subtotal = cart.items.reduce((sum, item) => sum + (Number(item.product.price) * item.quantity), 0);
-    const discount = Math.floor(subtotal * 0.10); 
     
     if (paymentMethod === 'card') {
         await handleRazorpayPayment(fullAddress);
     } else {
         try {
-          await createOrder(cart.id, fullAddress, 'Cash on Delivery', discount, couponCode);
+          await createOrder(cart.id, fullAddress, 'Cash on Delivery', appliedDiscount, couponCode);
           alert("Order placed successfully! Redirecting to Orders...");
           navigate('/orders');
         } catch(e) {
@@ -187,9 +212,8 @@ export default function Checkout() {
   if(!cart || cart.items.length === 0) return <div className="container" style={{marginTop:40}}>Cart is empty</div>;
 
   const subtotal = cart.items.reduce((sum, item) => sum + (Number(item.product.price) * item.quantity), 0);
-  const discount = Math.floor(subtotal * 0.10); 
   const deliveryFee = 0.0;
-  const total = subtotal - discount + deliveryFee;
+  const total = subtotal - appliedDiscount + deliveryFee;
 
   return (
     <div className="container checkout-page">
@@ -233,7 +257,29 @@ export default function Checkout() {
          <div className="checkout-summary">
              <h3 className="checkout-section-title">Price Details</h3>
              <div className="checkout-row"><span>Subtotal</span><span>₹{subtotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span></div>
-             <div className="checkout-row" style={{color:'#ef4444'}}><span>Discount (10%)</span><span>-₹{discount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span></div>
+             
+             {/* COUPON SECTION */}
+             <div className="coupon-section" style={{margin:'16px 0', padding:'12px', background:'#f9fafb', borderRadius:8}}>
+                {!couponCode ? (
+                    <div style={{display:'flex', gap:10}}>
+                        <input 
+                          type="text" 
+                          placeholder="Enter Coupon Code" 
+                          value={couponInput}
+                          onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
+                          style={{flex:1, padding:'8px 12px', borderRadius:4, border:'1px solid #d1d5db'}}
+                        />
+                        <button onClick={applyCoupon} style={{background:'#2563eb', color:'white', border:'none', borderRadius:4, padding:'0 16px', cursor:'pointer'}}>Apply</button>
+                    </div>
+                ) : (
+                    <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', color:'#166534', fontWeight:500}}>
+                        <span>Coupon Applied: {couponCode}</span>
+                        <button onClick={removeCoupon} style={{background:'none', border:'none', color:'#ef4444', cursor:'pointer', fontSize:13}}>Remove</button>
+                    </div>
+                )}
+             </div>
+
+             <div className="checkout-row" style={{color:'#16a34a'}}><span>Discount</span><span>-₹{appliedDiscount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span></div>
              <div className="checkout-row"><span>Delivery Fee</span><span>₹{deliveryFee}</span></div>
              <div className="checkout-row total"><span>Total</span><span>₹{Math.max(0, total).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span></div>
 

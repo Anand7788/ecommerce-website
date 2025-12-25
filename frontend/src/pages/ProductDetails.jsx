@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { fetchProduct, addToCart, fetchAddresses } from "../api/api";
+import { fetchProduct, addToCart, fetchAddresses, fetchReviews, createReview, addToWishlist } from "../api/api";
 import "../styles/ProductDetails.css";
 
 export default function ProductDetails() {
@@ -11,10 +11,19 @@ export default function ProductDetails() {
   const [quantity, setQuantity] = useState(1);
   const [selectedColor, setSelectedColor] = useState("red");
   const [pincode, setPincode] = useState("");
+  const [activeTab, setActiveTab] = useState("specs"); // specs, reviews
   const [showAllDetails, setShowAllDetails] = useState(false);
+  
+  // Reviews State
+  const [reviews, setReviews] = useState([]);
+  const [reviewsLoading, setReviewsLoading] = useState(false);
+  const [newReview, setNewReview] = useState({ rating: 5, comment: "" });
+  const [submittingReview, setSubmittingReview] = useState(false);
   
   // Mock images for gallery (since backend only provides one)
   const [mainImage, setMainImage] = useState("");
+
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     fetchProduct(id).then((data) => {
@@ -23,9 +32,8 @@ export default function ProductDetails() {
       setLoading(false);
     });
 
-    // Auto-fetch default pincode if logged in
-    const token = localStorage.getItem('token');
     if (token) {
+        // Auto-fetch default pincode if logged in
         fetchAddresses().then(addresses => {
             if (addresses && addresses.length > 0) {
                 const defaultAddr = addresses.find(a => a.is_default) || addresses[0];
@@ -33,20 +41,47 @@ export default function ProductDetails() {
                     setPincode(defaultAddr.zip);
                 }
             }
-        }).catch(err => {
-            console.error("Failed to auto-fetch pincode", err);
-        });
+        }).catch(err => console.error(err));
     }
   }, [id]);
 
+  // Fetch reviews when tab changes to reviews
+  useEffect(() => {
+    if (activeTab === 'reviews') {
+        setReviewsLoading(true);
+        fetchReviews(id).then(data => {
+            setReviews(data);
+            setReviewsLoading(false);
+        }).catch(err => {
+            console.error("Failed to fetch reviews", err);
+            setReviewsLoading(false);
+        });
+    }
+  }, [id, activeTab]);
+
   const handleBuyNow = async () => {
-    const token = localStorage.getItem('token');
     if (!token) {
       navigate('/login');
       return;
     }
     await addToCart(product.id, quantity);
     navigate("/cart");
+  };
+
+  const handleSubmitReview = async (e) => {
+    e.preventDefault();
+    if (!token) return navigate('/login');
+    
+    setSubmittingReview(true);
+    try {
+        const created = await createReview(id, newReview);
+        setReviews([created, ...reviews]);
+        setNewReview({ rating: 5, comment: "" });
+    } catch (err) {
+        alert("Failed to submit review. You might have already reviewed this product.");
+    } finally {
+        setSubmittingReview(false);
+    }
   };
 
   if (loading || !product) {
@@ -96,6 +131,16 @@ export default function ProductDetails() {
                         className="p-main-img" 
                         onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/600x600?text=No+Image'; }}
                     />
+                    <button 
+                        className="p-wishlist-fab"
+                        onClick={() => {
+                             const token = localStorage.getItem('token');
+                             if (!token) return alert("Please login");
+                             addToWishlist(product.id).then(() => alert("Added to Wishlist!")).catch(e => console.error(e));
+                        }}
+                    >
+                        <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                    </button>
                  </div>
              </div>
 
@@ -122,7 +167,7 @@ export default function ProductDetails() {
             <div className="p-rating-badge">
               4.3 <svg width="12" height="12" fill="white" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
             </div>
-            <span className="p-rating-text">121 Ratings & 15 Reviews</span>
+            <span className="p-rating-text">121 Ratings & {reviews.length > 0 ? reviews.length : 15} Reviews</span>
             <span style={{color: '#16a34a', fontWeight:'600', fontSize:'13px', display:'flex', alignItems:'center', gap:'4px'}}>
               <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> 
               Verified
@@ -192,56 +237,104 @@ export default function ProductDetails() {
             </div>
           </div>
           
-          {/* PRODUCT SPECS & DETAILS (Consolidated Card) */}
-          <div className="p-specs-card">
-             <h4 className="p-section-title">Product Highlights</h4>
-             <div className="p-highlights-grid">
-                <div className="p-highlight-item">
-                    <span className="ph-label">Occasion</span>
-                    <span className="ph-value">Casual</span>
-                </div>
-                <div className="p-highlight-item">
-                    <span className="ph-label">Color</span>
-                    <span className="ph-value">{selectedColor.charAt(0).toUpperCase() + selectedColor.slice(1)}</span>
-                </div>
-                <div className="p-highlight-item">
-                    <span className="ph-label">Generic Name</span>
-                    <span className="ph-value">T-Shirts</span>
-                </div>
-                <div className="p-highlight-item">
-                    <span className="ph-label">Fit/Shape</span>
-                    <span className="ph-value">Regular</span>
-                </div>
-             </div>
+          {/* PRODUCT DETAILS & REVIEWS CARD */}
+          <div className="p-details-bottom-card">
+            <div className="p-tabs">
+                 <button 
+                    className={`p-tab ${activeTab === 'specs' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('specs')}
+                 >
+                    Product Specification
+                 </button>
+                 <button 
+                    className={`p-tab ${activeTab === 'reviews' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('reviews')}
+                 >
+                    Reviews ({reviews.length})
+                 </button>
+            </div>
+            
+            <div className="p-tab-content">
+                 {activeTab === 'specs' && (
+                     <div className="p-specs-container">
+                         {/* 1. Product Highlights */}
+                         <h4 className="p-section-title">Product Highlights</h4>
+                         <div className="p-highlights-grid">
+                            <div className="p-highlight-item">
+                                <span className="ph-label">Occasion</span>
+                                <span className="ph-value">Casual</span>
+                            </div>
+                            <div className="p-highlight-item">
+                                <span className="ph-label">Color</span>
+                                <span className="ph-value">{selectedColor.charAt(0).toUpperCase() + selectedColor.slice(1)}</span>
+                            </div>
+                            <div className="p-highlight-item">
+                                <span className="ph-label">Generic Name</span>
+                                <span className="ph-value">T-Shirts</span>
+                            </div>
+                            <div className="p-highlight-item">
+                                <span className="ph-label">Fit/Shape</span>
+                                <span className="ph-value">Regular</span>
+                            </div>
+                         </div>
 
-             {/* Expandable Details */}
-             {showAllDetails && (
-               <div className="p-details-expanded">
-                 <h4 className="p-section-title" style={{marginTop: 32}}>Additional Details</h4>
-                 <div className="p-details-list">
-                    <div className="p-detail-row">
-                        <span className="pd-label">Pattern</span>
-                        <span className="pd-value">Solid</span>
-                    </div>
-                    <div className="p-detail-row">
-                        <span className="pd-label">Sleeve Styling</span>
-                        <span className="pd-value">Regular</span>
-                    </div>
-                    <div className="p-detail-row">
-                        <span className="pd-label">Fabric</span>
-                        <span className="pd-value">Cotton Blend</span>
-                    </div>
-                    <div className="p-detail-row">
-                        <span className="pd-label">Country of Origin</span>
-                        <span className="pd-value">India</span>
-                    </div>
-                 </div>
-               </div>
-             )}
-             
-             <button className="p-show-more-btn" onClick={() => setShowAllDetails(!showAllDetails)}>
-                {showAllDetails ? 'View Less' : 'View More'}
-             </button>
+                         {/* 2. Additional Details (Expandable) */}
+                         {showAllDetails && (
+                           <>
+                             <h4 className="p-section-title" style={{marginTop: 32}}>Additional Details</h4>
+                             <div className="p-details-list">
+                                <div className="p-detail-row">
+                                    <span className="pd-label">Pattern</span>
+                                    <span className="pd-value">Solid</span>
+                                </div>
+                                <div className="p-detail-row">
+                                    <span className="pd-label">Sleeve Styling</span>
+                                    <span className="pd-value">Regular</span>
+                                </div>
+                                <div className="p-detail-row">
+                                    <span className="pd-label">Fabric</span>
+                                    <span className="pd-value">Cotton Blend</span>
+                                </div>
+                                <div className="p-detail-row">
+                                    <span className="pd-label">Country of Origin</span>
+                                    <span className="pd-value">India</span>
+                                </div>
+                             </div>
+                           </>
+                         )}
+                         
+                         <button className="p-show-more-btn" onClick={() => setShowAllDetails(!showAllDetails)}>
+                            {showAllDetails ? 'View Less' : 'View More'}
+                         </button>
+                     </div>
+                 )}
+
+                 {activeTab === 'reviews' && (
+                     <div className="p-reviews-container">
+                        {/* Reviews List */}
+                        <div className="p-reviews-list">
+                            {reviewsLoading ? (
+                                <div>Loading reviews...</div>
+                            ) : reviews.length === 0 ? (
+                                <div className="p-no-reviews">No reviews yet.</div>
+                            ) : (
+                                reviews.map(review => (
+                                    <div key={review.id} className="p-review-item">
+                                        <div className="p-review-header">
+                                            <div className={`p-review-rating ${review.rating >= 4 ? 'good' : review.rating >= 3 ? 'avg' : 'bad'}`}>
+                                                {review.rating} ★
+                                            </div>
+                                            <span className="p-review-user">{review.user?.name || "User"}</span>
+                                        </div>
+                                        <p className="p-review-comment">{review.comment}</p>
+                                        <span className="p-review-date">{new Date(review.created_at).toLocaleDateString()}</span>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+                     </div>
+                 )}
+            </div>
           </div>  
         </div>
       </div>

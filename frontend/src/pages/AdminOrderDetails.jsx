@@ -57,9 +57,12 @@ export default function AdminOrderDetails() {
                style={{background:'#e0e7ff', color:'#1e40af', border:'none', fontWeight:600}}
             >
                <option value="pending">Pending</option>
+               <option value="processing">Processing</option>
                <option value="shipped">Shipped</option>
+               <option value="out_for_delivery">Out for Delivery</option>
                <option value="delivered">Delivered</option>
                <option value="cancelled">Cancelled</option>
+               <option value="returned">Returned</option>
             </select>
          </div>
       </div>

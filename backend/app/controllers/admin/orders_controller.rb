@@ -17,7 +17,12 @@ module Admin
 
     def update
       order = Order.find(params[:id])
+      old_status = order.status
       if order.update(status: params[:status])
+        # Create Log
+        if old_status != order.status
+           order.order_status_logs.create(status: order.status, notes: "Status updated by Admin")
+        end
         render json: order
       else
         render json: { error: "Failed to update" }, status: :unprocessable_entity

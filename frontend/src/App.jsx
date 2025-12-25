@@ -20,6 +20,8 @@ import AdminOrders from './pages/AdminOrders';
 import AdminOrderDetails from './pages/AdminOrderDetails';
 import AdminCustomers from './pages/AdminCustomers';
 import AdminCustomerDetails from './pages/AdminCustomerDetails';
+import AdminCoupons from './pages/AdminCoupons';
+import AdminReviews from './pages/AdminReviews';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import ChangePassword from './pages/ChangePassword';
@@ -49,9 +51,11 @@ export default function App(){
          <Route index element={<AdminDashboard />} />
          <Route path="products" element={<AdminProducts />} />
          <Route path="orders" element={<AdminOrders />} />
-         <Route path="orders/:id" element={<AdminOrderDetails />} />
+          <Route path="orders/:id" element={<AdminOrderDetails />} />
          <Route path="customers" element={<AdminCustomers />} />
          <Route path="customers/:id" element={<AdminCustomerDetails />} />
+         <Route path="coupons" element={<AdminCoupons />} />
+         <Route path="reviews" element={<AdminReviews />} />
          {/* Fallback for other admin links */}
          <Route path="*" element={<div style={{padding:20}}>Coming Soon</div>} />
       </Route>

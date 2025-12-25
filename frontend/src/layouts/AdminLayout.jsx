@@ -66,6 +66,12 @@ export default function AdminLayout() {
           <NavLink to="/admin/products" className={({isActive}) => `admin-nav-item ${isActive ? 'active' : ''}`}>
              <FiBox /> Products
           </NavLink>
+          <NavLink to="/admin/coupons" className={({isActive}) => `admin-nav-item ${isActive ? 'active' : ''}`}>
+             <FiShoppingBag /> Coupons
+          </NavLink>
+          <NavLink to="/admin/reviews" className={({isActive}) => `admin-nav-item ${isActive ? 'active' : ''}`}>
+             <FiMessageSquare /> Reviews
+          </NavLink>
           <NavLink to="/admin/messages" className={({isActive}) => `admin-nav-item ${isActive ? 'active' : ''}`}>
              <FiMessageSquare /> Message
           </NavLink>

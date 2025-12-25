@@ -4,6 +4,8 @@ class User < ApplicationRecord
   has_many :carts
   has_many :orders
   has_many :addresses, dependent: :destroy
+  has_many :reviews, dependent: :destroy
+  has_many :wishlist_items, dependent: :destroy
 
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :mobile, allow_blank: true, length: { is: 10 }, format: { with: /\A\d{10}\z/, message: "must be 10 digits" }
