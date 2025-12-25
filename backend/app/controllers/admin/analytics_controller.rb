@@ -14,15 +14,23 @@ module Admin
       total_items = OrderItem.sum(:quantity) || 0
       
       # Monthly Analytics (Last 6 months)
-      # SQLite specific grouping
+      # PostgreSQL vs SQLite grouping
+      group_clause = if ActiveRecord::Base.connection.adapter_name.downcase.include?('postgres')
+                       "TO_CHAR(created_at, 'YYYY-MM')"
+                     else
+                       "strftime('%Y-%m', created_at)"
+                     end
+
       analytics_data = Order.where("created_at > ?", 6.months.ago)
-                            .group("strftime('%Y-%m', created_at)")
+                            .group(group_clause)
                             .sum(:total_price)
                             .map { |k, v| { name: Date.parse(k + "-01").strftime("%b"), val1: v } }
       
       # If no data, provide at least the month names with 0
       if analytics_data.empty?
          analytics_data = 6.downto(0).map { |i| { name: i.months.ago.strftime("%b"), val1: 0 } }
+      else
+         # Fill in missing months?Ideally yes, but simple version for now
       end
 
       # Recent Orders
@@ -40,8 +48,9 @@ module Admin
                            end
 
       # Top Products
+      # STRICT GROUP BY for Postgres
       top_products = OrderItem.joins(:product)
-                              .group(:product_id)
+                              .group('products.id', 'products.name', 'products.category')
                               .select("products.name, products.category, sum(order_items.quantity) as total_sold, sum(order_items.quantity * order_items.price) as total_earned")
                               .order("total_sold DESC")
                               .limit(5)
