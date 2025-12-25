@@ -30,7 +30,7 @@ import Addresses from './pages/Addresses';
 const PublicLayout = () => (
   <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
     <Navbar />
-    <main style={{ padding: 20, flex: 1 }}>
+    <main style={{ flex: 1 }}>
       <Outlet />
     </main>
     <Footer />
