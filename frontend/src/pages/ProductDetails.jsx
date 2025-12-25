@@ -101,7 +101,7 @@ export default function ProductDetails() {
     <div className="container product-details-page">
       {/* Breadcrumbs */}
       <div className="p-breadcrumbs">
-        <Link to="/">Electronics</Link> / <Link to="/">Audio</Link> / <Link to="/">Headphones</Link> / <span>{product.name}</span>
+        <Link to="/">Home</Link> / <span>{product.category || "General"}</span> / <span>{product.name}</span>
       </div>
 
       <div className="p-details-grid">

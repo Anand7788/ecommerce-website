@@ -16,17 +16,24 @@ Product.transaction do
   # User.connection.execute("DELETE FROM sqlite_sequence WHERE name='products'")
 
   # Helper to create/update
+  # Helper to create/update
   add_or_update = ->(attrs) do
     sku = attrs[:sku]
     p = Product.find_or_initialize_by(sku: sku)
-    p.name = attrs[:name]
-    p.description = attrs[:description]
-    p.category = attrs[:category]
-    p.price_cents = (attrs[:price] * 100).to_i
-    p.stock = attrs[:stock] || 50
-    # Prefer thumbnail for listing, or first image
-    p.image_url = attrs[:image_url]
-    p.save!
+    
+    # Only set attributes if it's a NEW record. 
+    # This prevents overwriting manual edits made in the Admin Panel during deployments.
+    if p.new_record?
+      p.name = attrs[:name]
+      p.description = attrs[:description]
+      p.category = attrs[:category]
+      p.price_cents = (attrs[:price] * 100).to_i
+      p.stock = attrs[:stock] || 50
+      # Prefer thumbnail for listing, or first image
+      p.image_url = attrs[:image_url]
+      p.save!
+      print "."
+    end
   end
 
   # Function to fetch and map

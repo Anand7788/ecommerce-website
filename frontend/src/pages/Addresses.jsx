@@ -1,7 +1,8 @@
 // src/pages/Addresses.jsx
 import React, { useEffect, useState } from 'react';
-import { fetchAddresses, createAddress, deleteAddress } from '../api/api'; // updateAddress if needed
+import { fetchAddresses, createAddress, deleteAddress } from '../api/api';
 import { useNavigate } from 'react-router-dom';
+import '../styles/Addresses.css';
 
 export default function Addresses() {
   const [addresses, setAddresses] = useState([]);
@@ -60,56 +61,36 @@ export default function Addresses() {
   if(loading) return <div style={{padding:40}}>Loading...</div>;
 
   return (
-    <div style={{maxWidth:1000, margin:'40px auto', padding:20}}>
-        <div style={{fontSize:14, marginBottom:20, color:'#565959'}}>
-           <span style={{cursor:'pointer', textDecoration:'underline'}} onClick={() => navigate('/profile')}>Your Account</span> › Your Addresses
+    <div className="addresses-container">
+        <div className="addresses-breadcrumb">
+           <span onClick={() => navigate('/profile')}>Your Account</span> › Your Addresses
         </div>
 
-        <h1 style={{fontSize:28, marginBottom:24}}>Your Addresses</h1>
+        <h1 className="addresses-title">Your Addresses</h1>
 
-        <div style={{
-            display:'grid',
-            gridTemplateColumns:'repeat(auto-fill, minmax(300px, 1fr))',
-            gap:20
-        }}>
+        <div className="addresses-grid">
             {/* Add Address Card */}
             <div 
+              className="add-address-card"
               onClick={() => setShowForm(true)}
-              style={{
-                  border:'2px dashed #d5d9d9',
-                  borderRadius:8,
-                  display:'flex',
-                  flexDirection:'column',
-                  alignItems:'center',
-                  justifyContent:'center',
-                  height:260,
-                  cursor:'pointer',
-                  color:'#767676'
-            }}>
-                <div style={{fontSize:40, marginBottom:10}}>+</div>
-                <div style={{fontSize:20, fontWeight:700}}>Add Address</div>
+            >
+                <div className="add-icon">+</div>
+                <div className="add-text">Add Address</div>
             </div>
 
             {/* List Addresses */}
             {addresses.map(addr => (
-                <div key={addr.id} style={{
-                    border: '1px solid #d5d9d9',
-                    borderRadius:8,
-                    padding:20,
-                    height:260,
-                    position:'relative',
-                    background:'white'
-                }}>
-                    {addr.is_default && <span style={{fontSize:12, color:'#565959', borderBottom:'1px solid #565959'}}>Default</span>}
-                    <div style={{fontWeight:700, marginTop:10}}>{addr.name}</div>
-                    <div style={{marginTop:4}}>{addr.street}</div>
-                    <div>{addr.city}, {addr.zip}</div>
-                    <div>Phone number: {addr.mobile}</div>
+                <div key={addr.id} className="address-card">
+                    {addr.is_default && <span className="default-badge">Default</span>}
+                    <div className="address-name">{addr.name}</div>
+                    <div className="address-line">{addr.street}</div>
+                    <div className="address-line">{addr.city}, {addr.zip}</div>
+                    <div className="address-line">Phone number: {addr.mobile}</div>
                     
-                    <div style={{position:'absolute', bottom:20, left:20, display:'flex', gap:10}}>
+                    <div className="address-actions">
                        <button 
+                         className="btn-remove"
                          onClick={() => remove(addr.id)}
-                         style={{color:'#007185', background:'none', border:'none', cursor:'pointer', padding:0}}
                         >
                            Remove
                        </button>
@@ -120,38 +101,54 @@ export default function Addresses() {
 
         {/* Modal-ish Form */}
         {showForm && (
-            <div style={{
-                position:'fixed', top:0, left:0, right:0, bottom:0, background:'rgba(0,0,0,0.5)', display:'flex', justifyContent:'center', alignItems:'center'
-            }}>
-                <div style={{background:'white', padding:30, borderRadius:8, width:500, maxWidth:'95%'}}>
+            <div className="address-modal-overlay">
+                <div className="address-modal-content">
                     <h3>Add a new address</h3>
                     <form onSubmit={handleAdd}>
-                        <div style={{marginBottom:10}}><label style={{display:'block',fontWeight:700}}>Full Name</label><input required style={{width:'100%', padding:8}} value={form.name} onChange={e=>setForm({...form,name:e.target.value})} /></div>
-                        <div style={{marginBottom:10}}><label style={{display:'block',fontWeight:700}}>Address</label><input required style={{width:'100%', padding:8}} value={form.street} onChange={e=>setForm({...form,street:e.target.value})} /></div>
-                        <div style={{marginBottom:10}}><label style={{display:'block',fontWeight:700}}>City</label><input required style={{width:'100%', padding:8}} value={form.city} onChange={e=>setForm({...form,city:e.target.value})} /></div>
-                        <div style={{marginBottom:10}}><label style={{display:'block',fontWeight:700}}>Zip Code</label><input required style={{width:'100%', padding:8}} value={form.zip} onChange={e=>setForm({...form,zip:e.target.value})} /></div>
-                    <div style={{marginBottom:10}}><label style={{display:'block',fontWeight:700}}>Phone Number</label>
-                        <input 
-                            required 
-                            type="tel"
-                            style={{width:'100%', padding:8}} 
-                            value={form.mobile} 
-                            onChange={e => {
-                                const val = e.target.value.replace(/\D/g, '').slice(-10);
-                                setForm({...form, mobile: val});
-                            }} 
-                        />
-                    </div>
-                    <div style={{marginBottom:20}}><label><input type="checkbox" checked={form.is_default} onChange={e=>setForm({...form, is_default:e.target.checked})} /> Set as default address</label></div>
+                        <div className="form-group">
+                            <label className="form-label">Full Name</label>
+                            <input required className="form-input" value={form.name} onChange={e=>setForm({...form,name:e.target.value})} />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">Address</label>
+                            <input required className="form-input" value={form.street} onChange={e=>setForm({...form,street:e.target.value})} />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">City</label>
+                            <input required className="form-input" value={form.city} onChange={e=>setForm({...form,city:e.target.value})} />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">Zip Code</label>
+                            <input required className="form-input" value={form.zip} onChange={e=>setForm({...form,zip:e.target.value})} />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">Phone Number</label>
+                            <input 
+                                required 
+                                type="tel"
+                                className="form-input"
+                                value={form.mobile} 
+                                onChange={e => {
+                                    const val = e.target.value.replace(/\D/g, '').slice(-10);
+                                    setForm({...form, mobile: val});
+                                }} 
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label className="checkbox-label">
+                                <input type="checkbox" checked={form.is_default} onChange={e=>setForm({...form, is_default:e.target.checked})} /> 
+                                Set as default address
+                            </label>
+                        </div>
                         
-                    <div style={{display:'flex', gap:10}}>
-                        <button style={{background:'#FFD814', border:'none', padding:'10px 20px', borderRadius:8}}>Add Address</button>
-                        <button type="button" onClick={() => setShowForm(false)} style={{background:'white', border:'1px solid #ddd', padding:'10px 20px', borderRadius:8}}>Cancel</button>
-                    </div>
-                </form>
+                        <div className="modal-actions">
+                            <button className="btn-submit-address">Add Address</button>
+                            <button type="button" onClick={() => setShowForm(false)} className="btn-cancel-address">Cancel</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
-    )}
-</div>
-);
+        )}
+    </div>
+  );
 }

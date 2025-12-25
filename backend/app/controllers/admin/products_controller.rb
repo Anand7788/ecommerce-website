@@ -49,6 +49,7 @@ module Admin
       return render json: { error: 'No file uploaded' }, status: :bad_request unless file
 
       created_count = 0
+      updated_count = 0
       errors = []
 
       begin
@@ -56,24 +57,54 @@ module Admin
           # Skip empty rows
           next if row.to_h.values.all?(&:nil?)
 
-          product = Product.new(
-            name: row['name'],
-            price_cents: (row['price'].to_f * 100).to_i, # Convert decimal price to cents
-            description: row['description'],
-            image_url: row['image_url'],
-            category: row['category'],
-            stock: row['stock'] || 0,
-            sku: row['sku'] || "SKU-#{SecureRandom.hex(4)}" # Fallback SKU generation
-          )
+          # 1. Extract attributes correctly
+          # We purposefully check .present? to allow "Partial Updates"
+          # (e.g. uploading a CSV with just SKU and Price will only update Price)
+          attrs = {}
+          attrs[:name]        = row['name']        if row['name'].present?
+          attrs[:description] = row['description'] if row['description'].present?
+          attrs[:category]    = row['category']    if row['category'].present?
+          attrs[:image_url]   = row['image_url']   if row['image_url'].present?
+          attrs[:stock]       = row['stock']       if row['stock'].present?
           
-          if product.save
-            created_count += 1
+          if row['price'].present?
+            attrs[:price_cents] = (row['price'].to_f * 100).to_i
+          end
+
+          sku = row['sku'].presence
+
+          # 2. Find existing product by SKU
+          product = Product.find_by(sku: sku) if sku
+
+          if product
+            # UPDATE existing
+            if product.update(attrs)
+              updated_count += 1
+            else
+              errors << "Row #{$.} (SKU #{sku}): #{product.errors.full_messages.join(', ')}"
+            end
           else
-            errors << "Row #{$.}: #{product.errors.full_messages.join(', ')}"
+            # CREATE new
+            # For creation, we need specific defaults or valid data.
+            # If SKU was missing, generate one
+            attrs[:sku] = sku || "SKU-#{SecureRandom.hex(4)}"
+            
+            new_product = Product.new(attrs)
+            if new_product.save
+              created_count += 1
+            else
+              errors << "Row #{$.}: #{new_product.errors.full_messages.join(', ')}"
+            end
           end
         end
 
-        render json: { message: "Imported #{created_count} products", errors: errors }
+        # 3. Construct result message
+        summary = []
+        summary << "Created #{created_count}" if created_count > 0
+        summary << "Updated #{updated_count}" if updated_count > 0
+        message = summary.any? ? "Import Complete: #{summary.join(', ')}" : "No products processed"
+
+        render json: { message: message, errors: errors }
       rescue => e
         render json: { error: "CSV Error: #{e.message}" }, status: :unprocessable_entity
       end

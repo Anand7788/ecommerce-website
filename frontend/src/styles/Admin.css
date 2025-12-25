@@ -240,6 +240,18 @@
     gap: 32px;
 }
 
+.admin-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 24px;
+}
+
+.admin-table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
 .admin-products-actions {
     display: flex;
     flex-direction: row;
@@ -526,6 +538,10 @@
 
     .mobile-list {
         display: block;
+    }
+
+    .admin-details-grid {
+        grid-template-columns: 1fr;
     }
 }
 
