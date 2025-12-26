@@ -1,6 +1,6 @@
-# 🛒 ShoppersPoint – Full-Stack E-Commerce Web Application
+# 🛒 ShopNOW – Full-Stack E-Commerce Web Application
 
-**ShoppersPoint** is a modern, responsive e-commerce platform built with **React.js (Frontend)** and **Ruby on Rails (Backend)**. It provides a seamless online shopping experience with product listings, secure authentication, Razorpay payments, cart management, and a powerful Admin Panel.
+**ShopNow** is a modern, responsive e-commerce platform built with **React.js (Frontend)** and **Ruby on Rails (Backend)**. It provides a seamless online shopping experience with product listings, secure authentication, Razorpay payments, cart management, and a powerful Admin Panel.
 
 ---
 
@@ -61,9 +61,7 @@ npm install
 npm run dev    # Client runs on http://localhost:5173
 ```
 
----
-
-
-
 ## 📖 API Documentation
 For a detailed breakdown of the backend architecture, API endpoints, and database schema, please refer to the [Backend Overview](brain/backend_overview.md).
+
+---

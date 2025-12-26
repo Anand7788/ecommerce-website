@@ -1,0 +1,5 @@
+{
+  "appId": "com.shopnow.app",
+  "appName": "ShopNow",
+  "webDir": "../frontend/dist"
+}
