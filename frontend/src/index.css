@@ -36,6 +36,10 @@ body {
   background: var(--bg);
   color: var(--text);
   -webkit-font-smoothing: antialiased;
+  /* Mobile Safe Area & App Feel */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Dark theme overrides (applied when body has .dark-theme) */
@@ -72,6 +76,7 @@ body.dark-theme {
   /* Amazon/Flipkart style is usually solid or subtle. Keeping gradient but making it punchy */
   background: linear-gradient(to right, #2563eb, #9333ea);
   /* Blue to Purple (Modern) */
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
